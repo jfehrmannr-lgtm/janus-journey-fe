@@ -1,5 +1,20 @@
 ## 2026-10-02
 
+### #JANUS-FE-0006: Authenticated Dashboard Workspace
+
+**Work**: Plan / Build; Implemented the first authenticated application shell and Dashboard Home using local mock data with React Query and Zustand UI-state boundaries.
+
+- Added the `/dashboard/home` route inside a reusable authenticated `AppLayout` with persistent application navigation.
+- Added the SideNav navigation layer with Home, Tasks, Favorites, Journeys, Folders, Settings, and User areas.
+- Added root-resource loading for User Journeys, User-owned root Folders, and User-owned root Tasks through React Query.
+- Added Journey accordion selection and expansion using Zustand identifiers only, with independently keyed Journey tree queries and loading Skeletons.
+- Added the Dashboard Home workspace with mock overview metrics, Journey summaries, quick actions, and responsive visual composition inspired by the Dashboard reference.
+- Added typed User, Journey, Folder, and Task mock data with one User, four Journeys, seven root Folders, and thirty Tasks using non-null User, Journey, or Folder parent relationships.
+- Added the shared TanStack Query provider, mock services, query hooks, Dashboard types, resource types, and application UI store without introducing authentication, API, BFF, persistence, microservice, or database behavior.
+- Kept Dashboard Home independent from Journey tree loading and did not automatically select the first Journey or implement future resource detail views.
+
+## 2026-10-02
+
 ### #JANUS-FE-0005: Scenic Background Asset
 
 **Work**: Build / Visual UI; Replaced the generated hero background treatment with the provided Janus Journey scenic image while keeping styling in Tailwind utilities.
