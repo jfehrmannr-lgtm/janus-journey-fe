@@ -82,18 +82,26 @@ without enforcing a mandatory execution order.
 ### Documentation
 
 - Document functions, hooks, services, repositories, utilities, and React components using TSDoc.
-- Use the following format when documenting components, hooks, functions, and their parameters:
+- Document each destructured parameter individually. Never document a destructured props object as `@param props`.
+- The `@param` name must match the actual destructured parameter name.
+- Do not use generic `props`, `params`, or `options` documentation when their properties are destructured.
+
+Use the following format:
 
 ```ts
 /**
  * {General description.}
  *
- * @param param - {Parameter description.}
+ * @param firstParam - {First parameter description.}
+ * @param secondParam - {Second parameter description.}
  * @returns {Return value description.}
- * 
  */
-const functionOrComponent = ({params}: Params) => {}
+const functionOrComponent = ({
+  firstParam,
+  secondParam,
+}: Params) => {
   // ...
+};
 ```
 - Document parameters, return values, behavior, and relevant constraints when they are not obvious from the code.
 - Use inline comments only for non-obvious logic, architectural decisions, workarounds, or external integration behavior.
@@ -104,8 +112,15 @@ const functionOrComponent = ({params}: Params) => {}
 
 - After completing any task that modifies the project, append an entry to `AIChangelog.md`.
 - Follow the format and rules defined inside `AIChangelog.md`.
-- Log only completed project changes, not discussions, planning, or unanswered prompts.
-- Keep entries concise and add the newest entry at the top.
+- Add the newest entry at the top.
+- Every completed change must have a unique sequential identifier using the format `#JANUS-FE-XXXX`.
+- Never reuse, modify, or reorder an existing change identifier.
+- Determine the next identifier from the highest existing `JANUS-FE` identifier in `AIChangelog.md`.
+- Every entry must include a descriptive title and a `Work` summary describing the workflow used (e.g. `Plan / Build`) and the purpose of the task.
+- Document the meaningful completed changes, including relevant UI, behavior, components, assets, configuration, architectural decisions, and implementation boundaries.
+- Log completed work only; do not include unfinished plans, discussions, or unanswered prompts.
+- Do not reduce substantial work to generic one-line summaries.
+- Do not document trivial implementation details or unchanged behavior.
 
 ## Basic App Structure
 
