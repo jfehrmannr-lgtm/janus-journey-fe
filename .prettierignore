@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+.git/
+.husky/_/
+AGENTS.md
+.agents/
+package-lock.json
+skills-lock.json
+*.svg
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.webp
