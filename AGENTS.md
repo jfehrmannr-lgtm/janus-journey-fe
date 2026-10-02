@@ -13,18 +13,28 @@ history, and sharing.
 A Journey can contain Folders and Tasks and represents a structured path
 without enforcing a mandatory execution order.
 
+## Project Knowledge
+
+- Local Janus Journey project knowledge is available under `.project/`.
+- Treat `.project/` as the source of truth for project-wide architecture, contracts, infrastructure, technology decisions, and visual references.
+- `.project/architecture/` contains architecture and infrastructure diagrams.
+- `.project/contracts/` contains project and data contracts.
+- `.project/media/` contains visual references and project media.
+- Consult only the project knowledge relevant to the current task.
+- Before changing behavior governed by a contract or architecture decision, read the relevant project knowledge.
+- When implementing an existing design, inspect the relevant visual reference before coding.
+- Never infer missing project rules. If required knowledge is unavailable, ask the user.
+- Never modify files under `.project/` without explicit user authorization.
+
 ## Technology Stack
 
-- React v19, TypeScript v6, and Vite v8.
-- Tailwind CSS v4 is integrated through `@tailwindcss/vite`
+- React v19, Next v16,TypeScript v6, Node v22
+- Tailwind CSS v4 is integrated through `@tailwindcss/postcss`
 - Zustand v5 for UI state management.
 - TankStack React Query v5.
+- Ant Design Icons v6 for Icons.
+- React Hot Toast v2
 - Use existing dependencies when they already provide the required functionality.
-
-## Commands
-
-- Development: `npm run start`
-- Lint: `npm run lint`
 
 ## Constraints
 
@@ -39,7 +49,7 @@ without enforcing a mandatory execution order.
 - Prioritize readable, maintainable code over clever abstractions or micro-optimizations.
 - Use descriptive names and avoid unnecessary abbreviations.
 - Declare functions and React components using arrow functions.
-- Use `lowerCamelCase` for functions, utilities, variables, hooks, and constants.
+- Use `lowerCamelCase` for arrow functions, utilities, variables, hooks, and constants.
 - Use `UpperCamelCase` for React components and component files.
 - Do not use global variables or global mutable state.
 - Keep constants scoped as locally as possible.
@@ -60,33 +70,31 @@ without enforcing a mandatory execution order.
 - Always prefer Tailwind canonical utilities suggested by Tailwind CSS IntelliSense (e.g. `tracking-wider` instead of `tracking-[0.05em]`) and avoid arbitrary values when an equivalent built-in utility exists.
 - Keep class lists minimal: avoid redundant, overlapping, duplicated, or conflicting utilities (e.g. unnecessary combinations of `p-*` with equivalent `px-*`/`py-*`, or `block lg:block`).
 - Before adding a utility, check whether an existing class already provides or overrides the same behavior.
-- When custom Tailwind theme tokens, colors, utilities, or animations are required, define them in `index.css`
+- When custom Tailwind theme tokens, colors, utilities, or animations are required, define them in `src/app/globals.css`
 
-## Testing Conventions
-
-- Tests define expected application behavior. Production code MUST satisfy the tests, not the other way around.
-- NEVER modify, weaken, bypass, or artificially accommodate a valid failing test just to make it pass.
-- When a test fails, first determine whether:
-  1. production behavior violates the test, or
-  2. the test contradicts the current specification.
-- Only modify an existing test when the specification or expected behavior has actually changed.
-- Tests MUST reproduce real user behavior. Do not add artificial rerenders, state mutations, timing workarounds, or implementation-specific actions that a real user would not perform just to make a test pass.
-- Bug fixes SHOULD keep the failing regression test unchanged and modify production code until that test passes.
-- Prefer stable testing contracts (`id`, `data-testid`, roles, etc.) over translated UI text when the text is locale-dependent.
-- After fixing a failing test, run the relevant test file first, then the full test suite.
-
-### State Management
+## State Management
 
 - Use **Zustand** for client-side and global UI state, including authentication state, filters, selected options, UI preferences, modals, drawers, and temporary interface state.
-- Use **React Query** for remote and persistent data, including Firestore queries, mutations, caching, loading/error states, invalidation, and refetching.
+- Use **React Query** for remote and persistent data, including mutations, caching, loading/error states, invalidation, and refetching.
 - Do not duplicate React Query data inside Zustand.
-- Firestore is the source of truth for persistent application data.
 - Zustand must not be used as a replacement for React Query.
-
 
 ### Documentation
 
 - Document functions, hooks, services, repositories, utilities, and React components using TSDoc.
+- Use the following format when documenting components, hooks, functions, and their parameters:
+
+```ts
+/**
+ * {General description.}
+ *
+ * @param param - {Parameter description.}
+ * @returns {Return value description.}
+ * 
+ */
+const functionOrComponent = ({params}: Params) => {}
+  // ...
+```
 - Document parameters, return values, behavior, and relevant constraints when they are not obvious from the code.
 - Use inline comments only for non-obvious logic, architectural decisions, workarounds, or external integration behavior.
 - Do not add comments that simply restate the code.
@@ -101,38 +109,20 @@ without enforcing a mandatory execution order.
 
 ## Basic App Structure
 
+- Use the Next.js App Router.
+- Keep `src/app/` focused on routing, layouts, route-level loading/error states, and route composition.
+- Do not place reusable application components or business logic directly inside `src/app/`.
+- Organize application code by responsibility using the following base structure:
+
+```text
 src/
+├── app/
 ├── components/
-│   └── ComponentFolder/
-│      ├── ComponentPart1.tsx
-│      ├── ComponentPart2.tsx
-│      ├── ...
-│      └── ComponentPartN.tsx     
-│
-├── pages/
-│   └── ExamplePage/
-│       └── Example.tsx
-│
 ├── services/
-│   └── example.service.ts
-│
-├── hooks/
-│   └── useHookExample.ts
-│
 ├── stores/
-│   └── example.store.ts
-│
-├── config/
-│   └── firebase.ts
-│
-├── types/
-│   └── typesExample.ts
-│
-├── router/
-│   └── router.tsx
-│
+├── layout/
+├── hooks/
 ├── assets/
-│
-├── App.tsx
-├── main.tsx
-└── index.css
+├── types/
+└── utils/
+```
