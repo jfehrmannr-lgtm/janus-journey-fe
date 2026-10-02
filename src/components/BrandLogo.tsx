@@ -15,11 +15,7 @@ interface BrandLogoProps {
 const BrandLogo = ({ compact = false, onDark = false }: BrandLogoProps) => {
   return (
     <div className="flex items-center gap-2">
-      <img
-        src="/janus-journey-logo.svg"
-        alt={compact ? 'Janus Journey logo' : ''}
-        className="size-15"
-      />
+      <Image src="/janus-journey-logo.svg" width={0} height={0} alt={compact ? 'Janus Journey logo' : ''} className="size-14" />
       {!compact && (
         <span className={`text-3xl font-semibold tracking-tight ${onDark ? 'text-white' : 'text-slate-950'}`}>
           Janus Journey
