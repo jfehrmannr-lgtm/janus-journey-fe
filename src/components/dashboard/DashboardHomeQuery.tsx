@@ -1,8 +1,8 @@
 'use client'
 
 import useDashboardHomeQuery from '@/hooks/useDashboardHomeQuery'
-import DashboardHome from '@/components/dashboard/DashboardHome'
-import DashboardHomeSkeleton from '@/components/dashboard/DashboardHomeSkeleton'
+import DashboardHome from '@/components/Dashboard/DashboardHome'
+import DashboardHomeSkeleton from '@/components/Dashboard/DashboardHomeSkeleton'
 
 /**
  * Loads only the data required by the Dashboard Home workspace.

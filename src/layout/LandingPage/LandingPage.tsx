@@ -1,4 +1,4 @@
-import MarketingPanel from '@/components/MarketingPanel'
+import MarketingPanel from '@/components/MarketingPanel/MarketingPanel'
 
 /**
  * Composes the Janus Journey landing experience for the root route.

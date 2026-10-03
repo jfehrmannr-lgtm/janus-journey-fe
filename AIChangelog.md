@@ -1,3 +1,47 @@
+## 2026-10-03
+
+### #JANUS-FE-0010: Component Folder Organization
+
+**Work**: Refactor / Structure; Moved root-level reusable components into dedicated component folders while preserving their behavior and keeping one component per file.
+
+- Moved BrandLogo, FeatureHighlight, LoginForm, MarketingHeader, MarketingPanel, and QueryProvider into matching folders under `src/components/`.
+- Updated application, layout, marketing, and SideNav imports to use the new component paths.
+- Kept Dashboard components grouped under `src/components/Dashboard/` and preserved the existing layout component structure.
+
+## 2026-10-02
+
+### #JANUS-FE-0009: Better Auth Google Authentication
+
+**Work**: Plan / Build; Replaced the temporary local authentication preview with Better Auth 1.7.7 Google authentication and server-enforced session access for the authenticated application.
+
+- Added stateless Better Auth server configuration with Google, Next.js cookie integration, and required environment documentation.
+- Added Better Auth client configuration and the `/api/auth/[...all]` App Router handler.
+- Connected the existing Login UI’s Google action to the Better Auth OAuth flow with a Dashboard callback.
+- Added Next.js Proxy protection for Dashboard requests and authoritative Server Component session checks for `/dashboard` and `/login` redirects.
+- Added real logout behavior to the authenticated SideNav using Better Auth sign-out and preserved React Query domain data and Zustand UI-state boundaries.
+- Removed the temporary `useState` authentication preview and its obsolete authenticated demo component.
+- Kept the phase frontend-scoped: no BFF calls, JWT plugin, JWKS integration, custom access-token issuer, database adapter, persistence, or access-token storage was added.
+
+## 2026-10-02
+
+### #JANUS-FE-0008: SideNav Overflow and Scroll Lock
+
+**Work**: Build / Responsive UI; Restructured SideNav overflow content and added DOM-driven mobile page scroll locking without introducing additional application state.
+
+- Moved Home, My Tasks, Favorites, and Explore into the SideNav’s scrollable overflow region with Journey and Folder resources.
+- Added a mobile-open data attribute and Tailwind `:has()` overflow rule on the document body to prevent main-page scrolling while the mobile SideNav is open.
+- Preserved the independent desktop collapse state and local mobile menu state.
+
+## 2026-10-02
+
+### #JANUS-FE-0007: Responsive SideNav Menu
+
+**Work**: Build / Responsive UI; Added a Tailwind breakpoint-driven mobile SideNav menu with independent local open/close state while preserving the desktop collapsed/expanded navigation state.
+
+- Added a mobile navigation trigger, overlay, drawer transition, and close controls using Tailwind responsive utilities.
+- Kept the desktop SideNav collapse state independent from the mobile menu state.
+- Preserved Journey accordion behavior, root resource queries, application navigation, and Dashboard logic.
+
 ## 2026-10-02
 
 ### #JANUS-FE-0006: Authenticated Dashboard Workspace
@@ -73,3 +117,13 @@
 - Updated the application metadata for Janus Journey.
 - Kept the implementation frontend-only: no Google authentication, persistence, API calls, BFF communication, microservice integration, or backend behavior was introduced.
 - Validated the implementation with the project's formatting, linting, testing, and production build checks.
+
+## 2026-10-03
+
+### #JANUS-FE-0011: Layout Folder Organization
+
+**Work**: Refactor / Structure; Moved root-level layout components into dedicated folders while preserving the existing application composition and behavior.
+
+- Moved `AppLayout`, `LandingPage`, and `LoginPage` into matching folders under `src/layout/`.
+- Updated route imports to use the new layout component paths.
+- Preserved the existing `SideNav` layout grouping and all layout behavior.

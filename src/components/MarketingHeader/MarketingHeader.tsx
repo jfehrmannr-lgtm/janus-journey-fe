@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import BrandLogo from '@/components/BrandLogo'
+import BrandLogo from '@/components/BrandLogo/BrandLogo'
 
 /**
  * Renders the marketing navigation shown above the login hero content.

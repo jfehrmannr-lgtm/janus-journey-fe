@@ -4,38 +4,59 @@ import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 
-interface LoginFormProps {
-  onSignIn: () => void
-}
-
 /**
- * Renders the visual-only login form.
+ * Renders the login form with Better Auth Google sign-in.
  *
- * @param onSignIn - Callback invoked when the demo sign-in action is submitted.
  * @returns The login form card content.
  */
-const LoginForm = ({ onSignIn }: LoginFormProps) => {
+const LoginForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [isSigningIn, setIsSigningIn] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   /**
-   * Prevents the browser form submission and invokes the visual sign-in callback.
+   * Starts the Better Auth Google OAuth flow.
+   *
+   * @returns A promise that resolves after the OAuth request is initiated.
+   */
+  const handleGoogleSignIn = async () => {
+    setErrorMessage(null)
+    setIsSigningIn(true)
+
+    try {
+      const { authClient } = await import('@/services/authClient')
+      const { error } = await authClient.signIn.social({ provider: 'google', callbackURL: '/dashboard/home' })
+
+      if (error) {
+        setErrorMessage(error.message ?? 'Google sign-in could not be started.')
+        setIsSigningIn(false)
+      }
+    } catch {
+      setErrorMessage('Google sign-in could not be started. Please try again.')
+      setIsSigningIn(false)
+    }
+  }
+
+  /**
+   * Keeps the visual email and password controls from submitting an unsupported credential flow.
    *
    * @param event - The form submission event to cancel.
    * @returns Nothing.
    */
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    onSignIn()
   }
 
   return (
     <form className="mt-8" id="login-form" onSubmit={handleSubmit}>
       <button
         className="flex h-12 w-full items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-800 transition-colors hover:border-slate-300 hover:bg-slate-50"
+        disabled={isSigningIn}
+        onClick={handleGoogleSignIn}
         type="button"
       >
         <span className="text-xl font-bold leading-none text-[#4285f4]">G</span>
-        Continue with Google
+        {isSigningIn ? 'Connecting to Google...' : 'Continue with Google'}
       </button>
 
       <div className="my-6 flex items-center gap-4 text-sm text-slate-400" aria-hidden="true">
@@ -43,6 +64,8 @@ const LoginForm = ({ onSignIn }: LoginFormProps) => {
         <span>or</span>
         <span className="h-px flex-1 bg-slate-200" />
       </div>
+
+      {errorMessage && <p className="mt-4 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">{errorMessage}</p>}
 
       <div className="space-y-5">
         <label className="block text-sm font-semibold text-slate-800" htmlFor="email">
@@ -92,7 +115,6 @@ const LoginForm = ({ onSignIn }: LoginFormProps) => {
 
       <button
         className="mt-6 h-12 w-full rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-900/15"
-        onClick={onSignIn}
         type="button"
       >
         Sign in

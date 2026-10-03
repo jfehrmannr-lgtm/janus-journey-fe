@@ -1,23 +1,12 @@
-'use client'
-
-import { useState } from 'react'
-
-import AuthenticatedView from '@/components/AuthenticatedView'
-import BrandLogo from '@/components/BrandLogo'
-import LoginForm from '@/components/LoginForm'
+import BrandLogo from '@/components/BrandLogo/BrandLogo'
+import LoginForm from '@/components/LoginForm/LoginForm'
 
 /**
- * Coordinates the visual login demo and its local authenticated state.
+ * Renders the Janus Journey login experience.
  *
- * @returns The login page or the temporary authenticated demo view.
+ * @returns The login page experience.
  */
 const LoginPage = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-  if (isAuthenticated) {
-    return <AuthenticatedView onLogout={() => setIsAuthenticated(false)} />
-  }
-
   return (
     <main className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50/50 via-slate-50 to-orange-50/30 px-6 py-12 sm:px-10 lg:px-16 lg:py-16 xl:px-24 2xl:px-32">
       <div
@@ -39,7 +28,7 @@ const LoginPage = () => {
             <h1 className="text-3xl font-semibold tracking-tight text-slate-950">Welcome back</h1>
             <p className="mt-2 text-sm text-slate-500">Sign in to continue your journey.</p>
           </div>
-          <LoginForm onSignIn={() => setIsAuthenticated(true)} />
+          <LoginForm />
         </div>
       </section>
     </main>

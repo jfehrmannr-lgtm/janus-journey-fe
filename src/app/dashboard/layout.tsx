@@ -1,6 +1,10 @@
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
+
 import type { ReactNode } from 'react'
 
-import AppLayout from '@/layout/AppLayout'
+import AppLayout from '@/layout/AppLayout/AppLayout'
+import { auth } from '@/services/auth'
 
 interface DashboardRouteLayoutProps {
   children: ReactNode
@@ -12,7 +16,13 @@ interface DashboardRouteLayoutProps {
  * @param children - Dashboard route content rendered in the main application area.
  * @returns The shared application layout for Dashboard routes.
  */
-const DashboardRouteLayout = ({ children }: DashboardRouteLayoutProps) => {
+const DashboardRouteLayout = async ({ children }: DashboardRouteLayoutProps) => {
+  const session = await auth.api.getSession({ headers: await headers() })
+
+  if (!session) {
+    redirect('/login')
+  }
+
   return <AppLayout>{children}</AppLayout>
 }
 

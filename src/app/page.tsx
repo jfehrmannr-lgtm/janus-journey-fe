@@ -1,4 +1,4 @@
-import LandingPage from '@/layout/LandingPage'
+import LandingPage from '@/layout/LandingPage/LandingPage'
 
 /**
  * Composes the root route with the Janus Journey landing page.

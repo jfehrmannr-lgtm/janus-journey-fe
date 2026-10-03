@@ -5,8 +5,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import backgroundImage from '@/assets/janus-journey-background.png'
-import FeatureHighlight from '@/components/FeatureHighlight'
-import MarketingHeader from '@/components/MarketingHeader'
+import FeatureHighlight from '@/components/FeatureHighlight/FeatureHighlight'
+import MarketingHeader from '@/components/MarketingHeader/MarketingHeader'
 
 /**
  * Renders the dark marketing panel from the login visual reference.

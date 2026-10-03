@@ -1,4 +1,4 @@
-import DashboardHomeQuery from '@/components/dashboard/DashboardHomeQuery'
+import DashboardHomeQuery from '@/components/Dashboard/DashboardHomeQuery'
 
 /**
  * Composes the Dashboard Home route.
