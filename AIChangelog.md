@@ -127,3 +127,14 @@
 - Moved `AppLayout`, `LandingPage`, and `LoginPage` into matching folders under `src/layout/`.
 - Updated route imports to use the new layout component paths.
 - Preserved the existing `SideNav` layout grouping and all layout behavior.
+
+## 2026-10-03
+
+### #JANUS-FE-0012: Frontend README Documentation
+
+**Work**: Documentation / Build; Replaced the default Next.js README with project documentation for Janus Journey, its product philosophy, frontend architecture, authentication setup, development workflow, and contribution boundaries.
+
+- Documented the purpose of Janus Journey, the distinction between Tasks, Folders, and Journeys, and the non-prescriptive Journey model.
+- Documented the frontend technology stack, source structure, Better Auth, React Query, and Zustand ownership boundaries.
+- Added installation, environment configuration, Google OAuth callback setup, development, validation, and production instructions.
+- Documented the current frontend scope and explicitly identified deferred BFF, database, JWT/JWKS, and future resource-view work.
