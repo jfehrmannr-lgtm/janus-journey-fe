@@ -18,7 +18,6 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import BrandLogo from '@/components/BrandLogo/BrandLogo'
-import useUserQuery from '@/hooks/useUserQuery'
 import { authClient } from '@/services/authClient'
 import useAppUiStore from '@/stores/appUiStore'
 import type { NavigationRootResources } from '@/types/resources'
@@ -37,10 +36,12 @@ interface SideNavProps {
 const SideNav = ({ resources }: SideNavProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const router = useRouter()
-  const { data: user } = useUserQuery()
+  const { data: session } = authClient.useSession()
   const isSideNavCollapsed = useAppUiStore((state) => state.isSideNavCollapsed)
   const toggleSideNav = useAppUiStore((state) => state.toggleSideNav)
   const showExpandedContent = isMobileMenuOpen || !isSideNavCollapsed
+  const displayName = session?.user.name ?? 'Janus User'
+  const userInitials = displayName.slice(0, 2).toUpperCase()
 
   /**
    * Ends the Better Auth session and returns to the public login route.
@@ -86,9 +87,9 @@ const SideNav = ({ resources }: SideNavProps) => {
 
       <aside
         data-mobile-nav-open={isMobileMenuOpen ? true : undefined}
-        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-80 max-w-[calc(100vw-2rem)] -translate-x-full transform flex-col border-r border-slate-200 bg-white px-4 py-5 shadow-2xl transition-transform lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:shrink-0 lg:translate-x-0 lg:border-b-0 lg:py-6 lg:shadow-none ${isMobileMenuOpen ? 'translate-x-0' : ''} ${isSideNavCollapsed ? 'lg:w-20' : 'lg:w-72'}`}
+        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-80 max-w-[calc(100vw-2rem)] -translate-x-full transform flex-col border-r border-slate-200 bg-white py-5 shadow-2xl transition-transform lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:shrink-0 lg:translate-x-0 lg:border-b-0 lg:py-6 lg:shadow-none ${isMobileMenuOpen ? 'translate-x-0' : ''} ${isSideNavCollapsed ? 'lg:w-16' : 'lg:w-72 px-4'}`}
       >
-        <div className="flex items-center justify-between gap-3 px-2">
+        <div className={`flex items-center gap-3 ${isSideNavCollapsed ? 'justify-center' : 'justify-between'}`}>
           {showExpandedContent && (
             <Link className="text-xl font-semibold tracking-tight text-slate-950" href="/dashboard/home">
               Janus Journey
@@ -169,17 +170,6 @@ const SideNav = ({ resources }: SideNavProps) => {
                 <SettingOutlined />
                 Settings
               </button>
-              <div className="flex items-center gap-3 rounded-xl px-3 py-2.5">
-                <span className="flex size-9 items-center justify-center rounded-full bg-indigo-600 text-sm font-semibold text-white">
-                  {user?.config.username.slice(0, 2).toUpperCase() ?? 'JJ'}
-                </span>
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-slate-900">
-                    {user?.config.username ?? 'Janus User'}
-                  </p>
-                  <p className="truncate text-xs text-slate-400">{user?.email ?? 'user@example.com'}</p>
-                </div>
-              </div>
               <button
                 className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950"
                 onClick={handleLogout}
@@ -188,6 +178,15 @@ const SideNav = ({ resources }: SideNavProps) => {
                 <LogoutOutlined />
                 Log out
               </button>
+              <div className="flex items-center gap-3 rounded-xl px-3 py-2.5">
+                <span className="flex size-9 items-center justify-center rounded-full bg-indigo-600 text-sm font-semibold text-white">
+                  {userInitials}
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-slate-900">{displayName}</p>
+                  <p className="truncate text-xs text-slate-400">{session?.user.email ?? 'user@example.com'}</p>
+                </div>
+              </div>
             </div>
           </>
         )}

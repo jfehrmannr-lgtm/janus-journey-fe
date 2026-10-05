@@ -138,3 +138,27 @@
 - Documented the frontend technology stack, source structure, Better Auth, React Query, and Zustand ownership boundaries.
 - Added installation, environment configuration, Google OAuth callback setup, development, validation, and production instructions.
 - Documented the current frontend scope and explicitly identified deferred BFF, database, JWT/JWKS, and future resource-view work.
+
+## 2026-10-04
+
+### #JANUS-FE-0013: Better Auth Session Identity Boundary
+
+**Work**: Build / Authentication; Completed the existing Better Auth session boundary for the authenticated workspace without introducing Janus domain User provisioning or BFF integration.
+
+- Replaced the SideNav’s mock Janus User query with the authenticated Better Auth session identity for the profile display.
+- Preserved Better Auth ownership of authentication, session, Google OAuth, logout, and protected route access.
+- Preserved the existing Dashboard mock resource services and React Query architecture without creating or requesting a domain User from authentication.
+
+## 2026-10-05
+
+### #JANUS-FE-0014: Better Auth BFF JWT Plugin
+
+**Work**: Build / Authentication; Enabled Better Auth’s official JWT server and client plugins for the future Janus BFF token without integrating the BFF or adding persistence.
+
+- Configured `jwt()` with a bounded five-minute token, `BETTER_AUTH_URL` issuer, `janus-bff` audience, and Better Auth user ID subject.
+- Configured `jwtClient()` so authenticated frontend code can request the token through `authClient.token()`.
+- Enabled the official Better Auth JWKS endpoint with RS256 signing keys for future BFF validation.
+- Added a development-only Dashboard inspector that requests the JWT, decodes only its payload in memory, and never stores the token in browser storage or Zustand.
+- Added a temporary process-memory JWKS adapter because no database, schema, migration, or persistence architecture is approved in this phase.
+- Removed remaining mock Janus User reads from Dashboard and navigation loading; current mock resources use their existing fixture owner identifier.
+- Kept Google authentication, Better Auth sessions, protected Dashboard routes, mock Dashboard data, and logout behavior unchanged.

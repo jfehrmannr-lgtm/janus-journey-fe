@@ -13,7 +13,8 @@ import {
 } from '@ant-design/icons'
 import type { ReactNode } from 'react'
 
-import useUserQuery from '@/hooks/useUserQuery'
+import BffTokenInspector from '@/components/Dashboard/BffTokenInspector/BffTokenInspector'
+import { authClient } from '@/services/authClient'
 import type { DashboardHomeData, DashboardMetricTone, DashboardQuickAction } from '@/types/dashboard'
 
 interface DashboardHomeProps {
@@ -56,8 +57,8 @@ const getProgressWidthClass = (progressPercent: number) => {
  * @returns The Dashboard Home workspace.
  */
 const DashboardHome = ({ data }: DashboardHomeProps) => {
-  const { data: user } = useUserQuery()
-  const username = user?.config.username ?? 'there'
+  const { data: session } = authClient.useSession()
+  const username = session?.user.name?.split(' ')[0] ?? 'there'
   const metricIcons = {
     'active-journeys': <AppstoreOutlined />,
     'tasks-completed': <CheckCircleOutlined />,
@@ -105,6 +106,8 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
           <h1 className="mt-1 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">{username}</h1>
           <p className="mt-3 text-base text-slate-500">Keep going. Small steps compound over time.</p>
         </section>
+
+        <BffTokenInspector />
 
         <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Workspace summary">
           {data.metrics.map((metric) => (

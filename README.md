@@ -41,14 +41,21 @@ includes:
 - Responsive SideNav navigation with Journey accordions and mobile drawer
   behavior.
 - Local mock data for the current Dashboard and navigation workspace.
+- No Janus domain User provisioning or domain User request yet; the workspace
+  currently uses Better Auth session identity for authentication UI.
 
 The current phase intentionally does **not** include:
 
 - Nest BFF integration or frontend BFF API calls.
 - A database or persistent Janus domain data.
-- Better Auth JWT/JWKS integration.
 - A custom access-token issuer.
 - Future resource detail views such as full Task or Folder pages.
+
+The Better Auth JWT plugin and JWKS endpoint are enabled for development so the
+future BFF token contract can be inspected. JWT signing keys are currently held
+in process memory because no persistence architecture has been approved yet.
+Production key persistence must be established before relying on this token
+across frontend restarts or deployments.
 
 ## Technology stack
 
@@ -93,6 +100,8 @@ Better Auth owns authentication concerns:
 - Server-side session validation.
 - Login and logout behavior.
 - Access decisions for `/dashboard` routes.
+- The official JWT plugin for the future Janus BFF token.
+- The official JWKS endpoint at `/api/auth/jwks`.
 
 Authentication is configured in `src/services/auth.ts`, the browser client is
 in `src/services/authClient.ts`, and the Next.js handler is exposed at:
@@ -101,11 +110,17 @@ in `src/services/authClient.ts`, and the Next.js handler is exposed at:
 /api/auth/[...all]
 ```
 
+After authentication, the frontend can request the future BFF JWT with
+`authClient.token()`. The token uses a five-minute expiration, the Better Auth
+base URL as issuer, `janus-bff` as audience, and the Better Auth user ID as
+subject. The token is not stored in Zustand, localStorage, or another browser
+storage mechanism. A temporary Dashboard inspector decodes only the payload in
+memory for development verification.
+
 ### TanStack React Query
 
 React Query owns remote and persistent application data, including:
 
-- The Janus domain User.
 - Root Journeys, Folders, and Tasks used by the SideNav.
 - Journey-specific trees.
 - Dashboard Home summaries.
@@ -255,6 +270,8 @@ When extending the frontend:
 - Use React Query for remote or persistent data.
 - Use Zustand only for shared UI state.
 - Preserve the separation between Better Auth, Janus domain data, and UI state.
+- Use `authClient.token()` for the future BFF JWT; do not use the Google OAuth
+  provider access token or the Better Auth session token as the BFF token.
 - Prefer existing dependencies and established project conventions.
 
 Meaningful completed changes are recorded in [`AIChangelog.md`](./AIChangelog.md).

@@ -1,8 +1,8 @@
 import journeysMock from '@/mock/journeys.mock.json'
-import { getUser } from '@/services/userService'
 import type { JourneyTreeData, MockDashboardData, NavigationRootResources } from '@/types/resources'
 
 const navigationData = journeysMock as MockDashboardData
+const mockRootOwnerUid = 'user-alex'
 
 /**
  * Returns the root resources required by the authenticated application navigation.
@@ -10,17 +10,15 @@ const navigationData = journeysMock as MockDashboardData
  * @returns A promise containing User-owned Journeys, Folders, and Tasks.
  */
 const getNavigationRootResources = async (): Promise<NavigationRootResources> => {
-  const user = await getUser()
-
   return {
     journeys: navigationData.journeys
-      .filter((journey) => journey.parentUid === user.id)
+      .filter((journey) => journey.parentUid === mockRootOwnerUid)
       .sort((firstJourney, secondJourney) => firstJourney.orderIndex - secondJourney.orderIndex),
     rootFolders: navigationData.folders
-      .filter((folder) => folder.parentUid === user.id)
+      .filter((folder) => folder.parentUid === mockRootOwnerUid)
       .sort((firstFolder, secondFolder) => firstFolder.orderIndex - secondFolder.orderIndex),
     rootTasks: navigationData.tasks
-      .filter((task) => task.parentUid === user.id)
+      .filter((task) => task.parentUid === mockRootOwnerUid)
       .sort((firstTask, secondTask) => firstTask.orderIndex - secondTask.orderIndex)
   }
 }
@@ -33,9 +31,8 @@ const getNavigationRootResources = async (): Promise<NavigationRootResources> =>
  * @throws An error when the requested Journey does not belong to the mock User.
  */
 const getJourneyTree = async (journeyUid: string): Promise<JourneyTreeData> => {
-  const user = await getUser()
   const journey = navigationData.journeys.find(
-    (candidateJourney) => candidateJourney.uid === journeyUid && candidateJourney.parentUid === user.id
+    (candidateJourney) => candidateJourney.uid === journeyUid && candidateJourney.parentUid === mockRootOwnerUid
   )
 
   if (!journey) {
