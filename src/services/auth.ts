@@ -34,7 +34,7 @@ const auth = betterAuth({
         issuer: process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'
       }
     }),
-    nextCookies(),
+    nextCookies()
   ]
 })
 
