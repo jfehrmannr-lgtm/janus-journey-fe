@@ -9,6 +9,17 @@ export interface User {
   id: string
   userId: string
   email: string
+  isVerified: boolean
+  authLogins: Array<{
+    authLogin: string
+    provider: string
+    providerEmail: string | null
+    providerUsername: string | null
+    providerAvatarUrl: string | null
+    metadata: Record<string, unknown>
+    createdAt: string
+    lastLoginAt: string
+  }>
   config: UserConfig
 }
 

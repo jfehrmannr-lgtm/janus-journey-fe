@@ -41,13 +41,16 @@ includes:
 - Responsive SideNav navigation with Journey accordions and mobile drawer
   behavior.
 - Local mock data for the current Dashboard and navigation workspace.
-- No Janus domain User provisioning or domain User request yet; the workspace
-  currently uses Better Auth session identity for authentication UI.
+- Authenticated Janus User lookup through the BFF using the Better Auth JWT
+  subject as the User resource identifier.
+- First-time Janus User provisioning only after authenticated User lookup returns
+  `404`.
 
 The current phase intentionally does **not** include:
 
-- Nest BFF integration or frontend BFF API calls.
-- A database or persistent Janus domain data.
+- Direct frontend access to `ms-users`.
+- Resolving a Janus User before Better Auth authentication completes.
+- A database or persistent Journey domain data.
 - A custom access-token issuer.
 - Future resource detail views such as full Task or Folder pages.
 
@@ -110,12 +113,18 @@ in `src/services/authClient.ts`, and the Next.js handler is exposed at:
 /api/auth/[...all]
 ```
 
-After authentication, the frontend can request the future BFF JWT with
+After Google authentication completes, the frontend obtains the BFF JWT with
 `authClient.token()`. The token uses a five-minute expiration, the Better Auth
 base URL as issuer, `janus-bff` as audience, and the Better Auth user ID as
-subject. The token is not stored in Zustand, localStorage, or another browser
-storage mechanism. A temporary Dashboard inspector decodes only the payload in
-memory for development verification.
+subject. The frontend reads that `sub` only to address the existing BFF
+`GET /users/{id}` resource route; the BFF remains responsible for validating the
+JWT and does not trust an arbitrary frontend identity. A `200` User response
+opens the dashboard, a `404` enters the provisioning flow, and other failures
+render the authentication error state.
+
+The token is not stored in Zustand, localStorage, or another browser storage
+mechanism. A temporary Dashboard inspector decodes only the payload in memory
+for development verification.
 
 ### TanStack React Query
 

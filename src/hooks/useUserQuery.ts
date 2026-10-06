@@ -5,12 +5,12 @@ import { useQuery } from '@tanstack/react-query'
 import { getUser } from '@/services/userService'
 
 /**
- * Reads and caches the current mock User for client components.
+ * Reads and caches the current Janus User for client components.
  *
  * @returns The React Query result for the mock User.
  */
-const useUserQuery = () => {
-  return useQuery({ queryKey: ['user'], queryFn: getUser })
+const useUserQuery = ({ enabled = true }: { enabled?: boolean } = {}) => {
+  return useQuery({ enabled, queryKey: ['user'], queryFn: getUser, retry: false })
 }
 
 export default useUserQuery

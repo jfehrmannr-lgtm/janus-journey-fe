@@ -1,3 +1,14 @@
+## 2026-10-05
+
+### #JANUS-FE-0011: Add Janus User Authentication Boundary
+
+**Work**: Plan / Build; Connected Better Auth session resolution to the BFF User boundary and added first-time Janus User provisioning without moving remote data ownership into Zustand.
+
+- Added authenticated BFF requests for `GET /users/me` and User creation, including Better Auth access-token transport and explicit status handling.
+- Added the global Janus authentication boundary and Zustand flags for loading, authenticated, provisioning, and error states while keeping the User response in React Query.
+- Added the `/provisioning` confirmation screen, Google provider-account lookup, AuthLogin payload construction, direct `201` authentication, and resolved `409` provisioning behavior.
+- Added frontend BFF environment configuration and expanded the User type for provider login data.
+
 ## 2026-10-03
 
 ### #JANUS-FE-0010: Component Folder Organization
@@ -162,3 +173,15 @@
 - Added a temporary process-memory JWKS adapter because no database, schema, migration, or persistence architecture is approved in this phase.
 - Removed remaining mock Janus User reads from Dashboard and navigation loading; current mock resources use their existing fixture owner identifier.
 - Kept Google authentication, Better Auth sessions, protected Dashboard routes, mock Dashboard data, and logout behavior unchanged.
+
+## 2026-10-06
+
+### #JANUS-FE-0012: Restore Login-First Janus User Resolution
+
+**Work**: Fix; Removed the unapproved `/users/me` and Better Auth account-list lookup flow, then restored authenticated User resolution through the existing BFF resource endpoint.
+
+- Derive the User resource identifier from the authenticated Better Auth JWT `sub` and request `GET /users/{id}` through the BFF.
+- Keep JWT validation in the BFF and use the frontend subject only to address the existing resource route.
+- Remove `authClient.listAccounts()` from provisioning and rely on the completed Better Auth session instead.
+- Keep provisioning reachable only after an authenticated User lookup returns `404`.
+- Update the frontend README to document the corrected authentication and provisioning boundary.
