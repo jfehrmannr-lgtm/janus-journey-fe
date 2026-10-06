@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { authClient } from '@/services/authClient'
@@ -9,6 +9,11 @@ import { createUser } from '@/services/userService'
 import useJanusAuthStore from '@/stores/janusAuthStore'
 import type { User } from '@/types/resources'
 import { useQueryClient } from '@tanstack/react-query'
+
+interface BetterAuthAccount {
+  accountId: string
+  providerId: string
+}
 
 /**
  * Renders the first-time User provisioning flow after an authenticated User
@@ -21,12 +26,46 @@ const CreateUserScreen = () => {
   const queryClient = useQueryClient()
   const setAuthState = useJanusAuthStore((state) => state.setState)
   const sessionResult = authClient.useSession()
+  const [accounts, setAccounts] = useState<BetterAuthAccount[]>([])
+  const [accountError, setAccountError] = useState<string | null>(null)
+  const [isLoadingAccounts, setIsLoadingAccounts] = useState(true)
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
   const [username, setUsername] = useState<string | undefined>()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [conflictMessage, setConflictMessage] = useState<string | null>(null)
   const sessionUser = sessionResult.data?.user
+
+  useEffect(() => {
+    if (!sessionResult.data) {
+      return
+    }
+
+    let isCancelled = false
+
+    const loadAccounts = async () => {
+      const { data, error } = await authClient.listAccounts()
+
+      if (isCancelled) {
+        return
+      }
+
+      if (error || !data) {
+        setAccountError(error?.message ?? 'The Google authentication identity could not be resolved.')
+        setIsLoadingAccounts(false)
+        return
+      }
+
+      setAccounts(data as BetterAuthAccount[])
+      setIsLoadingAccounts(false)
+    }
+
+    void loadAccounts()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [sessionResult.data])
 
   const handleCreate = async () => {
     setErrorMessage(null)
@@ -39,10 +78,27 @@ const CreateUserScreen = () => {
       return
     }
 
+    const googleAccount = accounts.find((account) => account.providerId === 'google')
+
+    if (!googleAccount) {
+      setErrorMessage('The Google authentication identity could not be resolved.')
+      return
+    }
+
     setIsCreating(true)
 
     try {
       const createdUser = await createUser({
+        authLogins: [
+          {
+            authLogin: `oauth-google-${googleAccount.accountId}`,
+            metadata: {},
+            provider: 'google',
+            providerAvatarUrl: sessionUser.image ?? null,
+            providerEmail: sessionUser.email,
+            providerUsername: sessionUser.name ?? null
+          }
+        ],
         config: {
           avatarUrl: sessionUser.image ?? null,
           username: confirmedUsername
@@ -110,15 +166,15 @@ const CreateUserScreen = () => {
           </span>
         </label>
 
-        {(errorMessage || conflictMessage) && (
+        {(accountError || errorMessage || conflictMessage) && (
           <p className="mt-4 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">
-            {conflictMessage ?? errorMessage}
+            {conflictMessage ?? accountError ?? errorMessage}
           </p>
         )}
 
         <button
           className="mt-6 h-11 w-full rounded-lg bg-slate-900 px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={!isConfirmed || !sessionUser || isCreating}
+          disabled={!isConfirmed || !sessionUser || isLoadingAccounts || isCreating}
           onClick={handleCreate}
           type="button"
         >

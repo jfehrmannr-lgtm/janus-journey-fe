@@ -14,6 +14,14 @@ const getUser = async (): Promise<User> => {
 }
 
 export interface CreateUserInput {
+  authLogins: Array<{
+    authLogin: string
+    metadata: Record<string, unknown>
+    provider: 'google'
+    providerAvatarUrl: string | null
+    providerEmail: string | null
+    providerUsername: string | null
+  }>
   config: {
     avatarUrl: string | null
     username: string

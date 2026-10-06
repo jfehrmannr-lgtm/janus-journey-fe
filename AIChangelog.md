@@ -185,3 +185,13 @@
 - Remove `authClient.listAccounts()` from provisioning and rely on the completed Better Auth session instead.
 - Keep provisioning reachable only after an authenticated User lookup returns `404`.
 - Update the frontend README to document the corrected authentication and provisioning boundary.
+
+## 2026-10-06
+
+### #JANUS-FE-0013: Complete Google User Provisioning Payload
+
+**Work**: Fix; Restored the frontend-owned Google AuthLogin data in the User creation request while leaving User identifiers, timestamps, and persistence defaults to the existing backend flow.
+
+- Resolve the authenticated Google account through Better Auth only after the provisioning route is reached.
+- Send `authLogin`, `provider`, provider email, provider username, provider avatar, and metadata.
+- Preserve the existing session-based User profile fields and omit server-owned `id`, timestamps, and generated defaults.
