@@ -1,5 +1,4 @@
-import { CheckCircleOutlined, FolderOutlined, MinusCircleOutlined } from '@ant-design/icons'
-
+import Icon from '@/components/Icon/Icon'
 import type { JourneyTreeData } from '@/types/resources'
 
 interface JourneyTreeProps {
@@ -23,16 +22,16 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
         return (
           <div key={folder.uid}>
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-              <FolderOutlined className="text-slate-400" />
+              <Icon className="text-slate-400" icon="FolderOutlined" />
               <span className="truncate">{folder.name}</span>
             </div>
             <div className="mt-1 space-y-1 pl-5">
               {folderTasks.map((task) => (
                 <div className="flex items-center gap-2 text-xs text-slate-500" key={task.uid}>
                   {task.status === 'completed' || task.status === 'discarded' ? (
-                    <CheckCircleOutlined className="text-emerald-500" />
+                    <Icon className="text-emerald-500" icon="CheckCircleOutlined" />
                   ) : (
-                    <MinusCircleOutlined className="text-slate-300" />
+                    <Icon className="text-slate-300" icon="MinusCircleOutlined" />
                   )}
                   <span className="truncate">{task.name}</span>
                 </div>
@@ -44,9 +43,9 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
       {directTasks.map((task) => (
         <div className="flex items-center gap-2 text-xs text-slate-500" key={task.uid}>
           {task.status === 'completed' || task.status === 'discarded' ? (
-            <CheckCircleOutlined className="text-emerald-500" />
+            <Icon className="text-emerald-500" icon="CheckCircleOutlined" />
           ) : (
-            <MinusCircleOutlined className="text-slate-300" />
+            <Icon className="text-slate-300" icon="MinusCircleOutlined" />
           )}
           <span className="truncate">{task.name}</span>
         </div>

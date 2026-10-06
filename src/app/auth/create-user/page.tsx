@@ -1,7 +1,7 @@
 import CreateUserScreen from '@/components/Provisioning/CreateUserScreen'
 
 /**
- * Composes the first-time Janus User provisioning route.
+ * Composes the first-time Janus User creation route.
  *
  * @returns The provisioning screen.
  */

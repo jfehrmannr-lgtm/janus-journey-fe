@@ -1,18 +1,8 @@
 'use client'
 
-import {
-  AppstoreOutlined,
-  BellOutlined,
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  FolderOpenOutlined,
-  PlusOutlined,
-  SearchOutlined,
-  TeamOutlined,
-  ThunderboltOutlined
-} from '@ant-design/icons'
 import type { ReactNode } from 'react'
 
+import Icon from '@/components/Icon/Icon'
 import { authClient } from '@/services/authClient'
 import type { DashboardHomeData, DashboardMetricTone, DashboardQuickAction } from '@/types/dashboard'
 
@@ -59,16 +49,16 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
   const { data: session } = authClient.useSession()
   const username = session?.user.name?.split(' ')[0] ?? 'there'
   const metricIcons = {
-    'active-journeys': <AppstoreOutlined />,
-    'tasks-completed': <CheckCircleOutlined />,
-    'tasks-in-progress': <ClockCircleOutlined />,
-    'tasks-remaining': <ThunderboltOutlined />
+    'active-journeys': <Icon icon="AppstoreOutlined" />,
+    'tasks-completed': <Icon icon="CheckCircleOutlined" />,
+    'tasks-in-progress': <Icon icon="ClockCircleOutlined" />,
+    'tasks-remaining': <Icon icon="ThunderboltOutlined" />
   }
   const quickActionIcons: Record<DashboardQuickAction, ReactNode> = {
-    journey: <AppstoreOutlined />,
-    task: <PlusOutlined />,
-    explore: <ThunderboltOutlined />,
-    shared: <TeamOutlined />
+    journey: <Icon icon="AppstoreOutlined" />,
+    task: <Icon icon="PlusOutlined" />,
+    explore: <Icon icon="ThunderboltOutlined" />,
+    shared: <Icon icon="TeamOutlined" />
   }
 
   return (
@@ -76,7 +66,7 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
       <div className="mx-auto max-w-7xl">
         <header className="flex items-center gap-3">
           <div className="relative flex min-w-0 flex-1 items-center">
-            <SearchOutlined className="absolute left-4 text-slate-400" />
+            <Icon className="absolute left-4 text-slate-400" icon="SearchOutlined" />
             <input
               aria-label="Search your Janus Journey workspace"
               className="h-12 w-full rounded-xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10"
@@ -88,7 +78,7 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
             className="hidden h-12 items-center gap-2 rounded-xl bg-slate-900 px-5 text-sm font-semibold text-white transition-colors hover:bg-slate-800 sm:flex"
             type="button"
           >
-            <PlusOutlined />
+            <Icon icon="PlusOutlined" />
             Create
           </button>
           <button
@@ -96,7 +86,7 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
             className="flex size-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-lg text-slate-600 transition-colors hover:bg-slate-50"
             type="button"
           >
-            <BellOutlined />
+            <Icon icon="BellOutlined" />
           </button>
         </header>
 
@@ -144,7 +134,7 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
                   <div
                     className={`flex size-12 shrink-0 items-center justify-center rounded-xl ${index % 2 === 0 ? 'bg-blue-50 text-blue-700' : 'bg-indigo-50 text-indigo-700'}`}
                   >
-                    <FolderOpenOutlined className="text-xl" />
+                    <Icon className="text-xl" icon="FolderOpenOutlined" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-3">

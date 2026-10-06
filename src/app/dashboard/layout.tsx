@@ -20,7 +20,7 @@ const DashboardRouteLayout = async ({ children }: DashboardRouteLayoutProps) => 
   const session = await auth.api.getSession({ headers: await headers() })
 
   if (!session) {
-    redirect('/login')
+    redirect('/auth/login')
   }
 
   return <AppLayout>{children}</AppLayout>

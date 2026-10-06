@@ -195,3 +195,23 @@
 - Resolve the authenticated Google account through Better Auth only after the provisioning route is reached.
 - Send `authLogin`, `provider`, provider email, provider username, provider avatar, and metadata.
 - Preserve the existing session-based User profile fields and omit server-owned `id`, timestamps, and generated defaults.
+
+## 2026-10-06
+
+### #JANUS-FE-0014: Move Authentication Routes Under Auth Segment
+
+**Work**: Refactor; Moved the login and User creation pages under the shared `/auth` App Router segment and updated all active frontend redirects and links without changing authentication behavior.
+
+- Moved the login page to `/auth/login`.
+- Moved the User creation page to `/auth/create-user`.
+- Updated proxy, dashboard protection, logout, marketing links, and authentication boundary redirects.
+
+## 2026-10-06
+
+### #JANUS-FE-0015: Centralize Ant Design Icon Rendering
+
+**Work**: Refactor; Added a typed client-side `Icon` component and migrated application icon consumers behind the shared Ant Design icon boundary without changing visual behavior or interactions.
+
+- Added explicit supported icon-name and icon-variant types.
+- Kept all Ant Design icon imports and name-to-component mapping inside `Icon.tsx`.
+- Refactored Dashboard, SideNav, Journey tree, Login, and marketing components to use `<Icon />`.

@@ -1,7 +1,6 @@
 'use client'
 
-import { DownOutlined, RightOutlined } from '@ant-design/icons'
-
+import Icon from '@/components/Icon/Icon'
 import useAppUiStore from '@/stores/appUiStore'
 import type { Journey } from '@/types/resources'
 import JourneyTreeQuery from '@/layout/SideNav/JourneyTreeQuery'
@@ -32,7 +31,7 @@ const JourneyAccordionItem = ({ journey }: JourneyAccordionItemProps) => {
         type="button"
       >
         <span className="flex size-4 items-center justify-center text-xs text-slate-400">
-          {isExpanded ? <DownOutlined /> : <RightOutlined />}
+          {isExpanded ? <Icon icon="DownOutlined" /> : <Icon icon="RightOutlined" />}
         </span>
         <span className="truncate">{journey.name}</span>
       </button>

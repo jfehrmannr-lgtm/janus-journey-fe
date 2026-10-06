@@ -29,7 +29,7 @@ const JanusAuthBoundary = ({ children }: JanusAuthBoundaryProps) => {
   const { isAuthenticated, isError, isProvisioning } = useJanusAuthStore()
   const setState = useJanusAuthStore((state) => state.setState)
   const isDashboardRoute = pathname.startsWith('/dashboard')
-  const isProvisioningRoute = pathname === '/provisioning'
+  const isProvisioningRoute = pathname === '/auth/create-user'
 
   useEffect(() => {
     if (session.isPending) {
@@ -78,7 +78,7 @@ const JanusAuthBoundary = ({ children }: JanusAuthBoundaryProps) => {
 
   useEffect(() => {
     if (isProvisioning && isDashboardRoute) {
-      router.replace('/provisioning')
+      router.replace('/auth/create-user')
       return
     }
 
@@ -88,7 +88,7 @@ const JanusAuthBoundary = ({ children }: JanusAuthBoundaryProps) => {
     }
 
     if (!session.isPending && !session.data && isProvisioningRoute) {
-      router.replace('/login')
+      router.replace('/auth/login')
     }
   }, [isAuthenticated, isDashboardRoute, isProvisioning, isProvisioningRoute, router, session.data, session.isPending])
 

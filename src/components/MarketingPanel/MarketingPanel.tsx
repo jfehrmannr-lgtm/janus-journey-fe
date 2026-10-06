@@ -1,11 +1,9 @@
-'use client'
-
-import { ArrowRightOutlined, BarChartOutlined, TeamOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import backgroundImage from '@/assets/janus-journey-background.png'
 import FeatureHighlight from '@/components/FeatureHighlight/FeatureHighlight'
+import Icon from '@/components/Icon/Icon'
 import MarketingHeader from '@/components/MarketingHeader/MarketingHeader'
 
 /**
@@ -40,17 +38,17 @@ const MarketingPanel = () => {
             >
               <FeatureHighlight
                 description="Turn your goals into clear, actionable steps."
-                icon={<UnorderedListOutlined />}
+                icon={<Icon icon="UnorderedListOutlined" />}
                 title="Stay organized"
               />
               <FeatureHighlight
                 description="See how far you have come, one step at a time."
-                icon={<BarChartOutlined />}
+                icon={<Icon icon="BarChartOutlined" />}
                 title="Track your progress"
               />
               <FeatureHighlight
                 description="Inspire others or learn together."
-                icon={<TeamOutlined />}
+                icon={<Icon icon="TeamOutlined" />}
                 title="Share your Journeys"
               />
             </ul>
@@ -58,14 +56,14 @@ const MarketingPanel = () => {
             <div className="mt-10 flex flex-wrap gap-4 pb-2 lg:mt-12">
               <Link
                 className="inline-flex items-center gap-4 rounded-xl bg-white px-6 py-4 text-base font-semibold text-slate-950 transition-transform hover:-translate-y-0.5 sm:px-8"
-                href="/login"
+                href="/auth/login"
               >
                 Get started
-                <ArrowRightOutlined />
+                <Icon icon="ArrowRightOutlined" />
               </Link>
               <Link
                 className="inline-flex items-center rounded-xl border border-slate-400/50 px-6 py-4 text-base font-medium text-white transition-colors hover:bg-white/10 sm:px-8"
-                href="/login"
+                href="/auth/login"
               >
                 Learn more
               </Link>

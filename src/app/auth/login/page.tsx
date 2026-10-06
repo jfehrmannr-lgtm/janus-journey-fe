@@ -5,7 +5,7 @@ import LoginPage from '@/layout/LoginPage/LoginPage'
 import { auth } from '@/services/auth'
 
 /**
- * Composes the Janus Journey login experience for the login route.
+ * Composes the Janus Journey login experience for the authentication route.
  *
  * @returns The login page experience.
  */

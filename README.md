@@ -215,11 +215,11 @@ npm run start
 Open:
 
 - Landing page: [http://localhost:3000](http://localhost:3000)
-- Login: [http://localhost:3000/login](http://localhost:3000/login)
+- Login: [http://localhost:3000/auth/login](http://localhost:3000/auth/login)
 - Dashboard Home: [http://localhost:3000/dashboard/home](http://localhost:3000/dashboard/home)
 
-The Dashboard is protected. Unauthenticated users are redirected to `/login`,
-and authenticated users visiting `/login` are redirected to
+The Dashboard is protected. Unauthenticated users are redirected to
+`/auth/login`, and authenticated users visiting `/auth/login` are redirected to
 `/dashboard/home`.
 
 ## Useful commands

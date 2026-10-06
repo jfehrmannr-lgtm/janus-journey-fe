@@ -15,12 +15,12 @@ const MarketingHeader = () => {
         aria-label="Marketing navigation"
         className="flex items-center gap-5 text-sm font-medium sm:gap-8 sm:text-base"
       >
-        <Link className="text-slate-200 transition-colors hover:text-white" href="/login">
+        <Link className="text-slate-200 transition-colors hover:text-white" href="/auth/login">
           Sign in
         </Link>
         <Link
           className="rounded-xl border border-slate-300/80 px-5 py-2.5 text-white transition-colors hover:bg-white/10 sm:px-6"
-          href="/login"
+          href="/auth/login"
         >
           Get started
         </Link>

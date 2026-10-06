@@ -1,8 +1,9 @@
 'use client'
 
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+
+import Icon from '@/components/Icon/Icon'
 
 /**
  * Renders the login form with Better Auth Google sign-in.
@@ -97,7 +98,7 @@ const LoginForm = () => {
               onClick={() => setIsPasswordVisible((visible) => !visible)}
               type="button"
             >
-              {isPasswordVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+              {isPasswordVisible ? <Icon icon="EyeInvisibleOutlined" /> : <Icon icon="EyeOutlined" />}
             </button>
           </span>
         </label>

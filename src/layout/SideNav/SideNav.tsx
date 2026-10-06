@@ -1,23 +1,11 @@
 'use client'
 
-import {
-  AppstoreOutlined,
-  CheckSquareOutlined,
-  CloseOutlined,
-  DownOutlined,
-  FolderOutlined,
-  HomeOutlined,
-  LogoutOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  SettingOutlined,
-  StarOutlined
-} from '@ant-design/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import BrandLogo from '@/components/BrandLogo/BrandLogo'
+import Icon from '@/components/Icon/Icon'
 import { authClient } from '@/services/authClient'
 import useAppUiStore from '@/stores/appUiStore'
 import type { NavigationRootResources } from '@/types/resources'
@@ -44,21 +32,21 @@ const SideNav = ({ resources }: SideNavProps) => {
   const userInitials = displayName.slice(0, 2).toUpperCase()
 
   /**
-   * Ends the Better Auth session and returns to the public login route.
+   * Ends the Better Auth session and returns to the public authentication route.
    *
    * @returns A promise that resolves after the session is cleared.
    */
   const handleLogout = async () => {
     await authClient.signOut()
-    router.replace('/login')
+    router.replace('/auth/login')
     router.refresh()
   }
 
   const navigationItems = [
-    { label: 'Home', icon: <HomeOutlined />, active: true },
-    { label: 'My Tasks', icon: <CheckSquareOutlined />, badge: resources.rootTasks.length },
-    { label: 'Favorites', icon: <StarOutlined /> },
-    { label: 'Explore', icon: <AppstoreOutlined /> }
+    { label: 'Home', icon: <Icon icon="HomeOutlined" />, active: true },
+    { label: 'My Tasks', icon: <Icon icon="CheckSquareOutlined" />, badge: resources.rootTasks.length },
+    { label: 'Favorites', icon: <Icon icon="StarOutlined" /> },
+    { label: 'Explore', icon: <Icon icon="AppstoreOutlined" /> }
   ]
 
   return (
@@ -72,7 +60,7 @@ const SideNav = ({ resources }: SideNavProps) => {
           onClick={() => setIsMobileMenuOpen((isOpen) => !isOpen)}
           type="button"
         >
-          <MenuUnfoldOutlined />
+          <Icon icon="MenuUnfoldOutlined" />
         </button>
       </div>
 
@@ -101,7 +89,7 @@ const SideNav = ({ resources }: SideNavProps) => {
             onClick={() => setIsMobileMenuOpen(false)}
             type="button"
           >
-            <CloseOutlined />
+            <Icon icon="CloseOutlined" />
           </button>
           <button
             aria-label={isSideNavCollapsed ? 'Expand navigation' : 'Collapse navigation'}
@@ -109,7 +97,7 @@ const SideNav = ({ resources }: SideNavProps) => {
             onClick={toggleSideNav}
             type="button"
           >
-            {isSideNavCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            {isSideNavCollapsed ? <Icon icon="MenuUnfoldOutlined" /> : <Icon icon="MenuFoldOutlined" />}
           </button>
         </div>
 
@@ -134,7 +122,7 @@ const SideNav = ({ resources }: SideNavProps) => {
                 <div className="flex items-center justify-between px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
                   <span>Journeys</span>
                   <button className="text-slate-500 hover:text-slate-900" type="button">
-                    <DownOutlined />
+                    <Icon icon="DownOutlined" />
                   </button>
                 </div>
                 <div className="mt-2 space-y-1">
@@ -145,7 +133,7 @@ const SideNav = ({ resources }: SideNavProps) => {
 
                 <div className="mt-8 flex items-center justify-between px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
                   <span>Folders</span>
-                  <FolderOutlined />
+                  <Icon icon="FolderOutlined" />
                 </div>
                 <div className="mt-2 space-y-1">
                   {resources.rootFolders.map((folder) => (
@@ -154,7 +142,7 @@ const SideNav = ({ resources }: SideNavProps) => {
                       key={folder.uid}
                       type="button"
                     >
-                      <FolderOutlined className="text-slate-400" />
+                      <Icon className="text-slate-400" icon="FolderOutlined" />
                       <span className="truncate">{folder.name}</span>
                     </button>
                   ))}
@@ -167,7 +155,7 @@ const SideNav = ({ resources }: SideNavProps) => {
                 className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950"
                 type="button"
               >
-                <SettingOutlined />
+                <Icon icon="SettingOutlined" />
                 Settings
               </button>
               <button
@@ -175,7 +163,7 @@ const SideNav = ({ resources }: SideNavProps) => {
                 onClick={handleLogout}
                 type="button"
               >
-                <LogoutOutlined />
+                <Icon icon="LogoutOutlined" />
                 Log out
               </button>
               <div className="flex items-center gap-3 rounded-xl px-3 py-2.5">
