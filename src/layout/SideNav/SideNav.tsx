@@ -32,13 +32,13 @@ const SideNav = ({ resources }: SideNavProps) => {
   const userInitials = displayName.slice(0, 2).toUpperCase()
 
   /**
-   * Ends the Better Auth session and returns to the public authentication route.
+   * Ends the Better Auth session and returns to the public root route.
    *
    * @returns A promise that resolves after the session is cleared.
    */
   const handleLogout = async () => {
     await authClient.signOut()
-    router.replace('/auth/login')
+    router.replace('/')
     router.refresh()
   }
 

@@ -13,18 +13,16 @@ history, and sharing.
 A Journey can contain Folders and Tasks and represents a structured path
 without enforcing a mandatory execution order.
 
-## Project Knowledge
+## Agent Behavior
 
-- Local Janus Journey project knowledge is available under `.project/`.
-- Treat `.project/` as the source of truth for project-wide architecture, contracts, infrastructure, technology decisions, and visual references.
-- `.project/architecture/` contains architecture and infrastructure diagrams.
-- `.project/contracts/` contains project and data contracts.
-- `.project/media/` contains visual references and project media.
-- Consult only the project knowledge relevant to the current task.
-- Before changing behavior governed by a contract or architecture decision, read the relevant project knowledge.
-- When implementing an existing design, inspect the relevant visual reference before coding.
-- Never infer missing project rules. If required knowledge is unavailable, ask the user.
-- Never modify files under `.project/` without explicit user authorization.
+- Inspect the existing implementation before modifying it.
+- Read the relevant knowledge from the root-level `project/` directory before making architectural or domain decisions.
+- Treat the root `project/` directory as the centralized source of project context, contracts, architecture, and domain knowledge shared by all Janus Journey repositories.
+- Do not expect, create, or maintain repository-specific `project/` directories.
+- Treat `project/` as project knowledge, not as implementation code.
+- Reuse established patterns.
+- Do not invent missing endpoints, microservices, domain contracts, or infrastructure.
+- When a required architectural decision cannot be inferred safely from the existing implementation or the root `project/` knowledge, ask before implementing it.
 
 ## Technology Stack
 

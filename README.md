@@ -50,15 +50,15 @@ The current phase intentionally does **not** include:
 
 - Direct frontend access to `ms-users`.
 - Resolving a Janus User before Better Auth authentication completes.
-- A database or persistent Journey domain data.
+- Persistent Journey domain data.
 - A custom access-token issuer.
 - Future resource detail views such as full Task or Folder pages.
 
-The Better Auth JWT plugin and JWKS endpoint are enabled for development so the
-future BFF token contract can be inspected. JWT signing keys are currently held
-in process memory because no persistence architecture has been approved yet.
-Production key persistence must be established before relying on this token
-across frontend restarts or deployments.
+The Better Auth JWT plugin and JWKS endpoint use the dedicated server-side
+`better-auth-db` database. Better Auth authentication state, provider accounts,
+sessions, verification data, and JWT signing keys persist across frontend
+restarts. MongoDB configuration is server-side only through `MONGODB_URI` and
+`BETTER_AUTH_DATABASE_NAME`; it is never exposed to the browser.
 
 ## Technology stack
 

@@ -1,36 +1,19 @@
-import { randomUUID } from 'node:crypto'
-
 import { betterAuth } from 'better-auth'
+import { mongodbAdapter } from 'better-auth/adapters/mongodb'
 import { nextCookies } from 'better-auth/next-js'
-import { jwt, type Jwk } from 'better-auth/plugins'
+import { jwt } from 'better-auth/plugins'
 
-/**
- * Creates the temporary in-memory JWKS adapter used until Better Auth persistence is established.
- *
- * @returns The development JWKS storage adapter.
- */
-const createDevelopmentJwksAdapter = () => {
-  const keys: Jwk[] = []
-
-  return {
-    getJwks: async () => keys,
-    createJwk: async (data: Omit<Jwk, 'id'>) => {
-      const key = { ...data, id: randomUUID() }
-      keys.push(key)
-      return key
-    }
-  }
-}
+import { betterAuthDb, betterAuthMongoClient } from '@/server/mongodb'
 
 /**
  * Configures Better Auth as the Janus Journey authentication manager.
  *
- * Authentication remains database-free for this phase. JWT signing keys are held
- * in process memory temporarily, while the official Better Auth JWKS endpoint
- * exposes their public keys for development verification.
+ * Better Auth owns persistent authentication state and JWT signing keys in the
+ * dedicated server-side better-auth-db database.
  */
 const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL ?? 'http://localhost:3000',
+  database: mongodbAdapter(betterAuthDb, { client: betterAuthMongoClient }),
   secret: process.env.BETTER_AUTH_SECRET,
   socialProviders: {
     google: {
@@ -39,9 +22,7 @@ const auth = betterAuth({
     }
   },
   plugins: [
-    nextCookies(),
     jwt({
-      adapter: createDevelopmentJwksAdapter(),
       jwks: {
         keyPairConfig: { alg: 'RS256' }
       },
@@ -52,7 +33,8 @@ const auth = betterAuth({
         getSubject: ({ user }) => user.id,
         issuer: process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'
       }
-    })
+    }),
+    nextCookies(),
   ]
 })
 

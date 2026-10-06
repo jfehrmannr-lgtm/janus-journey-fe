@@ -1,3 +1,23 @@
+## 2026-10-06
+
+### #JANUS-FE-0017: Redirect Logout to Root
+
+**Work**: Fix / Authentication; Updated the Dashboard logout redirect to return users to the public root route after the Better Auth session is cleared.
+
+- Preserved the existing Better Auth sign-out and route refresh behavior.
+- Changed only the post-logout destination from `/auth/login` to `/`.
+
+## 2026-10-06
+
+### #JANUS-FE-0016: Persist Better Auth in MongoDB
+
+**Work**: Build / Authentication; Replaced temporary process-memory Better Auth persistence with the official MongoDB adapter while preserving the existing Google, session, JWT, and BFF identity contracts.
+
+- Added a server-only reusable MongoDB connection for the dedicated `better-auth-db` database.
+- Persisted Better Auth users, accounts, sessions, verification data, and JWKS through the official adapter.
+- Removed the temporary in-memory JWKS adapter without changing JWT subject, issuer, audience, or expiration behavior.
+- Documented server-only MongoDB configuration and authentication persistence across frontend restarts.
+
 ## 2026-10-05
 
 ### #JANUS-FE-0011: Add Janus User Authentication Boundary
