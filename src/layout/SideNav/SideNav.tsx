@@ -115,7 +115,7 @@ const SideNav = ({ resources }: SideNavProps) => {
 
         {showExpandedContent && (
           <>
-            <div className="mt-8 min-h-0 flex-1 overflow-y-auto pr-1">
+            <div className="mt-4 min-h-0 flex-1 overflow-y-auto pr-1">
               <nav aria-label="Primary navigation" className="space-y-1">
                 {navigationItems.map((item) => (
                   <Link

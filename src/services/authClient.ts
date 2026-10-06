@@ -8,6 +8,13 @@ import { jwtClient } from 'better-auth/client/plugins'
  *
  * @returns The Better Auth browser client.
  */
-const authClient = createAuthClient({ plugins: [jwtClient()] })
+const authClient = createAuthClient({
+  plugins: [jwtClient()],
+  sessionOptions: {
+    refetchInterval: 0,
+    refetchOnWindowFocus: true,
+    refetchWhenOffline: false
+  }
+})
 
 export { authClient }

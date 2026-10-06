@@ -13,7 +13,6 @@ import {
 } from '@ant-design/icons'
 import type { ReactNode } from 'react'
 
-import BffTokenInspector from '@/components/Dashboard/BffTokenInspector/BffTokenInspector'
 import { authClient } from '@/services/authClient'
 import type { DashboardHomeData, DashboardMetricTone, DashboardQuickAction } from '@/types/dashboard'
 
@@ -106,8 +105,6 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
           <h1 className="mt-1 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">{username}</h1>
           <p className="mt-3 text-base text-slate-500">Keep going. Small steps compound over time.</p>
         </section>
-
-        <BffTokenInspector />
 
         <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Workspace summary">
           {data.metrics.map((metric) => (
