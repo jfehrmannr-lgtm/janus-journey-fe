@@ -10,6 +10,7 @@ import { authClient } from '@/services/authClient'
 import useAppUiStore from '@/stores/appUiStore'
 import type { NavigationRootResources } from '@/types/resources'
 import JourneyAccordionItem from '@/layout/SideNav/JourneyAccordionItem'
+import JanusJourneyLogo from 'janus-joriney-logo.svg'
 
 interface SideNavProps {
   resources: NavigationRootResources
@@ -75,12 +76,12 @@ const SideNav = ({ resources }: SideNavProps) => {
 
       <aside
         data-mobile-nav-open={isMobileMenuOpen ? true : undefined}
-        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-80 max-w-[calc(100vw-2rem)] -translate-x-full transform flex-col border-r border-slate-200 bg-white py-5 shadow-2xl transition-transform lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:shrink-0 lg:translate-x-0 lg:border-b-0 lg:py-6 lg:shadow-none ${isMobileMenuOpen ? 'translate-x-0' : ''} ${isSideNavCollapsed ? 'lg:w-16' : 'lg:w-72 px-4'}`}
+        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-80 max-w-[calc(100vw-2rem)] -translate-x-full transform flex-col border-r border-slate-200 bg-white py-5 shadow-2xl transition-transform lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:shrink-0 lg:translate-x-0 lg:border-b-0 lg:pb-6 lg:shadow-none ${isMobileMenuOpen ? 'translate-x-0' : ''} ${isSideNavCollapsed ? 'lg:w-16' : 'lg:w-72 px-4'}`}
       >
         <div className={`flex items-center gap-3 ${isSideNavCollapsed ? 'justify-center' : 'justify-between'}`}>
           {showExpandedContent && (
             <Link className="text-xl font-semibold tracking-tight text-slate-950" href="/dashboard/home">
-              Janus Journey
+              <BrandLogo size="sm" />
             </Link>
           )}
           <button
@@ -151,21 +152,23 @@ const SideNav = ({ resources }: SideNavProps) => {
             </div>
 
             <div className="mt-6 space-y-1 border-t border-slate-100 pt-4">
-              <button
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950"
-                type="button"
-              >
-                <Icon icon="SettingOutlined" />
-                Settings
-              </button>
-              <button
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950"
-                onClick={handleLogout}
-                type="button"
-              >
-                <Icon icon="LogoutOutlined" />
-                Log out
-              </button>
+              <div className="flex">
+                <button
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950"
+                  type="button"
+                >
+                  <Icon icon="SettingOutlined" />
+                  Settings
+                </button>
+                <button
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950"
+                  onClick={handleLogout}
+                  type="button"
+                >
+                  <Icon icon="LogoutOutlined" />
+                  Log out
+                </button>
+              </div>
               <div className="flex items-center gap-3 rounded-xl px-3 py-2.5">
                 <span className="flex size-9 items-center justify-center rounded-full bg-indigo-600 text-sm font-semibold text-white">
                   {userInitials}

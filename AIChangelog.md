@@ -1,5 +1,25 @@
 ## 2026-10-09
 
+### #JANUS-FE-0020: Add BrandLogo Size System
+
+**Work**: Plan / Build; Added a reusable BrandLogo size prop for responsive logo mark and wordmark sizing while preserving the existing normal appearance by default.
+
+- Added `sm`, `md`, `nm`, `lg`, and `xl` size options.
+- Kept `nm` as the default when `size` is omitted or undefined.
+- Preserved compact and dark-background behavior for all sizes.
+
+## 2026-10-09
+
+### #JANUS-FE-0019: Support Empty Dashboard State
+
+**Work**: Plan / Build; Updated the Dashboard mock workspace to represent a newly registered empty account and added a clear empty Journey state without changing the existing populated Journey cards or statistic layout.
+
+- Set mocked Journeys, Folders, Tasks, and Journey summaries to empty collections.
+- Set all Dashboard statistic values to zero while preserving the statistic cards and quick actions.
+- Added an empty Journey prompt that renders instead of fictional Journey cards when no Journeys exist.
+
+## 2026-10-09
+
 ### #JANUS-FE-0018: Integrate BFF Root Navigation Resources
 
 **Work**: Plan / Build; Replaced the SideNav root-resource mock query with the authenticated BFF `GET /journeys/root` endpoint while preserving the existing navigation component, query, loading, error, and sorting behavior.

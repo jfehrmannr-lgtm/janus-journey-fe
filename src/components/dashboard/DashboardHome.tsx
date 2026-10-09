@@ -124,44 +124,61 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
               <span aria-hidden="true">→</span>
             </button>
           </div>
-          <div className="mt-5 grid gap-4 xl:grid-cols-2">
-            {data.journeys.map((summary, index) => (
-              <article
-                className={`rounded-2xl border bg-white p-5 shadow-sm transition-colors ${index === 0 ? 'border-blue-400 ring-1 ring-blue-400/30' : 'border-slate-200/80'}`}
-                key={summary.journey.uid}
+          {data.journeys.length > 0 ? (
+            <div className="mt-5 grid gap-4 xl:grid-cols-2">
+              {data.journeys.map((summary, index) => (
+                <article
+                  className={`rounded-2xl border bg-white p-5 shadow-sm transition-colors ${index === 0 ? 'border-blue-400 ring-1 ring-blue-400/30' : 'border-slate-200/80'}`}
+                  key={summary.journey.uid}
+                >
+                  <div className="flex items-start gap-4">
+                    <div
+                      className={`flex size-12 shrink-0 items-center justify-center rounded-xl ${index % 2 === 0 ? 'bg-blue-50 text-blue-700' : 'bg-indigo-50 text-indigo-700'}`}
+                    >
+                      <Icon className="text-xl" icon="FolderOpenOutlined" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="text-lg font-semibold text-slate-950">{summary.journey.name}</h3>
+                          <p className="mt-1 text-sm text-slate-500">{summary.journey.description}</p>
+                        </div>
+                        <span className="text-xl text-slate-400" aria-hidden="true">
+                          ›
+                        </span>
+                      </div>
+                      <div className="mt-5 flex items-center gap-3">
+                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100">
+                          <div
+                            className={`h-full rounded-full bg-blue-500 ${getProgressWidthClass(summary.progressPercent)}`}
+                          />
+                        </div>
+                        <span className="whitespace-nowrap text-sm text-slate-500">
+                          {summary.completedTasks} / {summary.totalTasks} tasks
+                        </span>
+                        <span className="text-sm font-semibold text-slate-700">{summary.progressPercent}%</span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+              <Icon className="text-3xl text-slate-400" icon="AppstoreOutlined" />
+              <h3 className="mt-4 text-lg font-semibold text-slate-950">No Journeys yet</h3>
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+                Create your first Journey to organize goals, tasks, and progress in one place.
+              </p>
+              <button
+                className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+                type="button"
               >
-                <div className="flex items-start gap-4">
-                  <div
-                    className={`flex size-12 shrink-0 items-center justify-center rounded-xl ${index % 2 === 0 ? 'bg-blue-50 text-blue-700' : 'bg-indigo-50 text-indigo-700'}`}
-                  >
-                    <Icon className="text-xl" icon="FolderOpenOutlined" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <h3 className="text-lg font-semibold text-slate-950">{summary.journey.name}</h3>
-                        <p className="mt-1 text-sm text-slate-500">{summary.journey.description}</p>
-                      </div>
-                      <span className="text-xl text-slate-400" aria-hidden="true">
-                        ›
-                      </span>
-                    </div>
-                    <div className="mt-5 flex items-center gap-3">
-                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100">
-                        <div
-                          className={`h-full rounded-full bg-blue-500 ${getProgressWidthClass(summary.progressPercent)}`}
-                        />
-                      </div>
-                      <span className="whitespace-nowrap text-sm text-slate-500">
-                        {summary.completedTasks} / {summary.totalTasks} tasks
-                      </span>
-                      <span className="text-sm font-semibold text-slate-700">{summary.progressPercent}%</span>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                <Icon icon="PlusOutlined" />
+                Create Journey
+              </button>
+            </div>
+          )}
         </section>
 
         <section className="mt-12 pb-8" aria-labelledby="quick-actions-title">
