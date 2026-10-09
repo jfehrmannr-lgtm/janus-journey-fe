@@ -10,7 +10,6 @@ import { authClient } from '@/services/authClient'
 import useAppUiStore from '@/stores/appUiStore'
 import type { NavigationRootResources } from '@/types/resources'
 import JourneyAccordionItem from '@/layout/SideNav/JourneyAccordionItem'
-import JanusJourneyLogo from 'janus-joriney-logo.svg'
 
 interface SideNavProps {
   resources: NavigationRootResources
