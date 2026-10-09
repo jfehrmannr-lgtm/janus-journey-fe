@@ -1,5 +1,12 @@
 import journeysMock from '@/mock/journeys.mock.json'
+import { requestBff } from '@/services/bffClient'
 import type { JourneyTreeData, MockDashboardData, NavigationRootResources } from '@/types/resources'
+
+interface NavigationRootResponse {
+  items?: Pick<MockDashboardData, 'tasks' | 'folders' | 'journeys'>
+  payload?: Pick<MockDashboardData, 'tasks' | 'folders' | 'journeys'>
+  registers: number
+}
 
 const navigationData = journeysMock as MockDashboardData
 const mockRootOwnerUid = 'user-alex'
@@ -7,19 +14,24 @@ const mockRootOwnerUid = 'user-alex'
 /**
  * Returns the root resources required by the authenticated application navigation.
  *
- * @returns A promise containing User-owned Journeys, Folders, and Tasks.
+ * @returns A promise containing the authenticated User's root Journeys, Folders, and Tasks.
  */
 const getNavigationRootResources = async (): Promise<NavigationRootResources> => {
+  const response = await requestBff<NavigationRootResponse>('/journeys/root')
+  const rootItems = response.items ?? response.payload
+
+  if (!rootItems) {
+    throw new Error('The BFF root resources response did not contain resource items.')
+  }
+
   return {
-    journeys: navigationData.journeys
-      .filter((journey) => journey.parentUid === mockRootOwnerUid)
-      .sort((firstJourney, secondJourney) => firstJourney.orderIndex - secondJourney.orderIndex),
-    rootFolders: navigationData.folders
-      .filter((folder) => folder.parentUid === mockRootOwnerUid)
-      .sort((firstFolder, secondFolder) => firstFolder.orderIndex - secondFolder.orderIndex),
-    rootTasks: navigationData.tasks
-      .filter((task) => task.parentUid === mockRootOwnerUid)
-      .sort((firstTask, secondTask) => firstTask.orderIndex - secondTask.orderIndex)
+    journeys: [...rootItems.journeys].sort(
+      (firstJourney, secondJourney) => firstJourney.orderIndex - secondJourney.orderIndex
+    ),
+    rootFolders: [...rootItems.folders].sort(
+      (firstFolder, secondFolder) => firstFolder.orderIndex - secondFolder.orderIndex
+    ),
+    rootTasks: [...rootItems.tasks].sort((firstTask, secondTask) => firstTask.orderIndex - secondTask.orderIndex)
   }
 }
 

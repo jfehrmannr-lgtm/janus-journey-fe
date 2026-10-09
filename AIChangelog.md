@@ -1,3 +1,13 @@
+## 2026-10-09
+
+### #JANUS-FE-0018: Integrate BFF Root Navigation Resources
+
+**Work**: Plan / Build; Replaced the SideNav root-resource mock query with the authenticated BFF `GET /journeys/root` endpoint while preserving the existing navigation component, query, loading, error, and sorting behavior.
+
+- Adapted the BFF root response into the existing `NavigationRootResources` shape used by SideNav.
+- Supported both the requested `items` envelope and the currently deployed BFF `payload` envelope without changing the BFF.
+- Kept nested Journey and Folder navigation outside this integration boundary.
+
 ## 2026-10-06
 
 ### #JANUS-FE-0017: Redirect Logout to Root
