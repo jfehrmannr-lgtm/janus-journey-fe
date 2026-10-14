@@ -3,26 +3,29 @@
 import useJourneyTreeQuery from '@/hooks/useJourneyTreeQuery'
 import JourneyTree from '@/layout/SideNav/JourneyTree'
 import JourneyTreeSkeleton from '@/layout/SideNav/JourneyTreeSkeleton'
+import type { ResourceType } from '@/types/resources'
 
 interface JourneyTreeQueryProps {
-  journeyUid: string
+  resourceType: ResourceType
+  resourceId: string
 }
 
 /**
- * Loads one expanded Journey tree and selects the corresponding visual state.
+ * Loads one selected Journey or Folder tree and preserves the existing Tree states.
  *
- * @param journeyUid - Stable identifier of the expanded Journey.
+ * @param resourceType - Type of the selected resource.
+ * @param resourceId - Stable identifier of the selected resource.
  * @returns The Journey tree query boundary.
  */
-const JourneyTreeQuery = ({ journeyUid }: JourneyTreeQueryProps) => {
-  const { data, error, isLoading } = useJourneyTreeQuery(journeyUid)
+const JourneyTreeQuery = ({ resourceType, resourceId }: JourneyTreeQueryProps) => {
+  const { data, error, isLoading } = useJourneyTreeQuery(resourceType, resourceId)
 
   if (isLoading) {
     return <JourneyTreeSkeleton />
   }
 
   if (error || !data) {
-    return <p className="px-9 py-2 text-xs text-rose-500">Unable to load this Journey.</p>
+    return <p className="px-9 py-2 text-xs text-rose-500">Unable to load this resource.</p>
   }
 
   return <JourneyTree data={data} />

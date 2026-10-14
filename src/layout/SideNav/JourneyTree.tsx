@@ -6,13 +6,13 @@ interface JourneyTreeProps {
 }
 
 /**
- * Renders the resolved Folder and Task descendants of one Journey.
+ * Renders the resolved Folder and Task descendants of one selected resource.
  *
  * @param data - Selected Journey tree resources.
  * @returns The flat Journey tree content for the SideNav.
  */
 const JourneyTree = ({ data }: JourneyTreeProps) => {
-  const directTasks = data.tasks.filter((task) => task.parentUid === data.journey.uid)
+  const directTasks = data.tasks.filter((task) => task.parentUid === data.rootResourceUid)
 
   return (
     <div className="space-y-3 py-2 pl-9 pr-2">
@@ -28,7 +28,7 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
             <div className="mt-1 space-y-1 pl-5">
               {folderTasks.map((task) => (
                 <div className="flex items-center gap-2 text-xs text-slate-500" key={task.uid}>
-                  {task.status === 'completed' || task.status === 'discarded' ? (
+                  {task.status === 'completed' || task.status === 'complete' || task.status === 'discarded' ? (
                     <Icon className="text-emerald-500" icon="CheckCircleOutlined" />
                   ) : (
                     <Icon className="text-slate-300" icon="MinusCircleOutlined" />
@@ -42,7 +42,7 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
       })}
       {directTasks.map((task) => (
         <div className="flex items-center gap-2 text-xs text-slate-500" key={task.uid}>
-          {task.status === 'completed' || task.status === 'discarded' ? (
+          {task.status === 'completed' || task.status === 'complete' || task.status === 'discarded' ? (
             <Icon className="text-emerald-500" icon="CheckCircleOutlined" />
           ) : (
             <Icon className="text-slate-300" icon="MinusCircleOutlined" />

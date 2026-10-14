@@ -2,25 +2,27 @@
 
 import { useQuery } from '@tanstack/react-query'
 
-import { getJourneyTree } from '@/services/navigationService'
+import { getResourceTree } from '@/services/navigationService'
+import type { ResourceType } from '@/types/resources'
 
 /**
  * Reads and caches one Journey tree by Journey ID.
  *
- * @param journeyUid - Stable identifier of the Journey to load.
- * @returns The React Query result for the Journey tree.
+ * @param resourceType - Type of the selected resource.
+ * @param resourceId - Stable identifier of the selected resource.
+ * @returns The React Query result for the selected resource tree.
  */
-const useJourneyTreeQuery = (journeyUid: string | null) => {
+const useJourneyTreeQuery = (resourceType: ResourceType | null, resourceId: string | null) => {
   return useQuery({
-    queryKey: ['navigation', 'journey-tree', journeyUid],
+    queryKey: ['navigation', 'resource-tree', resourceType, resourceId],
     queryFn: () => {
-      if (!journeyUid) {
-        throw new Error('A Journey ID is required to load its tree.')
+      if (!resourceType || !resourceId) {
+        throw new Error('A resource type and ID are required to load its tree.')
       }
 
-      return getJourneyTree(journeyUid)
+      return getResourceTree(resourceType, resourceId)
     },
-    enabled: Boolean(journeyUid)
+    enabled: (resourceType === 'journey' || resourceType === 'folder') && Boolean(resourceId)
   })
 }
 

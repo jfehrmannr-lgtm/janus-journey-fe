@@ -10,6 +10,7 @@ import { authClient } from '@/services/authClient'
 import useAppUiStore from '@/stores/appUiStore'
 import type { NavigationRootResources } from '@/types/resources'
 import JourneyAccordionItem from '@/layout/SideNav/JourneyAccordionItem'
+import JourneyTreeQuery from '@/layout/SideNav/JourneyTreeQuery'
 
 interface SideNavProps {
   resources: NavigationRootResources
@@ -27,6 +28,9 @@ const SideNav = ({ resources }: SideNavProps) => {
   const { data: session } = authClient.useSession()
   const isSideNavCollapsed = useAppUiStore((state) => state.isSideNavCollapsed)
   const toggleSideNav = useAppUiStore((state) => state.toggleSideNav)
+  const selectedResourceType = useAppUiStore((state) => state.selectedResourceType)
+  const selectedResourceUid = useAppUiStore((state) => state.selectedResourceUid)
+  const selectResource = useAppUiStore((state) => state.selectResource)
   const showExpandedContent = isMobileMenuOpen || !isSideNavCollapsed
   const displayName = session?.user.name ?? 'Janus User'
   const userInitials = displayName.slice(0, 2).toUpperCase()
@@ -136,16 +140,23 @@ const SideNav = ({ resources }: SideNavProps) => {
                   <Icon icon="FolderOutlined" />
                 </div>
                 <div className="mt-2 space-y-1">
-                  {resources.rootFolders.map((folder) => (
-                    <button
-                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950"
-                      key={folder.uid}
-                      type="button"
-                    >
-                      <Icon className="text-slate-400" icon="FolderOutlined" />
-                      <span className="truncate">{folder.name}</span>
-                    </button>
-                  ))}
+                  {resources.rootFolders.map((folder) => {
+                    const isSelected = selectedResourceType === 'folder' && selectedResourceUid === folder.uid
+
+                    return (
+                      <div key={folder.uid}>
+                        <button
+                          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-colors ${isSelected ? 'bg-blue-50 font-semibold text-blue-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-950'}`}
+                          onClick={() => selectResource(folder.uid, 'folder')}
+                          type="button"
+                        >
+                          <Icon className="text-slate-400" icon="FolderOutlined" />
+                          <span className="truncate">{folder.name}</span>
+                        </button>
+                        {isSelected && <JourneyTreeQuery resourceId={folder.uid} resourceType="folder" />}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             </div>

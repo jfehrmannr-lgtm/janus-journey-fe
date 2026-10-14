@@ -1,5 +1,15 @@
 ## 2026-10-09
 
+### #JANUS-FE-0021: Integrate Resource Tree API
+
+**Work**: Plan / Build; Replaced mock Journey Tree resolution with authenticated BFF resource retrieval for selected Journeys and Folders while preserving the existing Tree, loading, error, and task-state rendering behavior.
+
+- Added resource-aware TanStack Query keys using both resource type and UID.
+- Added Folder selection and reused the existing Tree query and presentation components for Folder and Journey payloads.
+- Mapped structured BFF resources into the existing Tree contract without filtering task state or visibility.
+
+## 2026-10-09
+
 ### #JANUS-FE-0020: Add BrandLogo Size System
 
 **Work**: Plan / Build; Added a reusable BrandLogo size prop for responsive logo mark and wordmark sizing while preserving the existing normal appearance by default.

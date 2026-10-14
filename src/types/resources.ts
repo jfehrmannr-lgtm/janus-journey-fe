@@ -1,4 +1,5 @@
-export type TaskStatus = 'pending' | 'in-pause' | 'completed' | 'discarded'
+export type TaskStatus = 'pending' | 'in-progress' | 'complete' | 'in-pause' | 'completed' | 'discarded'
+export type ResourceType = 'journey' | 'folder' | 'task'
 
 export interface UserConfig {
   username: string
@@ -52,6 +53,56 @@ export interface Task {
   orderIndex: number
 }
 
+interface ApiParentReference {
+  uid: string
+  type: 'user' | 'journey' | 'folder'
+}
+
+interface ApiTaskResource {
+  uid: string
+  type: 'task'
+  parent: ApiParentReference
+  name: string
+  description: string | null
+  taskType: null
+  state: 'pending' | 'in-progress' | 'complete' | 'in-pause' | 'discarded'
+  isVisible: boolean
+  orderIndex: number | null
+  metadata: Record<string, unknown>
+  createdAt: string
+  updatedAt: string
+}
+
+interface ApiFolderResource {
+  uid: string
+  type: 'folder'
+  parent: ApiParentReference
+  name: string
+  description: string | null
+  orderIndex: number | null
+  metadata: Record<string, unknown>
+  tasks: ApiTaskResource[]
+  createdAt: string
+  updatedAt: string
+}
+
+interface ApiJourneyResource {
+  uid: string
+  type: 'journey'
+  parent: ApiParentReference
+  name: string
+  description: string | null
+  metadata: Record<string, unknown>
+  folders: ApiFolderResource[]
+  tasks: ApiTaskResource[]
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ResourceApiResponse {
+  payload: ApiJourneyResource | ApiFolderResource | ApiTaskResource
+}
+
 export interface MockDashboardData {
   journeys: Journey[]
   folders: Folder[]
@@ -86,7 +137,7 @@ export interface NavigationRootResources {
 }
 
 export interface JourneyTreeData {
-  journey: Journey
+  rootResourceUid: string
   folders: Folder[]
   tasks: Task[]
 }

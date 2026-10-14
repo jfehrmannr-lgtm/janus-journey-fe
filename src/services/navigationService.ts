@@ -1,6 +1,13 @@
-import journeysMock from '@/mock/journeys.mock.json'
 import { requestBff } from '@/services/bffClient'
-import type { JourneyTreeData, MockDashboardData, NavigationRootResources } from '@/types/resources'
+import type {
+  Folder,
+  JourneyTreeData,
+  MockDashboardData,
+  NavigationRootResources,
+  ResourceApiResponse,
+  ResourceType,
+  Task
+} from '@/types/resources'
 
 interface NavigationRootResponse {
   items?: Pick<MockDashboardData, 'tasks' | 'folders' | 'journeys'>
@@ -8,8 +15,9 @@ interface NavigationRootResponse {
   registers: number
 }
 
-const navigationData = journeysMock as MockDashboardData
-const mockRootOwnerUid = 'user-alex'
+type ApiTask = Extract<ResourceApiResponse['payload'], { type: 'task' }>
+type ApiFolder = Extract<ResourceApiResponse['payload'], { type: 'folder' }>
+type ApiJourney = Extract<ResourceApiResponse['payload'], { type: 'journey' }>
 
 /**
  * Returns the root resources required by the authenticated application navigation.
@@ -36,30 +44,62 @@ const getNavigationRootResources = async (): Promise<NavigationRootResources> =>
 }
 
 /**
- * Returns the direct Folder and Task descendants of one Journey.
+ * Returns the selected Journey or Folder and its descendants in the Tree data shape.
  *
- * @param journeyUid - Stable identifier of the Journey to resolve.
- * @returns A promise containing the selected Journey tree resources.
- * @throws An error when the requested Journey does not belong to the mock User.
+ * @param resourceType - Type of the selected resource.
+ * @param resourceId - Stable identifier of the selected resource.
+ * @returns A promise containing the selected resource tree resources.
  */
-const getJourneyTree = async (journeyUid: string): Promise<JourneyTreeData> => {
-  const journey = navigationData.journeys.find(
-    (candidateJourney) => candidateJourney.uid === journeyUid && candidateJourney.parentUid === mockRootOwnerUid
+const getResourceTree = async (resourceType: ResourceType, resourceId: string): Promise<JourneyTreeData> => {
+  const response = await requestBff<ResourceApiResponse>(
+    `/journeys/resources/${encodeURIComponent(resourceType)}/${encodeURIComponent(resourceId)}`
   )
 
-  if (!journey) {
-    throw new Error('The requested Journey could not be found.')
+  if (response.payload.type === 'journey') {
+    return mapJourneyTree(response.payload)
   }
 
-  const folders = navigationData.folders
-    .filter((folder) => folder.parentUid === journeyUid)
-    .sort((firstFolder, secondFolder) => firstFolder.orderIndex - secondFolder.orderIndex)
-  const folderUids = new Set(folders.map((folder) => folder.uid))
-  const tasks = navigationData.tasks
-    .filter((task) => task.parentUid === journeyUid || folderUids.has(task.parentUid))
-    .sort((firstTask, secondTask) => firstTask.orderIndex - secondTask.orderIndex)
+  if (response.payload.type === 'folder') {
+    return mapFolderTree(response.payload)
+  }
 
-  return { journey, folders, tasks }
+  throw new Error('The selected resource cannot be rendered as a Tree.')
 }
 
-export { getJourneyTree, getNavigationRootResources }
+const mapJourneyTree = (journey: ApiJourney): JourneyTreeData => ({
+  rootResourceUid: journey.uid,
+  folders: journey.folders.map(mapFolder),
+  tasks: [...journey.folders.flatMap((folder) => folder.tasks), ...journey.tasks].map(mapTask)
+})
+
+const mapFolderTree = (folder: ApiFolder): JourneyTreeData => ({
+  rootResourceUid: folder.uid,
+  folders: [],
+  tasks: folder.tasks.map(mapTask)
+})
+
+const mapFolder = (folder: ApiFolder): Folder => ({
+  uid: folder.uid,
+  type: 'folder',
+  parentUid: folder.parent.uid,
+  name: folder.name,
+  description: folder.description ?? '',
+  orderIndex: folder.orderIndex ?? 0
+})
+
+const mapTask = (task: ApiTask): Task => ({
+  uid: task.uid,
+  type: 'task',
+  parentUid: task.parent.uid,
+  name: task.name,
+  description: task.description ?? '',
+  status: mapTaskStatus(task.state),
+  isVisible: task.isVisible,
+  orderIndex: task.orderIndex ?? 0
+})
+
+const mapTaskStatus = (state: ApiTask['state']): Task['status'] => {
+  return state
+}
+
+export { getNavigationRootResources, getResourceTree }

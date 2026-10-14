@@ -29,7 +29,7 @@ const auth = betterAuth({
       jwt: {
         audience: 'janus-bff',
         definePayload: () => ({}),
-        expirationTime: '24h',
+        expirationTime: '1440 minutes',
         getSubject: ({ user }) => user.id,
         issuer: process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'
       }

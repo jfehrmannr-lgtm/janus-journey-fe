@@ -20,7 +20,8 @@ const JourneyAccordionItem = ({ journey }: JourneyAccordionItemProps) => {
   const selectedJourneyUid = useAppUiStore((state) => state.selectedJourneyUid)
   const selectJourney = useAppUiStore((state) => state.selectJourney)
   const isExpanded = expandedJourneyUid === journey.uid
-  const isSelected = selectedJourneyUid === journey.uid
+  const selectedResourceType = useAppUiStore((state) => state.selectedResourceType)
+  const isSelected = selectedJourneyUid === journey.uid && selectedResourceType === 'journey'
 
   return (
     <div>
@@ -35,7 +36,7 @@ const JourneyAccordionItem = ({ journey }: JourneyAccordionItemProps) => {
         </span>
         <span className="truncate">{journey.name}</span>
       </button>
-      {isExpanded && <JourneyTreeQuery journeyUid={journey.uid} />}
+      {isExpanded && <JourneyTreeQuery resourceId={journey.uid} resourceType="journey" />}
     </div>
   )
 }
