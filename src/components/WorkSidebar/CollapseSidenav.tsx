@@ -1,9 +1,9 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { useState } from 'react'
 
 import CollapseSidenavEffect from '@/components/WorkSidebar/CollapseSidenavEffect'
+import useAppUiStore from '@/stores/appUiStore'
 
 interface CollapseSidenavProps {
   children: ReactNode
@@ -16,10 +16,12 @@ interface CollapseSidenavProps {
  * @returns A collapsible Work Sidebar.
  */
 const CollapseSidenav = ({ children }: CollapseSidenavProps) => {
-  const [isOpen, setIsOpen] = useState(true)
+  const isOpen = useAppUiStore((state) => state.isWorkSidebarOpen)
+  const closeWorkSidebar = useAppUiStore((state) => state.closeWorkSidebar)
+  const openWorkSidebar = useAppUiStore((state) => state.openWorkSidebar)
 
   return (
-    <CollapseSidenavEffect isOpen={isOpen} onToggle={() => setIsOpen((open) => !open)}>
+    <CollapseSidenavEffect isOpen={isOpen} onToggle={isOpen ? closeWorkSidebar : openWorkSidebar}>
       {children}
     </CollapseSidenavEffect>
   )

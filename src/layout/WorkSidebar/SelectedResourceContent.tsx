@@ -1,8 +1,7 @@
 'use client'
 
-import Icon from '@/components/Icon/Icon'
 import JourneyTreeQuery from '@/layout/SideNav/JourneyTreeQuery'
-import JourneyTree from '@/layout/SideNav/JourneyTree'
+import JourneyWorkspace from '@/layout/WorkSidebar/JourneyWorkspace'
 import useAppUiStore from '@/stores/appUiStore'
 
 /**
@@ -24,29 +23,7 @@ const SelectedResourceContent = () => {
 
   return (
     <JourneyTreeQuery resourceId={selectedResourceUid} resourceType={selectedResourceType}>
-      {(data) => (
-        <>
-          <header className="border-b border-slate-100 px-5 py-5">
-            <div className="flex items-center gap-3">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-lg text-blue-700">
-                <Icon icon={data.rootResource.type === 'journey' ? 'AppstoreOutlined' : 'FolderOutlined'} />
-              </span>
-              <div className="min-w-0">
-                <h2 className="truncate text-lg font-semibold text-slate-950">{data.rootResource.name}</h2>
-                <p className="mt-1 text-sm leading-5 text-slate-500">
-                  {data.rootResource.description || 'No description available.'}
-                </p>
-              </div>
-            </div>
-          </header>
-          <section aria-labelledby="selected-resource-tasks" className="px-5 py-4">
-            <h3 className="text-sm font-semibold text-slate-950" id="selected-resource-tasks">
-              Tasks
-            </h3>
-            <JourneyTree data={data} />
-          </section>
-        </>
-      )}
+      {(data) => <JourneyWorkspace data={data} />}
     </JourneyTreeQuery>
   )
 }

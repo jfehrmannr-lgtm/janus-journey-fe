@@ -22,7 +22,8 @@ const CollapseSidenavEffect = ({ children, isOpen, onToggle }: CollapseSidenavEf
   return (
     <aside
       aria-label="Work sidebar"
-      className={`fixed inset-y-0 right-0 z-40 flex h-screen max-w-[calc(100vw-2.5rem)] flex-col border-l border-slate-200 bg-white transition-[width,transform] duration-300 ease-in-out ${isOpen ? 'w-88' : 'w-0'}`}
+      className={`fixed inset-y-0 right-0 z-40 flex h-screen max-w-[calc(100vw-2.5rem)] flex-col border-l border-slate-200 bg-white transition-[width,transform] ease-in-out ${isOpen ? 'w-120' : 'w-0'}`}
+      style={{ transitionDelay: isOpen ? '0ms' : '0ms' }}
     >
       <button
         aria-label={isOpen ? 'Collapse work sidebar' : 'Expand work sidebar'}
@@ -34,6 +35,7 @@ const CollapseSidenavEffect = ({ children, isOpen, onToggle }: CollapseSidenavEf
       </button>
       <div
         className={`min-h-0 flex-1 overflow-x-hidden overflow-y-auto transition-[transform,opacity] duration-300 ease-in-out ${isOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
+        style={{ transitionDelay: isOpen ? '100ms' : '0ms' }}
       >
         {children}
       </div>

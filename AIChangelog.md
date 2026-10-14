@@ -1,5 +1,35 @@
 ## 2026-10-14
 
+### #JANUS-FE-0029: Sequence WorkSidebar Visibility Transition
+
+**Work**: Fix / Interaction; Sequenced WorkSidebar opacity and width transitions so content appears after opening completes and disappears before the panel collapses.
+
+- Delayed content fade-in until the panel width has expanded.
+- Delayed panel collapse until content has fully faded out.
+- Preserved the existing overlay positioning and collapse controls.
+
+## 2026-10-14
+
+### #JANUS-FE-0028: Reopen WorkSidebar on Resource Selection
+
+**Work**: Fix / Interaction; Connected WorkSidebar visibility to the existing Zustand UI state so selecting a Journey, Folder, or Task always reopens the work content.
+
+- Reused the existing Journey and Folder selection actions to set WorkSidebar visibility without duplicating selection state.
+- Added task-row reopen behavior while preserving the current Journey Tree data and interactions.
+- Kept collapse controls functional through the shared UI store.
+
+## 2026-10-14
+
+### #JANUS-FE-0027: Refine Journey WorkSidebar UI
+
+**Work**: Build / Visual UI; Refined selected Journey presentation to match the Dashboard reference while preserving real resource data and existing query and selection boundaries.
+
+- Added Journey-specific hero, temporary reference progress, section tabs, folder accordions, task rows, status indicators, and contextual action affordances.
+- Kept folder/task names, counts, ordering, and task states sourced from the existing BFF resource response.
+- Kept the generic WorkSidebar reusable and isolated the reference-specific UI in Journey workspace components.
+
+## 2026-10-14
+
 ### #JANUS-FE-0026: Refactor WorkSidebar as Overlay
 
 **Work**: Refactor / Layout; Removed the WorkSidebar’s desktop flex-column participation and made it a fixed overlay so opening or closing it cannot resize or reposition the active page.

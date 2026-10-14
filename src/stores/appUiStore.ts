@@ -5,12 +5,15 @@ import type { ResourceType } from '@/types/resources'
 
 interface AppUiState {
   expandedJourneyUid: string | null
+  isWorkSidebarOpen: boolean
   isSideNavCollapsed: boolean
   selectedResourceType: ResourceType | null
   selectedResourceUid: string | null
   selectedJourneyUid: string | null
   selectResource: (resourceUid: string, resourceType: 'journey' | 'folder') => void
   selectJourney: (journeyUid: string) => void
+  closeWorkSidebar: () => void
+  openWorkSidebar: () => void
   toggleSideNav: () => void
 }
 
@@ -19,6 +22,7 @@ interface AppUiState {
  */
 const useAppUiStore = create<AppUiState>((set) => ({
   expandedJourneyUid: null,
+  isWorkSidebarOpen: true,
   isSideNavCollapsed: false,
   selectedResourceType: null,
   selectedResourceUid: null,
@@ -28,15 +32,19 @@ const useAppUiStore = create<AppUiState>((set) => ({
       expandedJourneyUid: resourceType === 'journey' ? resourceUid : null,
       selectedJourneyUid: resourceType === 'journey' ? resourceUid : null,
       selectedResourceType: resourceType,
-      selectedResourceUid: resourceUid
+      selectedResourceUid: resourceUid,
+      isWorkSidebarOpen: true
     }),
   selectJourney: (journeyUid) =>
     set({
       expandedJourneyUid: journeyUid,
       selectedJourneyUid: journeyUid,
       selectedResourceType: 'journey',
-      selectedResourceUid: journeyUid
+      selectedResourceUid: journeyUid,
+      isWorkSidebarOpen: true
     }),
+  closeWorkSidebar: () => set({ isWorkSidebarOpen: false }),
+  openWorkSidebar: () => set({ isWorkSidebarOpen: true }),
   toggleSideNav: () => set((state) => ({ isSideNavCollapsed: !state.isSideNavCollapsed }))
 }))
 
