@@ -1,5 +1,39 @@
 ## 2026-10-14
 
+### #JANUS-FE-0039: Refine Create Journey Visual Layout
+
+**Work**: Refactor / Visual UI; Reworked the full-page Create Journey presentation to match the approved visual reference while preserving controlled form behavior and resource hierarchy.
+
+- Separated Journey details, Folders, and Journey Tasks into distinct semantic cards with independent empty states.
+- Added existing application resource icons for Journeys, Folders, and Tasks in section and item presentations.
+- Preserved controlled Folder and Task editors, stable temporary identifiers, validation, ordering, draft logging, and full-page Cancel navigation.
+- Kept Modal infrastructure, `modalUiStore`, backend boundaries, and form state ownership unchanged.
+
+## 2026-10-14
+
+### #JANUS-FE-0038: Move Create Journey to Dashboard Route
+
+**Work**: Refactor / Routing; Moved the Create Journey workflow from the Dashboard Modal entry point to the authenticated `/dashboard/create/journey` route while preserving the reusable controlled form components and draft-only behavior.
+
+- Added a Server Component App Router page that composes the existing Client `JourneyForm` inside the authenticated Dashboard layout.
+- Updated Dashboard Create Journey actions to navigate to the new route and removed only the Dashboard’s Modal rendering/imports.
+- Updated JourneyForm cancellation to navigate back to `/dashboard/home` while preserving validation, hierarchy editing, ordering, and console payload logging.
+- Preserved the generic Modal infrastructure, `modalUiStore`, FolderForm, TaskForm, ActionButtons, types, utilities, and backend boundaries.
+
+## 2026-10-14
+
+### #JANUS-FE-0037: Refactor Reusable Resource Forms
+
+**Work**: Refactor / Forms; Split the Create Journey hierarchy editor into controlled, reusable Journey, Folder, Task, and action-button components without changing Modal behavior or backend boundaries.
+
+- Added `JourneyForm`, `FolderForm`, `TaskForm`, and reusable `ActionButtons` components under `src/components/Form`.
+- Centralized Journey draft coordination, validation, deterministic ordering, payload generation, and modal cancellation in `JourneyForm`.
+- Reused the same controlled `TaskForm` for both Journey-root Tasks and Folder Tasks while preserving stable temporary identifiers and nested relationships.
+- Removed the obsolete monolithic `CreateJourneyForm` after updating Dashboard composition.
+- Preserved Create logging behavior, Modal fade-out cleanup, semantic styling, accessibility, and frontend-only parentless payload generation.
+
+## 2026-10-14
+
 ### #JANUS-FE-0036: Add Create Journey Draft Form
 
 **Work**: Plan / Build; Added reusable client-side Modal infrastructure and connected the Dashboard Journey creation flow to a local hierarchical Journey draft form without introducing backend persistence.
