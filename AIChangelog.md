@@ -1,5 +1,17 @@
 ## 2026-10-14
 
+### #JANUS-FE-0036: Add Create Journey Draft Form
+
+**Work**: Plan / Build; Added reusable client-side Modal infrastructure and connected the Dashboard Journey creation flow to a local hierarchical Journey draft form without introducing backend persistence.
+
+- Added SSR-safe Portal rendering, animated Modal composition, delayed exit unmounting, accessibility behavior, focus management, Escape handling, backdrop dismissal, and lifecycle transition callbacks.
+- Separated modal UI state into `useModalUiStore` with independent `showModal`, `typeModal`, `setShowModal`, and `setTypeModal` state/actions while preserving navigation state in `useAppUiStore`.
+- Connected Create Journey quick actions to the `create` modal type and added dynamic local Folders, nested Tasks, and Journey-root Tasks with stable client-only identifiers.
+- Added contract-based validation and a parentless frontend draft payload using editable Journey, Folder, and Task fields with deterministic ordering and `completed` task terminology.
+- Kept the form mounted through Modal fade-out, reset it through unmount on the next opening, and intentionally avoided API requests, mutations, success messaging, and backend changes.
+
+## 2026-10-14
+
 ### #JANUS-FE-0035: Standardize Semantic Color Tokens
 
 **Work**: Refactor / Styling; Centralized recurring application surfaces, borders, text roles, primary actions, focus states, and error roles in the Tailwind v4 theme and migrated shared authenticated UI consumers.

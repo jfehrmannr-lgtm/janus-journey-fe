@@ -2,9 +2,12 @@
 
 import type { ReactNode } from 'react'
 
+import CreateJourneyForm from '@/components/CreateJourney/CreateJourneyForm'
 import Icon from '@/components/Icon/Icon'
+import ModalContainer from '@/components/Modal/ModalContainer'
 import JourneyCard from '@/components/JourneyCard/JourneyCard'
 import { authClient } from '@/services/authClient'
+import useModalUiStore from '@/stores/modalUiStore'
 import type { DashboardHomeData, DashboardMetricTone, DashboardQuickAction } from '@/types/dashboard'
 import type { Journey } from '@/types/resources'
 
@@ -29,6 +32,8 @@ const metricStyles: Record<DashboardMetricTone, { icon: string; value: string }>
  */
 const DashboardHome = ({ data, journeys }: DashboardHomeProps) => {
   const { data: session } = authClient.useSession()
+  const setShowModal = useModalUiStore((state) => state.setShowModal)
+  const setTypeModal = useModalUiStore((state) => state.setTypeModal)
   const username = session?.user.name?.split(' ')[0] ?? 'there'
   const metricIcons = {
     'active-journeys': <Icon icon="AppstoreOutlined" />,
@@ -41,6 +46,11 @@ const DashboardHome = ({ data, journeys }: DashboardHomeProps) => {
     task: <Icon icon="PlusOutlined" />,
     explore: <Icon icon="ThunderboltOutlined" />,
     shared: <Icon icon="TeamOutlined" />
+  }
+
+  const openCreateJourneyModal = () => {
+    setTypeModal('create')
+    setShowModal(true)
   }
 
   return (
@@ -125,6 +135,7 @@ const DashboardHome = ({ data, journeys }: DashboardHomeProps) => {
               </p>
               <button
                 className="mt-5 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+                onClick={openCreateJourneyModal}
                 type="button"
               >
                 <Icon icon="PlusOutlined" />
@@ -143,6 +154,7 @@ const DashboardHome = ({ data, journeys }: DashboardHomeProps) => {
               <button
                 className="cursor-pointer rounded-2xl border border-border/80 bg-surface p-5 text-left transition-transform hover:border-blue-300 transition"
                 key={action.key}
+                onClick={action.key === 'journey' ? openCreateJourneyModal : undefined}
                 type="button"
               >
                 <span className="flex size-10 items-center justify-center rounded-full bg-primary-soft text-lg text-primary-foreground">
@@ -155,6 +167,9 @@ const DashboardHome = ({ data, journeys }: DashboardHomeProps) => {
           </div>
         </section>
       </div>
+      <ModalContainer title="Create Journey">
+        <CreateJourneyForm />
+      </ModalContainer>
     </div>
   )
 }
