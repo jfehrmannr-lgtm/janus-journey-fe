@@ -4,15 +4,10 @@ import backgroundImage from '@/assets/janus-journey-background.png'
 import Icon from '@/components/Icon/Icon'
 import JourneyTree from '@/layout/SideNav/JourneyTree'
 import type { JourneyTreeData } from '@/types/resources'
+import { calculateProgress, calculateProgressPercentage } from '@/utils/progress'
 
 interface JourneyWorkspaceProps {
   data: JourneyTreeData
-}
-
-const temporaryProgress = {
-  completedTasks: 6,
-  totalTasks: 24,
-  percentage: 25
 }
 
 /**
@@ -23,6 +18,16 @@ const temporaryProgress = {
  */
 const JourneyWorkspace = ({ data }: JourneyWorkspaceProps) => {
   const isJourney = data.rootResource.type === 'journey'
+  const progress = calculateProgress(data.tasks)
+  const resolvedTasks = progress.completed + progress.discarded
+  const progressPercentage = Math.round(calculateProgressPercentage(progress))
+  const progressSegments = [
+    { count: progress.completed, colorClass: 'bg-task-completed-foreground', label: 'completed' },
+    { count: progress.discarded, colorClass: 'bg-task-discarded-foreground', label: 'discarded' },
+    { count: progress.pending, colorClass: 'bg-task-pending-foreground', label: 'pending' },
+    { count: progress.inProgress, colorClass: 'bg-task-in-progress-foreground', label: 'in progress' },
+    { count: progress.inPause, colorClass: 'bg-task-in-pause-foreground', label: 'in pause' }
+  ]
 
   return (
     <div className="min-h-full bg-white">
@@ -49,13 +54,26 @@ const JourneyWorkspace = ({ data }: JourneyWorkspaceProps) => {
       {isJourney && (
         <section aria-label="Journey progress" className="border-b border-slate-100 px-5 py-4">
           <div className="flex items-center gap-3 text-xs text-slate-500">
-            <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100">
-              <div className="h-full w-1/4 rounded-full bg-blue-500" />
+            <div
+              aria-label={progressSegments
+                .filter((segment) => segment.count > 0)
+                .map((segment) => `${segment.count} ${segment.label}`)
+                .join(', ')}
+              className="flex h-2 flex-1 overflow-hidden rounded-full bg-slate-100"
+              role="img"
+            >
+              {progressSegments.map((segment) => (
+                <div
+                  className={`h-full ${segment.colorClass}`}
+                  key={segment.label}
+                  style={{ width: progress.total === 0 ? '0%' : `${(segment.count / progress.total) * 100}%` }}
+                />
+              ))}
             </div>
             <span className="whitespace-nowrap">
-              {temporaryProgress.completedTasks} / {temporaryProgress.totalTasks} tasks
+              {resolvedTasks} / {progress.total} tasks
             </span>
-            <span className="font-semibold text-slate-700">{temporaryProgress.percentage}%</span>
+            <span className="font-semibold text-slate-700">{progressPercentage}%</span>
           </div>
         </section>
       )}
@@ -71,7 +89,7 @@ const JourneyWorkspace = ({ data }: JourneyWorkspaceProps) => {
         <h3 className="sr-only" id="workspace-tasks">
           Tasks
         </h3>
-        <JourneyTree data={data} />
+        <JourneyTree data={data} key={data.rootResourceUid} />
       </section>
     </div>
   )

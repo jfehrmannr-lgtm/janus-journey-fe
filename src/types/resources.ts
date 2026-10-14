@@ -1,4 +1,4 @@
-export type TaskStatus = 'pending' | 'in-progress' | 'complete' | 'in-pause' | 'completed' | 'discarded'
+export type TaskStatus = 'pending' | 'in-progress' | 'in-pause' | 'completed' | 'discarded'
 export type ResourceType = 'journey' | 'folder' | 'task'
 
 export interface UserConfig {
@@ -65,7 +65,7 @@ interface ApiTaskResource {
   name: string
   description: string | null
   taskType: null
-  state: 'pending' | 'in-progress' | 'complete' | 'in-pause' | 'discarded'
+  state: 'pending' | 'in-progress' | 'completed' | 'in-pause' | 'discarded'
   isVisible: boolean
   orderIndex: number | null
   metadata: Record<string, unknown>

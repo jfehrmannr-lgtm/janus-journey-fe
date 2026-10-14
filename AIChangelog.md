@@ -1,5 +1,52 @@
 ## 2026-10-14
 
+### #JANUS-FE-0034: Redistribute Progress Bar Status Colors
+
+**Work**: Refactor / Visual UI; Updated the Journey progress bar to represent every visible Task state with the shared semantic status palette.
+
+- Added normalized pending, in-progress, and in-pause counts to the pure progress result.
+- Rendered completed, discarded, pending, in-progress, and in-pause segments proportionally in the WorkSidebar progress bar.
+- Preserved resolved/total and percentage calculations.
+
+## 2026-10-14
+
+### #JANUS-FE-0033: Centralize Task Status Colors
+
+**Work**: Refactor / Visual UI; Added semantic dark Task status foreground tokens to the Tailwind theme and reused each token for both status icons and titles.
+
+- Centralized completed, discarded, pending, in-progress, and in-pause color values in `globals.css`.
+- Removed duplicated icon/text color classes from the Journey Tree status mapping.
+
+## 2026-10-14
+
+### #JANUS-FE-0032: Map Journey Task Status Visuals
+
+**Work**: Build / Visual UI; Added centralized Task status icon and readable color mapping for the Journey Tree.
+
+- Represented completed, discarded, pending, in-progress, and in-pause states with distinct Ant Design icons and darker palette shades.
+- Applied the same status mapping to both Task icons and Task titles while preserving existing Tree structure and behavior.
+
+## 2026-10-14
+
+### #JANUS-FE-0031: Calculate Real Journey Progress
+
+**Work**: Plan / Build; Replaced temporary WorkSidebar progress values with pure visible-task progress calculation and reused the same rules for Journey and Folder counters.
+
+- Counted only visible Tasks, treating completed and discarded Tasks as resolved while excluding Folders from totals.
+- Added distinct completed and discarded progress-bar segments with automatic recalculation from loaded resource data.
+- Added unit coverage for mixed states, hidden Tasks, empty Folders, direct Journey Tasks, and multi-Folder aggregation.
+
+## 2026-10-14
+
+### #JANUS-FE-0030: Reset Journey Tree Expansion
+
+**Work**: Fix / Resource UI; Reset resource Tree expansion when the selected root changes so every newly opened Journey or Folder displays all available tree sections expanded.
+
+- Initialized all folder accordions as open instead of only the first two.
+- Keyed the rendered Tree by the resolved root resource UID so React Query data changes cannot retain the previous resource’s accordion state.
+
+## 2026-10-14
+
 ### #JANUS-FE-0029: Sequence WorkSidebar Visibility Transition
 
 **Work**: Fix / Interaction; Sequenced WorkSidebar opacity and width transitions so content appears after opening completes and disappears before the panel collapses.

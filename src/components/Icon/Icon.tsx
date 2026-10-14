@@ -8,6 +8,7 @@ import {
   CheckCircleOutlined,
   CheckSquareOutlined,
   ClockCircleOutlined,
+  CloseCircleOutlined,
   CloseOutlined,
   DownOutlined,
   EyeInvisibleOutlined,
@@ -20,11 +21,13 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   MinusCircleOutlined,
+  PauseCircleOutlined,
   PlusOutlined,
   RightOutlined,
   SearchOutlined,
   SettingOutlined,
   StarOutlined,
+  SyncOutlined,
   TeamOutlined,
   ThunderboltOutlined,
   UnorderedListOutlined
@@ -38,6 +41,7 @@ const iconComponents = {
   CheckCircleOutlined,
   CheckSquareOutlined,
   ClockCircleOutlined,
+  CloseCircleOutlined,
   CloseOutlined,
   DownOutlined,
   EyeInvisibleOutlined,
@@ -50,11 +54,13 @@ const iconComponents = {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   MinusCircleOutlined,
+  PauseCircleOutlined,
   PlusOutlined,
   RightOutlined,
   SearchOutlined,
   SettingOutlined,
   StarOutlined,
+  SyncOutlined,
   TeamOutlined,
   ThunderboltOutlined,
   UnorderedListOutlined
@@ -68,6 +74,7 @@ export type IconName =
   | 'CheckCircleOutlined'
   | 'CheckSquareOutlined'
   | 'ClockCircleOutlined'
+  | 'CloseCircleOutlined'
   | 'CloseOutlined'
   | 'DownOutlined'
   | 'EyeInvisibleOutlined'
@@ -80,11 +87,13 @@ export type IconName =
   | 'MenuFoldOutlined'
   | 'MenuUnfoldOutlined'
   | 'MinusCircleOutlined'
+  | 'PauseCircleOutlined'
   | 'PlusOutlined'
   | 'RightOutlined'
   | 'SearchOutlined'
   | 'SettingOutlined'
   | 'StarOutlined'
+  | 'SyncOutlined'
   | 'TeamOutlined'
   | 'ThunderboltOutlined'
   | 'UnorderedListOutlined'

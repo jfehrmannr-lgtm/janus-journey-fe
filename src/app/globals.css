@@ -10,6 +10,22 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Task states */
+  --color-task-completed: #dcfce7;
+  --color-task-completed-foreground: #166534;
+
+  --color-task-discarded: #fee2e2;
+  --color-task-discarded-foreground: #991b1b;
+
+  --color-task-pending: #f1f5f9;
+  --color-task-pending-foreground: #475569;
+
+  --color-task-in-progress: #dbeafe;
+  --color-task-in-progress-foreground: #1d4ed8;
+
+  --color-task-in-pause: #fef3c7;
+  --color-task-in-pause-foreground: #92400e;
 }
 
 body {

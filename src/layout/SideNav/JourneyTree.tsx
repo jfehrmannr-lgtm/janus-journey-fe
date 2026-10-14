@@ -3,11 +3,41 @@
 import { useState } from 'react'
 
 import Icon from '@/components/Icon/Icon'
-import type { JourneyTreeData } from '@/types/resources'
+import type { IconName } from '@/components/Icon/Icon'
+import type { JourneyTreeData, TaskStatus } from '@/types/resources'
 import useAppUiStore from '@/stores/appUiStore'
+import { calculateProgress } from '@/utils/progress'
 
 interface JourneyTreeProps {
   data: JourneyTreeData
+}
+
+const taskStatusStyles: Record<TaskStatus, { icon: IconName; colorClass: string; colorIcon: string }> = {
+  completed: {
+    icon: 'CheckCircleOutlined',
+    colorIcon: 'text-task-completed-foreground!',
+    colorClass: 'text-task-completed-foreground'
+  },
+  discarded: {
+    icon: 'CloseCircleOutlined',
+    colorIcon: 'text-task-discarded-foreground!',
+    colorClass: 'text-task-discarded-foreground'
+  },
+  pending: {
+    icon: 'ClockCircleOutlined',
+    colorIcon: 'text-task-pending-foreground!',
+    colorClass: 'text-task-pending-foreground'
+  },
+  'in-progress': {
+    icon: 'SyncOutlined',
+    colorIcon: 'text-task-in-progress-foreground!',
+    colorClass: 'text-task-in-progress-foreground'
+  },
+  'in-pause': {
+    icon: 'PauseCircleOutlined',
+    colorIcon: 'text-task-in-pause-foreground!',
+    colorClass: 'text-task-in-pause-foreground'
+  }
 }
 
 /**
@@ -17,9 +47,7 @@ interface JourneyTreeProps {
  * @returns The flat Journey tree content for the SideNav.
  */
 const JourneyTree = ({ data }: JourneyTreeProps) => {
-  const [expandedFolderUids, setExpandedFolderUids] = useState<string[]>(() =>
-    data.folders.slice(0, 2).map((folder) => folder.uid)
-  )
+  const [expandedFolderUids, setExpandedFolderUids] = useState<string[]>(() => data.folders.map((folder) => folder.uid))
   const openWorkSidebar = useAppUiStore((state) => state.openWorkSidebar)
   const directTasks = data.tasks.filter((task) => task.parentUid === data.rootResourceUid)
 
@@ -32,7 +60,7 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
   }
 
   const renderTask = (task: JourneyTreeData['tasks'][number]) => {
-    const isComplete = task.status === 'completed' || task.status === 'complete' || task.status === 'discarded'
+    const statusStyle = taskStatusStyles[task.status]
 
     return (
       <button
@@ -41,14 +69,8 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
         onClick={openWorkSidebar}
         type="button"
       >
-        {isComplete ? (
-          <Icon className="shrink-0 text-emerald-500" icon="CheckCircleOutlined" />
-        ) : (
-          <Icon className="shrink-0 text-slate-300" icon="MinusCircleOutlined" />
-        )}
-        <span className={`min-w-0 flex-1 truncate text-sm ${isComplete ? 'text-slate-500' : 'text-slate-700'}`}>
-          {task.name}
-        </span>
+        <Icon className={`shrink-0 ${statusStyle.colorIcon}`} icon={statusStyle.icon} />
+        <span className={`min-w-0 flex-1  ${statusStyle.colorClass}`}>{task.name}</span>
         <span aria-hidden="true" className="shrink-0 text-slate-400">
           <Icon icon="EllipsisOutlined" />
         </span>
@@ -60,9 +82,8 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
     <div className="space-y-3 py-3">
       {data.folders.map((folder) => {
         const folderTasks = data.tasks.filter((task) => task.parentUid === folder.uid)
-        const completedTaskCount = folderTasks.filter(
-          (task) => task.status === 'completed' || task.status === 'complete' || task.status === 'discarded'
-        ).length
+        const folderProgress = calculateProgress(folderTasks)
+        const resolvedTaskCount = folderProgress.completed + folderProgress.discarded
         const isExpanded = expandedFolderUids.includes(folder.uid)
 
         return (
@@ -76,7 +97,7 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
               <Icon className="text-blue-700" icon="FolderOutlined" />
               <span className="min-w-0 flex-1 truncate text-sm font-semibold text-slate-800">{folder.name}</span>
               <span className="text-xs text-slate-500">
-                {completedTaskCount} / {folderTasks.length}
+                {resolvedTaskCount} / {folderProgress.total}
               </span>
               <Icon className="text-xs text-slate-500" icon={isExpanded ? 'DownOutlined' : 'RightOutlined'} />
             </button>
