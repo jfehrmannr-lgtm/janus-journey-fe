@@ -1,5 +1,15 @@
 ## 2026-10-14
 
+### #JANUS-FE-0035: Standardize Semantic Color Tokens
+
+**Work**: Refactor / Styling; Centralized recurring application surfaces, borders, text roles, primary actions, focus states, and error roles in the Tailwind v4 theme and migrated shared authenticated UI consumers.
+
+- Added semantic surface, border, text, primary, action, focus, and danger tokens while preserving existing Task state tokens.
+- Updated Dashboard, SideNav, WorkSidebar, Journey cards, loading states, authentication states, and shared error presentation to use semantic utilities.
+- Retained brand-specific, marketing-only, hero-overlay, and task-state palette values where their visual responsibility is distinct.
+
+## 2026-10-14
+
 ### #JANUS-FE-0034: Redistribute Progress Bar Status Colors
 
 **Work**: Refactor / Visual UI; Updated the Journey progress bar to represent every visible Task state with the shared semantic status palette.

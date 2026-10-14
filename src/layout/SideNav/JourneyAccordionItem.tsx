@@ -26,11 +26,11 @@ const JourneyAccordionItem = ({ journey }: JourneyAccordionItemProps) => {
     <div>
       <button
         aria-expanded={isExpanded}
-        className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm transition-colors ${isSelected ? 'bg-blue-50 font-semibold text-blue-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-950'}`}
+        className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm transition-colors ${isSelected ? 'bg-primary-soft font-semibold text-primary-foreground' : 'text-text-body hover:bg-surface-subtle hover:text-text-primary'}`}
         onClick={() => selectJourney(journey.uid)}
         type="button"
       >
-        <span className="flex size-4 items-center justify-center text-xs text-slate-400">
+        <span className="flex size-4 items-center justify-center text-xs text-text-subtle">
           {isExpanded ? <Icon icon="DownOutlined" /> : <Icon icon="RightOutlined" />}
         </span>
         <span className="truncate">{journey.name}</span>

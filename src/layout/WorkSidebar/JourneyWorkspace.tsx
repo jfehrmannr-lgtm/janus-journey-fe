@@ -37,7 +37,7 @@ const JourneyWorkspace = ({ data }: JourneyWorkspaceProps) => {
           backgroundImage: `linear-gradient(to top, rgb(15 23 42 / 0.85), rgb(15 23 42 / 0.15)), url(${backgroundImage.src})`
         }}
       >
-        <span className="absolute right-4 top-4 flex size-8 items-center justify-center rounded-lg bg-slate-950/40 text-lg text-white">
+        <span className="absolute right-4 top-4 flex size-8 items-center justify-center rounded-lg bg-surface-inverse/40 text-lg text-white">
           <Icon icon="EllipsisOutlined" />
         </span>
         <div className="relative">
@@ -52,14 +52,14 @@ const JourneyWorkspace = ({ data }: JourneyWorkspaceProps) => {
       </header>
 
       {isJourney && (
-        <section aria-label="Journey progress" className="border-b border-slate-100 px-5 py-4">
-          <div className="flex items-center gap-3 text-xs text-slate-500">
+        <section aria-label="Journey progress" className="border-b border-border-subtle px-5 py-4">
+          <div className="flex items-center gap-3 text-xs text-text-muted">
             <div
               aria-label={progressSegments
                 .filter((segment) => segment.count > 0)
                 .map((segment) => `${segment.count} ${segment.label}`)
                 .join(', ')}
-              className="flex h-2 flex-1 overflow-hidden rounded-full bg-slate-100"
+              className="flex h-2 flex-1 overflow-hidden rounded-full bg-surface-subtle"
               role="img"
             >
               {progressSegments.map((segment) => (
@@ -73,16 +73,16 @@ const JourneyWorkspace = ({ data }: JourneyWorkspaceProps) => {
             <span className="whitespace-nowrap">
               {resolvedTasks} / {progress.total} tasks
             </span>
-            <span className="font-semibold text-slate-700">{progressPercentage}%</span>
+            <span className="font-semibold text-text-body">{progressPercentage}%</span>
           </div>
         </section>
       )}
 
-      <nav aria-label="Journey sections" className="flex items-center gap-5 border-b border-slate-200 px-5 pt-4">
-        <span className="border-b-2 border-blue-600 pb-3 text-sm font-semibold text-slate-950">Tasks</span>
-        <span className="pb-3 text-sm text-slate-500">Overview</span>
-        <span className="pb-3 text-sm text-slate-500">Notes</span>
-        <span className="pb-3 text-sm text-slate-500">Share</span>
+      <nav aria-label="Journey sections" className="flex items-center gap-5 border-b border-border px-5 pt-4">
+        <span className="border-b-2 border-primary pb-3 text-sm font-semibold text-text-primary">Tasks</span>
+        <span className="pb-3 text-sm text-text-muted">Overview</span>
+        <span className="pb-3 text-sm text-text-muted">Notes</span>
+        <span className="pb-3 text-sm text-text-muted">Share</span>
       </nav>
 
       <section aria-labelledby="workspace-tasks" className="px-5 py-4">

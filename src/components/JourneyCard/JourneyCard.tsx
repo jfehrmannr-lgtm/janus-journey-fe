@@ -25,21 +25,21 @@ const JourneyCard = ({ journey }: JourneyCardProps) => {
   return (
     <button
       aria-pressed={isSelected}
-      className={`cursor-pointer group flex w-full items-center gap-4 rounded-2xl border bg-white p-5 text-left transition hover:border-blue-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/20 ${isSelected ? 'border-blue-400 ring-1 ring-blue-400/30' : 'border-slate-200/80'}`}
+      className={`group flex w-full cursor-pointer items-center gap-4 rounded-2xl border bg-surface p-5 text-left transition hover:border-blue-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-focus/20 ${isSelected ? 'border-blue-400 ring-1 ring-focus/30' : 'border-border/80'}`}
       onClick={() => selectJourney(journey.uid)}
       type="button"
     >
-      <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-xl text-blue-700">
+      <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-xl text-primary-foreground">
         <Icon icon="AppstoreOutlined" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-lg font-semibold text-slate-950">{journey.name}</span>
-        <span className="mt-1 block line-clamp-2 text-sm leading-6 text-slate-500">
+        <span className="block truncate text-lg font-semibold text-text-primary">{journey.name}</span>
+        <span className="mt-1 block line-clamp-2 text-sm leading-6 text-text-muted">
           {journey.description || 'No description available.'}
         </span>
       </span>
       <Icon
-        className="shrink-0 text-xl text-slate-400 transition-colors group-hover:text-blue-600"
+        className="shrink-0 text-xl text-text-subtle transition-colors group-hover:text-primary"
         icon="RightOutlined"
       />
     </button>

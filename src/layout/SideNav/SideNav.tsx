@@ -54,12 +54,12 @@ const SideNav = ({ resources }: SideNavProps) => {
 
   return (
     <>
-      <div className="flex items-center justify-between border-b border-slate-200 bg-white px-5 py-4 lg:hidden">
+      <div className="flex items-center justify-between border-b border-border bg-surface px-5 py-4 lg:hidden">
         <BrandLogo />
         <button
           aria-expanded={isMobileMenuOpen}
           aria-label={isMobileMenuOpen ? 'Close navigation' : 'Open navigation'}
-          className="flex size-10 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950"
+          className="flex size-10 items-center justify-center rounded-lg text-text-body transition-colors hover:bg-surface-subtle hover:text-text-primary"
           onClick={() => setIsMobileMenuOpen((isOpen) => !isOpen)}
           type="button"
         >
@@ -70,7 +70,7 @@ const SideNav = ({ resources }: SideNavProps) => {
       {isMobileMenuOpen && (
         <button
           aria-label="Close navigation"
-          className="fixed inset-0 z-40 bg-slate-950/30 lg:hidden"
+          className="fixed inset-0 z-40 bg-surface-inverse/30 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
           type="button"
         />
@@ -78,17 +78,17 @@ const SideNav = ({ resources }: SideNavProps) => {
 
       <aside
         data-mobile-nav-open={isMobileMenuOpen ? true : undefined}
-        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-80 max-w-[calc(100vw-2rem)] -translate-x-full transform flex-col border-r border-slate-200 bg-white py-5 shadow-2xl transition-transform lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:shrink-0 lg:translate-x-0 lg:border-b-0 lg:pb-6 lg:shadow-none ${isMobileMenuOpen ? 'translate-x-0' : ''} ${isSideNavCollapsed ? 'lg:w-16' : 'lg:w-72 px-4'}`}
+        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-80 max-w-[calc(100vw-2rem)] -translate-x-full transform flex-col border-r border-border bg-surface py-5 shadow-2xl transition-transform lg:sticky lg:top-0 lg:h-screen lg:max-h-screen lg:shrink-0 lg:translate-x-0 lg:border-b-0 lg:pb-6 lg:shadow-none ${isMobileMenuOpen ? 'translate-x-0' : ''} ${isSideNavCollapsed ? 'lg:w-16' : 'lg:w-72 px-4'}`}
       >
         <div className={`flex items-center gap-3 ${isSideNavCollapsed ? 'justify-center' : 'justify-between'}`}>
           {showExpandedContent && (
-            <Link className="text-xl font-semibold tracking-tight text-slate-950" href="/dashboard/home">
+            <Link className="text-xl font-semibold tracking-tight text-text-primary" href="/dashboard/home">
               <BrandLogo size="sm" />
             </Link>
           )}
           <button
             aria-label="Close navigation"
-            className="flex size-10 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 lg:hidden"
+            className="flex size-10 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-subtle hover:text-text-strong lg:hidden"
             onClick={() => setIsMobileMenuOpen(false)}
             type="button"
           >
@@ -96,7 +96,7 @@ const SideNav = ({ resources }: SideNavProps) => {
           </button>
           <button
             aria-label={isSideNavCollapsed ? 'Expand navigation' : 'Collapse navigation'}
-            className="hidden size-10 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 lg:flex"
+            className="hidden size-10 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-subtle hover:text-text-strong lg:flex"
             onClick={toggleSideNav}
             type="button"
           >
@@ -110,21 +110,21 @@ const SideNav = ({ resources }: SideNavProps) => {
               <nav aria-label="Primary navigation" className="space-y-1">
                 {navigationItems.map((item) => (
                   <Link
-                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${item.active ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-950'}`}
+                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${item.active ? 'bg-primary-soft text-primary-foreground' : 'text-text-body hover:bg-surface-subtle hover:text-text-primary'}`}
                     href={item.active ? '/dashboard/home' : '#'}
                     key={item.label}
                   >
                     <span className="flex size-5 items-center justify-center text-base">{item.icon}</span>
                     <span className="flex-1">{item.label}</span>
-                    {item.badge !== undefined && <span className="text-xs text-slate-400">{item.badge}</span>}
+                    {item.badge !== undefined && <span className="text-xs text-text-subtle">{item.badge}</span>}
                   </Link>
                 ))}
               </nav>
 
               <div className="mt-8">
-                <div className="flex items-center justify-between px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <div className="flex items-center justify-between px-3 text-xs font-semibold uppercase tracking-wider text-text-subtle">
                   <span>Journeys</span>
-                  <button className="text-slate-500 hover:text-slate-900" type="button">
+                  <button className="text-text-muted hover:text-text-strong" type="button">
                     <Icon icon="DownOutlined" />
                   </button>
                 </div>
@@ -134,7 +134,7 @@ const SideNav = ({ resources }: SideNavProps) => {
                   ))}
                 </div>
 
-                <div className="mt-8 flex items-center justify-between px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <div className="mt-8 flex items-center justify-between px-3 text-xs font-semibold uppercase tracking-wider text-text-subtle">
                   <span>Folders</span>
                   <Icon icon="FolderOutlined" />
                 </div>
@@ -145,11 +145,11 @@ const SideNav = ({ resources }: SideNavProps) => {
                     return (
                       <div key={folder.uid}>
                         <button
-                          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-colors ${isSelected ? 'bg-blue-50 font-semibold text-blue-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-950'}`}
+                          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-colors ${isSelected ? 'bg-primary-soft font-semibold text-primary-foreground' : 'text-text-body hover:bg-surface-subtle hover:text-text-primary'}`}
                           onClick={() => selectResource(folder.uid, 'folder')}
                           type="button"
                         >
-                          <Icon className="text-slate-400" icon="FolderOutlined" />
+                          <Icon className="text-text-subtle" icon="FolderOutlined" />
                           <span className="truncate">{folder.name}</span>
                         </button>
                       </div>
@@ -159,17 +159,17 @@ const SideNav = ({ resources }: SideNavProps) => {
               </div>
             </div>
 
-            <div className="mt-6 space-y-1 border-t border-slate-100 pt-4">
+            <div className="mt-6 space-y-1 border-t border-border-subtle pt-4">
               <div className="flex">
                 <button
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950"
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-text-body transition-colors hover:bg-surface-subtle hover:text-text-primary"
                   type="button"
                 >
                   <Icon icon="SettingOutlined" />
                   Settings
                 </button>
                 <button
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950"
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-text-body transition-colors hover:bg-surface-subtle hover:text-text-primary"
                   onClick={handleLogout}
                   type="button"
                 >
@@ -182,8 +182,8 @@ const SideNav = ({ resources }: SideNavProps) => {
                   {userInitials}
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-slate-900">{displayName}</p>
-                  <p className="truncate text-xs text-slate-400">{session?.user.email ?? 'user@example.com'}</p>
+                  <p className="truncate text-sm font-semibold text-text-strong">{displayName}</p>
+                  <p className="truncate text-xs text-text-subtle">{session?.user.email ?? 'user@example.com'}</p>
                 </div>
               </div>
             </div>

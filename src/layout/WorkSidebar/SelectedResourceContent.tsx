@@ -16,7 +16,7 @@ const SelectedResourceContent = () => {
   if (!selectedResourceUid || (selectedResourceType !== 'journey' && selectedResourceType !== 'folder')) {
     return (
       <div className="flex h-full min-h-48 items-center justify-center px-6 text-center">
-        <p className="max-w-xs text-sm leading-6 text-slate-500">Select a Journey or Folder to view its work here.</p>
+        <p className="max-w-xs text-sm leading-6 text-text-muted">Select a Journey or Folder to view its work here.</p>
       </div>
     )
   }

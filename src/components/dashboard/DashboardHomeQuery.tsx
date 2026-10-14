@@ -21,8 +21,8 @@ const DashboardHomeQuery = () => {
 
   if (error || navigationQuery.error || !data || !navigationQuery.data) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
-        <p className="rounded-xl border border-rose-100 bg-rose-50 px-5 py-4 text-sm text-rose-600">
+      <div className="flex min-h-screen items-center justify-center bg-surface-page px-6">
+        <p className="rounded-xl border border-danger-border bg-danger-surface px-5 py-4 text-sm text-danger-foreground">
           Unable to load your Dashboard Home.
         </p>
       </div>

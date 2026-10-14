@@ -64,14 +64,14 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
 
     return (
       <button
-        className="flex min-h-10 w-full items-center gap-3 border-t border-slate-100 px-3 py-2 text-left transition-colors hover:bg-slate-50"
+        className="flex min-h-10 w-full items-center gap-3 border-t border-border-subtle px-3 py-2 text-left transition-colors hover:bg-surface-subtle"
         key={task.uid}
         onClick={openWorkSidebar}
         type="button"
       >
         <Icon className={`shrink-0 ${statusStyle.colorIcon}`} icon={statusStyle.icon} />
         <span className={`min-w-0 flex-1  ${statusStyle.colorClass}`}>{task.name}</span>
-        <span aria-hidden="true" className="shrink-0 text-slate-400">
+        <span aria-hidden="true" className="shrink-0 text-text-subtle">
           <Icon icon="EllipsisOutlined" />
         </span>
       </button>
@@ -87,27 +87,27 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
         const isExpanded = expandedFolderUids.includes(folder.uid)
 
         return (
-          <div className="overflow-hidden rounded-xl border border-slate-100" key={folder.uid}>
+          <div className="overflow-hidden rounded-xl border border-border-subtle" key={folder.uid}>
             <button
               aria-expanded={isExpanded}
-              className="flex w-full items-center gap-3 bg-slate-50 px-3 py-3 text-left transition-colors hover:bg-slate-100"
+              className="flex w-full items-center gap-3 bg-surface-subtle px-3 py-3 text-left transition-colors hover:bg-slate-200"
               onClick={() => toggleFolder(folder.uid)}
               type="button"
             >
               <Icon className="text-blue-700" icon="FolderOutlined" />
-              <span className="min-w-0 flex-1 truncate text-sm font-semibold text-slate-800">{folder.name}</span>
-              <span className="text-xs text-slate-500">
+              <span className="min-w-0 flex-1 truncate text-sm font-semibold text-text-strong">{folder.name}</span>
+              <span className="text-xs text-text-muted">
                 {resolvedTaskCount} / {folderProgress.total}
               </span>
-              <Icon className="text-xs text-slate-500" icon={isExpanded ? 'DownOutlined' : 'RightOutlined'} />
+              <Icon className="text-xs text-text-muted" icon={isExpanded ? 'DownOutlined' : 'RightOutlined'} />
             </button>
             {isExpanded && <div>{folderTasks.map(renderTask)}</div>}
           </div>
         )
       })}
       {directTasks.length > 0 && (
-        <div className="overflow-hidden rounded-xl border border-slate-100">
-          <div className="bg-slate-50 px-3 py-3 text-sm font-semibold text-slate-800">Tasks</div>
+        <div className="overflow-hidden rounded-xl border border-border-subtle">
+          <div className="bg-surface-subtle px-3 py-3 text-sm font-semibold text-text-strong">Tasks</div>
           {directTasks.map(renderTask)}
         </div>
       )}

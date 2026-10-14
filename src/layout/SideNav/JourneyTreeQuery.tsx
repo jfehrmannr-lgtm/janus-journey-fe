@@ -29,7 +29,7 @@ const JourneyTreeQuery = ({ resourceType, resourceId, children }: JourneyTreeQue
   }
 
   if (error || !data) {
-    return <p className="px-9 py-2 text-xs text-rose-500">Unable to load this resource.</p>
+    return <p className="px-9 py-2 text-xs text-danger-foreground">Unable to load this resource.</p>
   }
 
   return children ? children(data) : <JourneyTree data={data} />
