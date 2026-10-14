@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
 
+import WorkSidebar from '@/components/WorkSidebar/WorkSidebar'
 import SideNavQuery from '@/layout/SideNav/SideNavQuery'
+import SelectedResourceContent from '@/layout/WorkSidebar/SelectedResourceContent'
 
 interface AppLayoutProps {
   children: ReactNode
@@ -17,6 +19,9 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     <div className="flex min-h-screen flex-col bg-slate-50 lg:flex-row">
       <SideNavQuery />
       <main className="min-w-0 flex-1">{children}</main>
+      <WorkSidebar>
+        <SelectedResourceContent />
+      </WorkSidebar>
     </div>
   )
 }

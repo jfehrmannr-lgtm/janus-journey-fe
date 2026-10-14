@@ -1,6 +1,7 @@
 'use client'
 
 import useDashboardHomeQuery from '@/hooks/useDashboardHomeQuery'
+import useNavigationResourcesQuery from '@/hooks/useNavigationResourcesQuery'
 import DashboardHome from '@/components/Dashboard/DashboardHome'
 import DashboardHomeSkeleton from '@/components/Dashboard/DashboardHomeSkeleton'
 
@@ -10,13 +11,15 @@ import DashboardHomeSkeleton from '@/components/Dashboard/DashboardHomeSkeleton'
  * @returns The Dashboard Home query boundary.
  */
 const DashboardHomeQuery = () => {
-  const { data, error, isLoading } = useDashboardHomeQuery()
+  const dashboardQuery = useDashboardHomeQuery()
+  const navigationQuery = useNavigationResourcesQuery()
+  const { data, error, isLoading } = dashboardQuery
 
-  if (isLoading) {
+  if (isLoading || navigationQuery.isLoading) {
     return <DashboardHomeSkeleton />
   }
 
-  if (error || !data) {
+  if (error || navigationQuery.error || !data || !navigationQuery.data) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
         <p className="rounded-xl border border-rose-100 bg-rose-50 px-5 py-4 text-sm text-rose-600">
@@ -26,7 +29,7 @@ const DashboardHomeQuery = () => {
     )
   }
 
-  return <DashboardHome data={data} />
+  return <DashboardHome data={data} journeys={navigationQuery.data.journeys} />
 }
 
 export default DashboardHomeQuery

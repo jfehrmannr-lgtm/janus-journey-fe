@@ -10,7 +10,6 @@ import { authClient } from '@/services/authClient'
 import useAppUiStore from '@/stores/appUiStore'
 import type { NavigationRootResources } from '@/types/resources'
 import JourneyAccordionItem from '@/layout/SideNav/JourneyAccordionItem'
-import JourneyTreeQuery from '@/layout/SideNav/JourneyTreeQuery'
 
 interface SideNavProps {
   resources: NavigationRootResources
@@ -153,7 +152,6 @@ const SideNav = ({ resources }: SideNavProps) => {
                           <Icon className="text-slate-400" icon="FolderOutlined" />
                           <span className="truncate">{folder.name}</span>
                         </button>
-                        {isSelected && <JourneyTreeQuery resourceId={folder.uid} resourceType="folder" />}
                       </div>
                     )
                   })}

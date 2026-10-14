@@ -5,6 +5,7 @@ import QueryProvider from '@/components/QueryProvider/QueryProvider'
 import JanusAuthBoundary from '@/components/Authentication/JanusAuthBoundary'
 
 import './globals.css'
+import '../index.css'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

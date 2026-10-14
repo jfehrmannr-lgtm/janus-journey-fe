@@ -1,5 +1,3 @@
-import type { Journey } from '@/types/resources'
-
 export type DashboardMetricTone = 'blue' | 'green' | 'indigo' | 'amber'
 export type DashboardQuickAction = 'journey' | 'task' | 'explore' | 'shared'
 
@@ -10,13 +8,6 @@ export interface DashboardMetric {
   tone: DashboardMetricTone
 }
 
-export interface JourneySummary {
-  journey: Journey
-  completedTasks: number
-  totalTasks: number
-  progressPercent: number
-}
-
 export interface QuickAction {
   key: DashboardQuickAction
   title: string
@@ -25,6 +16,5 @@ export interface QuickAction {
 
 export interface DashboardHomeData {
   metrics: DashboardMetric[]
-  journeys: JourneySummary[]
   quickActions: QuickAction[]
 }

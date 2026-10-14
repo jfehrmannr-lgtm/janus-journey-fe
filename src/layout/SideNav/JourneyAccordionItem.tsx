@@ -3,7 +3,6 @@
 import Icon from '@/components/Icon/Icon'
 import useAppUiStore from '@/stores/appUiStore'
 import type { Journey } from '@/types/resources'
-import JourneyTreeQuery from '@/layout/SideNav/JourneyTreeQuery'
 
 interface JourneyAccordionItemProps {
   journey: Journey
@@ -36,7 +35,6 @@ const JourneyAccordionItem = ({ journey }: JourneyAccordionItemProps) => {
         </span>
         <span className="truncate">{journey.name}</span>
       </button>
-      {isExpanded && <JourneyTreeQuery resourceId={journey.uid} resourceType="journey" />}
     </div>
   )
 }

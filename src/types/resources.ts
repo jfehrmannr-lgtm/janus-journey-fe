@@ -138,6 +138,12 @@ export interface NavigationRootResources {
 
 export interface JourneyTreeData {
   rootResourceUid: string
+  rootResource: {
+    uid: string
+    type: 'journey' | 'folder'
+    name: string
+    description: string
+  }
   folders: Folder[]
   tasks: Task[]
 }

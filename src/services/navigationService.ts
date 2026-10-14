@@ -68,12 +68,24 @@ const getResourceTree = async (resourceType: ResourceType, resourceId: string): 
 
 const mapJourneyTree = (journey: ApiJourney): JourneyTreeData => ({
   rootResourceUid: journey.uid,
+  rootResource: {
+    uid: journey.uid,
+    type: journey.type,
+    name: journey.name,
+    description: journey.description ?? ''
+  },
   folders: journey.folders.map(mapFolder),
   tasks: [...journey.folders.flatMap((folder) => folder.tasks), ...journey.tasks].map(mapTask)
 })
 
 const mapFolderTree = (folder: ApiFolder): JourneyTreeData => ({
   rootResourceUid: folder.uid,
+  rootResource: {
+    uid: folder.uid,
+    type: folder.type,
+    name: folder.name,
+    description: folder.description ?? ''
+  },
   folders: [],
   tasks: folder.tasks.map(mapTask)
 })

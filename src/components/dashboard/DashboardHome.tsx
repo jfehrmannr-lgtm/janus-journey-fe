@@ -3,11 +3,14 @@
 import type { ReactNode } from 'react'
 
 import Icon from '@/components/Icon/Icon'
+import JourneyCard from '@/components/JourneyCard/JourneyCard'
 import { authClient } from '@/services/authClient'
 import type { DashboardHomeData, DashboardMetricTone, DashboardQuickAction } from '@/types/dashboard'
+import type { Journey } from '@/types/resources'
 
 interface DashboardHomeProps {
   data: DashboardHomeData
+  journeys: Journey[]
 }
 
 const metricStyles: Record<DashboardMetricTone, { icon: string; value: string }> = {
@@ -18,34 +21,13 @@ const metricStyles: Record<DashboardMetricTone, { icon: string; value: string }>
 }
 
 /**
- * Maps a progress percentage to a Tailwind width utility.
- *
- * @param progressPercent - Progress percentage to represent.
- * @returns A Tailwind width class for the progress bar.
- */
-const getProgressWidthClass = (progressPercent: number) => {
-  if (progressPercent >= 75) {
-    return 'w-3/4'
-  }
-
-  if (progressPercent >= 50) {
-    return 'w-1/2'
-  }
-
-  if (progressPercent >= 25) {
-    return 'w-1/4'
-  }
-
-  return 'w-0'
-}
-
-/**
  * Renders the first visual Dashboard Home workspace.
  *
- * @param data - Dashboard Home metrics, Journey summaries, and quick actions.
+ * @param data - Dashboard Home metrics and quick actions.
+ * @param journeys - Real root Journeys available to the authenticated User.
  * @returns The Dashboard Home workspace.
  */
-const DashboardHome = ({ data }: DashboardHomeProps) => {
+const DashboardHome = ({ data, journeys }: DashboardHomeProps) => {
   const { data: session } = authClient.useSession()
   const username = session?.user.name?.split(' ')[0] ?? 'there'
   const metricIcons = {
@@ -62,7 +44,7 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-6 py-6 sm:px-10 sm:py-8 lg:px-12 lg:py-10">
+    <div className="min-h-screen bg-slate-50 px-6 py-6">
       <div className="mx-auto max-w-7xl">
         <header className="flex items-center gap-3">
           <div className="relative flex min-w-0 flex-1 items-center">
@@ -90,24 +72,25 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
           </button>
         </header>
 
-        <section className="mt-10">
-          <p className="text-sm font-medium text-slate-500">Good morning,</p>
-          <h1 className="mt-1 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">{username}</h1>
-          <p className="mt-3 text-base text-slate-500">Keep going. Small steps compound over time.</p>
+        <section className="mt-10 space-y-2">
+          <h1 className="mt-1 text-4xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+            Good morning, {username}
+          </h1>
+          <span className="text-gray-600">What are we going to work on today?</span>
         </section>
 
         <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Workspace summary">
           {data.metrics.map((metric) => (
-            <article className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm" key={metric.key}>
+            <article className="rounded-2xl border border-slate-200/80 bg-white p-2 px-4" key={metric.key}>
               <div className="flex items-center gap-4">
                 <span
-                  className={`flex size-11 items-center justify-center rounded-full text-lg ${metricStyles[metric.tone].icon}`}
+                  className={`flex size-8 items-center justify-center rounded-full text-lg ${metricStyles[metric.tone].icon}`}
                 >
                   {metricIcons[metric.key as keyof typeof metricIcons]}
                 </span>
                 <div>
                   <p className={`text-2xl font-semibold ${metricStyles[metric.tone].value}`}>{metric.value}</p>
-                  <p className="mt-1 text-sm text-slate-500">{metric.label}</p>
+                  <p className="text-sm text-slate-500">{metric.label}</p>
                 </div>
               </div>
             </article>
@@ -124,43 +107,10 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
               <span aria-hidden="true">→</span>
             </button>
           </div>
-          {data.journeys.length > 0 ? (
-            <div className="mt-5 grid gap-4 xl:grid-cols-2">
-              {data.journeys.map((summary, index) => (
-                <article
-                  className={`rounded-2xl border bg-white p-5 shadow-sm transition-colors ${index === 0 ? 'border-blue-400 ring-1 ring-blue-400/30' : 'border-slate-200/80'}`}
-                  key={summary.journey.uid}
-                >
-                  <div className="flex items-start gap-4">
-                    <div
-                      className={`flex size-12 shrink-0 items-center justify-center rounded-xl ${index % 2 === 0 ? 'bg-blue-50 text-blue-700' : 'bg-indigo-50 text-indigo-700'}`}
-                    >
-                      <Icon className="text-xl" icon="FolderOpenOutlined" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 className="text-lg font-semibold text-slate-950">{summary.journey.name}</h3>
-                          <p className="mt-1 text-sm text-slate-500">{summary.journey.description}</p>
-                        </div>
-                        <span className="text-xl text-slate-400" aria-hidden="true">
-                          ›
-                        </span>
-                      </div>
-                      <div className="mt-5 flex items-center gap-3">
-                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100">
-                          <div
-                            className={`h-full rounded-full bg-blue-500 ${getProgressWidthClass(summary.progressPercent)}`}
-                          />
-                        </div>
-                        <span className="whitespace-nowrap text-sm text-slate-500">
-                          {summary.completedTasks} / {summary.totalTasks} tasks
-                        </span>
-                        <span className="text-sm font-semibold text-slate-700">{summary.progressPercent}%</span>
-                      </div>
-                    </div>
-                  </div>
-                </article>
+          {journeys.length > 0 ? (
+            <div className="mt-5 grid gap-2 xl:grid-cols-1">
+              {journeys.map((journey) => (
+                <JourneyCard journey={journey} key={journey.uid} />
               ))}
             </div>
           ) : (
@@ -188,7 +138,7 @@ const DashboardHome = ({ data }: DashboardHomeProps) => {
           <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {data.quickActions.map((action) => (
               <button
-                className="rounded-2xl border border-slate-200/80 bg-white p-5 text-left shadow-sm transition-transform hover:-translate-y-0.5"
+                className="cursor-pointer rounded-2xl border border-slate-200/80 bg-white p-5 text-left transition-transform hover:border-blue-300 transition"
                 key={action.key}
                 type="button"
               >

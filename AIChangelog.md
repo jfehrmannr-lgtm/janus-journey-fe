@@ -1,3 +1,49 @@
+## 2026-10-14
+
+### #JANUS-FE-0026: Refactor WorkSidebar as Overlay
+
+**Work**: Refactor / Layout; Removed the WorkSidebar’s desktop flex-column participation and made it a fixed overlay so opening or closing it cannot resize or reposition the active page.
+
+- Kept the reusable children-based WorkSidebar composition and existing selected-resource content unchanged.
+- Constrained the panel to the viewport and preserved independent internal scrolling and collapse transitions.
+- Preserved the shared AppLayout integration and SideNav behavior while eliminating the layout-shifting `lg:relative` positioning.
+
+## 2026-10-14
+
+### #JANUS-FE-0025: Display Selected Journey in Work Sidebar
+
+**Work**: Build / Resource Integration; Connected the selected-resource query to a real Journey header and the existing resource Tree inside the reusable WorkSidebar.
+
+- Preserved the existing TanStack Query key, BFF resource endpoint, Tree mapping, task states, ordering, loading, and error handling.
+- Exposed mapped root resource metadata from the existing response so the selected Journey name and description render without an additional request.
+- Kept WorkSidebar presentation independent from Journey data fetching by composing the selected-resource content through children.
+
+## 2026-10-14
+
+### #JANUS-FE-0024: Add Reusable Work Sidebar Shell
+
+**Work**: Plan / Build; Added a reusable collapsible Work Sidebar as a shared application-layout sibling and composed the existing selected-resource Tree into it without coupling the shell to Dashboard or Journey data fetching.
+
+- Added `WorkSidebar`, `CollapseSidenav`, and `CollapseSidenavEffect` with separated visibility state and transition presentation.
+- Composed selected Journey and Folder Tree content through Zustand selection state and the existing Tree query boundary.
+- Kept the generic sidebar children-based so other sections can provide Server or Client Component content without direct imports into the shell.
+
+## 2026-10-14
+
+### #JANUS-FE-0023: Align Journey Card Icon
+
+**Work**: Fix / Visual UI; Updated JourneyCard to use the existing Journey icon treatment from the Dashboard reference instead of the Folder icon.
+
+## 2026-10-14
+
+### #JANUS-FE-0022: Integrate Dashboard Journey Cards
+
+**Work**: Plan / Build; Replaced Dashboard mock Journey summaries with real root Journeys, added a reusable clickable JourneyCard, and connected card selection to the existing Zustand navigation state.
+
+- Added JourneyCard presentation for real Journey names and descriptions with an explicit clickable affordance.
+- Omitted progress UI because the current Journey API does not provide progress data.
+- Reused `useNavigationResourcesQuery` and `selectJourney`, allowing Dashboard and SideNav to share the existing TanStack Query cache and Journey Tree flow.
+
 ## 2026-10-09
 
 ### #JANUS-FE-0021: Integrate Resource Tree API
