@@ -38,14 +38,7 @@ const CreateUserScreen = () => {
   const sessionUser = sessionResult.data?.user
 
   useEffect(() => {
-    console.log('[Accounts] SETUP')
-
-    if (!sessionResult.data) {
-      console.log('[Accounts] NO SESSION')
-      return
-    }
-
-    console.log('[Accounts] REQUEST')
+    if (!sessionResult.data) return
 
     let isCancelled = false
 
@@ -68,9 +61,8 @@ const CreateUserScreen = () => {
 
     return () => {
       isCancelled = true
-      console.log('[Accounts] CLEANUP')
     }
-  }, [sessionResult.data?.user.id])
+  }, [sessionResult.data])
 
   const handleCreate = async () => {
     setErrorMessage(null)
