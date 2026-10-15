@@ -109,7 +109,7 @@ const JourneyCard = ({
           icon="RightOutlined"
         />
       </span>
-      {shouldShowProgress && (
+      {!shouldShowProgress && (
         <span className="block">
           <span className="flex items-center justify-between gap-3 text-xs font-semibold text-text-muted">
             <span>Progress</span>
@@ -123,7 +123,7 @@ const JourneyCard = ({
             />
           </span>
           <span className="mt-2 block text-xs text-text-muted">
-            {resolvedTasks} of {progress.total} tasks
+            {resolvedTasks} of {progress?.total} tasks
           </span>
         </span>
       )}

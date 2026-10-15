@@ -36,9 +36,9 @@ const Button = ({
 }: ButtonProps) => {
   const [waves, setWaves] = useState<ButtonWave[]>([])
   const classes = [
-    'relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg border-2 font-semibold transition-colors duration-150',
+    'relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg border-1 font-semibold transition-colors duration-150',
     'focus:outline-none focus-visible:ring-4 focus-visible:ring-focus/20',
-    'disabled:cursor-not-allowed disabled:opacity-60',
+    'disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer',
     variant === 'dotted' ? 'border-dotted' : variant === 'outlined' ? 'border-solid' : 'border-transparent',
     BUTTON_WIDTH_CLASSES[size],
     BUTTON_VISUAL_SIZE_CLASSES[buttonSize],

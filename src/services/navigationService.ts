@@ -1,4 +1,4 @@
-import type { Folder, Journey, Task } from '@/types/resource.type'
+import type { Folder, Journey, ResourceProgress, Task } from '@/types/resource.type'
 import type {
   ApiFolder,
   ApiFolderWithTasks,
@@ -88,7 +88,9 @@ const mapJourney = (journey: ApiJourneyWithResources | ApiJourney): Journey => (
   type: 'journey',
   parentUid: journey.parent.uid,
   name: journey.name,
-  description: journey.description ?? ''
+  description: journey.description ?? '',
+  updatedAt: journey.updatedAt,
+  progress: mapProgress(journey.progress)
 })
 
 const mapFolder = (folder: ApiFolder): Folder => ({
@@ -97,7 +99,9 @@ const mapFolder = (folder: ApiFolder): Folder => ({
   parentUid: folder.parent.uid,
   name: folder.name,
   description: folder.description ?? '',
-  orderIndex: normalizeOrderIndex(folder.orderIndex)
+  orderIndex: normalizeOrderIndex(folder.orderIndex),
+  updatedAt: folder.updatedAt,
+  progress: mapProgress(folder.progress)
 })
 
 const mapTask = (task: ApiTask): Task => ({
@@ -106,6 +110,7 @@ const mapTask = (task: ApiTask): Task => ({
   parentUid: task.parent.uid,
   name: task.name,
   description: task.description ?? '',
+  updatedAt: task.updatedAt,
   status: mapTaskStatus(task.state),
   isVisible: task.isVisible,
   orderIndex: normalizeOrderIndex(task.orderIndex)
@@ -113,6 +118,27 @@ const mapTask = (task: ApiTask): Task => ({
 
 const mapTaskStatus = (state: ApiTaskState): Task['status'] => {
   return state === 'complete' ? 'completed' : state
+}
+
+/**
+ * Converts an API progress summary to the frontend progress shape.
+ *
+ * @param progress - Optional API progress summary.
+ * @returns Frontend progress data or undefined when the API omitted progress.
+ */
+const mapProgress = (progress: ApiJourney['progress']): ResourceProgress | undefined => {
+  if (!progress) {
+    return undefined
+  }
+
+  return {
+    completed: progress.completed,
+    discarded: progress.discarded,
+    pending: Math.max(0, progress.total - progress.completed - progress.discarded),
+    inProgress: 0,
+    inPause: 0,
+    total: progress.total
+  }
 }
 
 const normalizeOrderIndex = (orderIndex: unknown): number => {

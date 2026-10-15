@@ -1,5 +1,48 @@
 ## 2026-10-15
 
+### #JANUS-FE-0059: Default Dashboard Progress To Zero
+
+**Work**: Fix / Dashboard; Standardized Dashboard resource progress rendering so unavailable progress data uses the reusable ProgressBar at 0%.
+
+- Rendered ProgressBar consistently in Dashboard Table and Cards views.
+- Defaulted missing or unavailable progress calculations to 0% without inventing task totals.
+- Preserved existing progress calculations and resource selection behavior.
+
+## 2026-10-15
+
+### #JANUS-FE-0058: Reuse Button In Dashboard Table Controls
+
+**Work**: Refactor / Dashboard; Replaced DashboardTable’s resource selector and view-toggle controls with the shared Button component.
+
+- Reused Button for Journeys/Folders/Tasks tabs and Table/Cards view controls.
+- Preserved accessible selection attributes, counts, click behavior, and responsive layout.
+- Kept custom resource cards and table rows as native elements because their composed content and table semantics are not compatible with the current Button API.
+
+## 2026-10-15
+
+### #JANUS-FE-0057: Split Dashboard Home Sections
+
+**Work**: Refactor / Dashboard; Separated Dashboard Home into focused header, Continue with, and resource workspace components while preserving existing behavior.
+
+- Added dedicated `DashboardHead`, `DashboardContinue`, and `DashboardTable` components.
+- Kept Dashboard state orchestration, resource filtering, Journey sorting, and WorkSidebar selection in `DashboardHome` and component callbacks.
+- Preserved the mobile-first responsive layout, existing reusable components, creation behavior, and root-resource data flow.
+
+## 2026-10-15
+
+### #JANUS-FE-0056: Refactor Dashboard Home
+
+**Work**: Refactor / Dashboard; Reworked Dashboard Home into a mobile-first resource workspace based on the Dashboard V2 visual reference while preserving existing authentication, SideNav, WorkSidebar, and navigation behavior.
+
+- Added a responsive greeting header with Journey navigation and display-only Folder and Task creation actions.
+- Added Continue with JourneyCards showing up to three most recently modified Journeys that are below 100% progress.
+- Preserved root resource progress and modification metadata from the existing API mapping for Dashboard presentation.
+- Added My Journeys Journeys/Folders/Tasks selectors, Table/Cards views, Filters placeholder, internal scrolling, and responsive touch-friendly layouts.
+- Connected Journey and Folder Dashboard selections to the existing WorkSidebar state while keeping Tasks display-only as agreed.
+- Reused Button, JourneyCard, ProgressBar, Icon, existing resource contracts, and progress utilities without adding API requests or BFF changes.
+
+## 2026-10-15
+
 ### #JANUS-FE-0055: Remove Button Playground Auto Focus
 
 **Work**: Fix / Development Tooling; Removed the automatic focus behavior that caused the Button playground to scroll down when selected.

@@ -29,7 +29,7 @@ const DashboardHomeQuery = () => {
     )
   }
 
-  return <DashboardHome data={data} journeys={navigationQuery.data.journeys} />
+  return <DashboardHome resources={navigationQuery.data} />
 }
 
 export default DashboardHomeQuery
