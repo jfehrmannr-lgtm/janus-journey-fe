@@ -1,18 +1,32 @@
-import journeysMock from '@/mock/journeys.mock.json'
-import type { DashboardHomeData } from '@/types/dashboard'
-import type { MockDashboardData } from '@/types/resources'
-
-const dashboardData = journeysMock as MockDashboardData
+import type { DashboardHomeData } from '@/types/dashboard.type'
+import type { NavigationRootResources } from '@/types/navigation.type'
 
 /**
- * Returns summary data required by the Dashboard Home view.
+ * Builds summary data required by the Dashboard Home view from normalized root resources.
  *
- * @returns A promise containing Dashboard Home metrics and summaries.
+ * @param resources - Normalized root resources returned by the BFF.
+ * @returns Dashboard Home metrics and quick actions.
  */
-const getDashboardHomeData = async (): Promise<DashboardHomeData> => {
+const getDashboardHomeData = (resources: NavigationRootResources): DashboardHomeData => {
+  const completedTasks = resources.rootTasks.filter((task) => task.status === 'completed').length
+  const inProgressTasks = resources.rootTasks.filter((task) => task.status === 'in-progress').length
+  const remainingTasks = resources.rootTasks.filter(
+    (task) => task.status !== 'completed' && task.status !== 'discarded'
+  ).length
+
   return {
-    metrics: dashboardData.dashboardHome.metrics,
-    quickActions: dashboardData.dashboardHome.quickActions
+    metrics: [
+      { key: 'active-journeys', value: resources.journeys.length, label: 'Active journeys', tone: 'blue' },
+      { key: 'tasks-completed', value: completedTasks, label: 'Tasks completed', tone: 'green' },
+      { key: 'tasks-in-progress', value: inProgressTasks, label: 'Tasks in progress', tone: 'indigo' },
+      { key: 'tasks-remaining', value: remainingTasks, label: 'Tasks remaining', tone: 'amber' }
+    ],
+    quickActions: [
+      { key: 'journey', title: 'Create Journey', description: 'Start a new structured path.' },
+      { key: 'task', title: 'Add Task', description: 'Add a quick task without a Journey.' },
+      { key: 'explore', title: 'Explore Journeys', description: 'Find and copy shared Journeys.' },
+      { key: 'shared', title: 'View Shared', description: 'Journeys shared with you.' }
+    ]
   }
 }
 

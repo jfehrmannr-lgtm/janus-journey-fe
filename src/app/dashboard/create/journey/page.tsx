@@ -1,4 +1,5 @@
 import JourneyForm from '@/components/Form/Journey/JourneyForm'
+import { createJourneyAction } from './actions'
 
 /**
  * Renders the full-page Create Journey workflow inside the authenticated Dashboard layout.
@@ -13,7 +14,7 @@ const CreateJourneyPage = () => {
           <h1 className="text-4xl font-semibold tracking-tight text-text-primary">Create Journey</h1>
           <p className="text-sm text-text-muted">Build a new Journey with Folders and Tasks to organize your goals.</p>
         </header>
-        <JourneyForm cancelHref="/dashboard/home" />
+        <JourneyForm cancelHref="/dashboard/home" onSubmit={createJourneyAction} />
       </div>
     </div>
   )

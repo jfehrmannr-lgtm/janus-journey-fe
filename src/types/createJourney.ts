@@ -1,4 +1,5 @@
-import type { TaskStatus } from '@/types/resources'
+import type { ApiTaskState } from '@/types/resource-api.type'
+import type { TaskStatus } from '@/types/resource.type'
 
 export type CreateJourneyTaskState = TaskStatus
 
@@ -27,7 +28,7 @@ export interface CreateJourneyFormState {
 export interface CreateJourneyDraftTaskPayload {
   name: string
   description: string | null
-  state: CreateJourneyTaskState
+  state: ApiTaskState
   isVisible: boolean
   orderIndex: number
 }

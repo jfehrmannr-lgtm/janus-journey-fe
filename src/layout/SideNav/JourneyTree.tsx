@@ -4,7 +4,8 @@ import { useState } from 'react'
 
 import Icon from '@/components/Icon/Icon'
 import type { IconName } from '@/components/Icon/Icon'
-import type { JourneyTreeData, TaskStatus } from '@/types/resources'
+import type { JourneyTreeData } from '@/types/navigation.type'
+import type { TaskStatus } from '@/types/resource.type'
 import useAppUiStore from '@/stores/appUiStore'
 import { calculateProgress } from '@/utils/progress'
 

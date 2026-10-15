@@ -1,4 +1,4 @@
-import type { Task } from '@/types/resources'
+import type { Task } from '@/types/resource.type'
 
 export interface Progress {
   completed: number

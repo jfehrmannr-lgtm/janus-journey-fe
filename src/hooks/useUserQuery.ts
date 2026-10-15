@@ -7,7 +7,7 @@ import { getUser } from '@/services/userService'
 /**
  * Reads and caches the current Janus User for client components.
  *
- * @returns The React Query result for the mock User.
+ * @returns The React Query result for the current User.
  */
 const useUserQuery = ({ enabled = true }: { enabled?: boolean } = {}) => {
   return useQuery({ enabled, queryKey: ['user'], queryFn: getUser, retry: false })

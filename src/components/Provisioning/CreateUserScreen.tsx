@@ -8,7 +8,7 @@ import { authClient } from '@/services/authClient'
 import { BffRequestError } from '@/services/bffClient'
 import { createUser } from '@/services/userService'
 import useJanusAuthStore from '@/stores/janusAuthStore'
-import type { User } from '@/types/resources'
+import type { User } from '@/types/user.type'
 import { useQueryClient } from '@tanstack/react-query'
 
 interface BetterAuthAccount {

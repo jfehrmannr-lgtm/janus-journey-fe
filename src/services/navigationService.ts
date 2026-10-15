@@ -1,24 +1,18 @@
+import type { Folder, Journey, Task } from '@/types/resource.type'
 import type {
-  Folder,
-  JourneyTreeData,
-  MockDashboardData,
-  NavigationRootResources,
-  ResourceApiResponse,
-  ResourceType,
-  Task
-} from '@/types/resources'
+  ApiFolder,
+  ApiFolderWithTasks,
+  ApiJourney,
+  ApiJourneyWithResources,
+  ApiTask,
+  ApiTaskState,
+  ResourceResponse,
+  RootResourceResponse
+} from '@/types/resource-api.type'
+import type { JourneyTreeData, NavigationRootResources } from '@/types/navigation.type'
+import type { ResourceType } from '@/types/resource.type'
 
 type BffRequester = <T>(path: string, init?: RequestInit) => Promise<T>
-
-interface NavigationRootResponse {
-  items?: Pick<MockDashboardData, 'tasks' | 'folders' | 'journeys'>
-  payload?: Pick<MockDashboardData, 'tasks' | 'folders' | 'journeys'>
-  registers: number
-}
-
-type ApiTask = Extract<ResourceApiResponse['payload'], { type: 'task' }>
-type ApiFolder = Extract<ResourceApiResponse['payload'], { type: 'folder' }>
-type ApiJourney = Extract<ResourceApiResponse['payload'], { type: 'journey' }>
 
 /**
  * Returns the root resources required by the authenticated application navigation.
@@ -27,21 +21,13 @@ type ApiJourney = Extract<ResourceApiResponse['payload'], { type: 'journey' }>
  * @returns A promise containing the authenticated User's root Journeys, Folders, and Tasks.
  */
 const getNavigationRootResources = async (requester: BffRequester): Promise<NavigationRootResources> => {
-  const response = await requester<NavigationRootResponse>('/journeys/root')
-  const rootItems = response.items ?? response.payload
-
-  if (!rootItems) {
-    throw new Error('The BFF root resources response did not contain resource items.')
-  }
+  const response = await requester<RootResourceResponse>('/journeys/root')
+  const rootItems = response.payload
 
   return {
-    journeys: [...rootItems.journeys].sort(
-      (firstJourney, secondJourney) => firstJourney.orderIndex - secondJourney.orderIndex
-    ),
-    rootFolders: [...rootItems.folders].sort(
-      (firstFolder, secondFolder) => firstFolder.orderIndex - secondFolder.orderIndex
-    ),
-    rootTasks: [...rootItems.tasks].sort((firstTask, secondTask) => firstTask.orderIndex - secondTask.orderIndex)
+    journeys: rootItems.journeys.map(mapJourney),
+    rootFolders: rootItems.folders.map(mapFolder).sort(sortByOrderIndex),
+    rootTasks: rootItems.tasks.map(mapTask).sort(sortByOrderIndex)
   }
 }
 
@@ -58,7 +44,7 @@ const getResourceTree = async (
   resourceType: ResourceType,
   resourceId: string
 ): Promise<JourneyTreeData> => {
-  const response = await requester<ResourceApiResponse>(
+  const response = await requester<ResourceResponse>(
     `/journeys/resources/${encodeURIComponent(resourceType)}/${encodeURIComponent(resourceId)}`
   )
 
@@ -73,7 +59,7 @@ const getResourceTree = async (
   throw new Error('The selected resource cannot be rendered as a Tree.')
 }
 
-const mapJourneyTree = (journey: ApiJourney): JourneyTreeData => ({
+const mapJourneyTree = (journey: ApiJourneyWithResources): JourneyTreeData => ({
   rootResourceUid: journey.uid,
   rootResource: {
     uid: journey.uid,
@@ -85,7 +71,7 @@ const mapJourneyTree = (journey: ApiJourney): JourneyTreeData => ({
   tasks: [...journey.folders.flatMap((folder) => folder.tasks), ...journey.tasks].map(mapTask)
 })
 
-const mapFolderTree = (folder: ApiFolder): JourneyTreeData => ({
+const mapFolderTree = (folder: ApiFolderWithTasks): JourneyTreeData => ({
   rootResourceUid: folder.uid,
   rootResource: {
     uid: folder.uid,
@@ -97,13 +83,21 @@ const mapFolderTree = (folder: ApiFolder): JourneyTreeData => ({
   tasks: folder.tasks.map(mapTask)
 })
 
+const mapJourney = (journey: ApiJourneyWithResources | ApiJourney): Journey => ({
+  uid: journey.uid,
+  type: 'journey',
+  parentUid: journey.parent.uid,
+  name: journey.name,
+  description: journey.description ?? ''
+})
+
 const mapFolder = (folder: ApiFolder): Folder => ({
   uid: folder.uid,
   type: 'folder',
   parentUid: folder.parent.uid,
   name: folder.name,
   description: folder.description ?? '',
-  orderIndex: folder.orderIndex ?? 0
+  orderIndex: normalizeOrderIndex(folder.orderIndex)
 })
 
 const mapTask = (task: ApiTask): Task => ({
@@ -114,11 +108,19 @@ const mapTask = (task: ApiTask): Task => ({
   description: task.description ?? '',
   status: mapTaskStatus(task.state),
   isVisible: task.isVisible,
-  orderIndex: task.orderIndex ?? 0
+  orderIndex: normalizeOrderIndex(task.orderIndex)
 })
 
-const mapTaskStatus = (state: ApiTask['state']): Task['status'] => {
-  return state
+const mapTaskStatus = (state: ApiTaskState): Task['status'] => {
+  return state === 'complete' ? 'completed' : state
+}
+
+const normalizeOrderIndex = (orderIndex: unknown): number => {
+  return typeof orderIndex === 'number' && Number.isFinite(orderIndex) ? orderIndex : 0
+}
+
+const sortByOrderIndex = <T extends { orderIndex: number }>(first: T, second: T): number => {
+  return first.orderIndex - second.orderIndex
 }
 
 export { getNavigationRootResources, getResourceTree }

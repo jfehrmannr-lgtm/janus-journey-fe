@@ -5,8 +5,8 @@ import type { ReactNode } from 'react'
 import Icon from '@/components/Icon/Icon'
 import JourneyCard from '@/components/JourneyCard/JourneyCard'
 import { authClient } from '@/services/authClient'
-import type { DashboardHomeData, DashboardMetricTone, DashboardQuickAction } from '@/types/dashboard'
-import type { Journey } from '@/types/resources'
+import type { DashboardHomeData, DashboardMetricTone, DashboardQuickAction } from '@/types/dashboard.type'
+import type { Journey } from '@/types/resource.type'
 import { useRouter } from 'next/navigation'
 
 interface DashboardHomeProps {

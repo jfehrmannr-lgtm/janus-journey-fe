@@ -1,6 +1,6 @@
 'use client'
 
-import type { FormEvent } from 'react'
+import type { ChangeEvent, FormEvent } from 'react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -8,7 +8,7 @@ import ActionButtons from '@/components/Form/ActionButtons'
 import FolderForm from '@/components/Form/Folder/FolderForm'
 import TaskForm from '@/components/Form/Task/TaskForm'
 import Icon from '@/components/Icon/Icon'
-import type { CreateJourneyFormState } from '@/types/createJourney'
+import type { CreateJourneyFormState, CreateJourneyPayload } from '@/types/createJourney'
 import {
   buildCreateJourneyPayload,
   createEmptyFolder,
@@ -16,9 +16,14 @@ import {
   createInitialCreateJourneyFormState,
   getCreateJourneyValidationErrors
 } from '@/utils/createJourneyPayload'
+import { ApiResponse } from '@/types/api.type'
+import { Journey } from '@/types/resource.type'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 interface JourneyFormProps {
   cancelHref?: string
+  onSubmit: (payload: CreateJourneyPayload) => Promise<ApiResponse<Journey>>
 }
 
 /**
@@ -27,10 +32,12 @@ interface JourneyFormProps {
  * @param cancelHref - Route to navigate to when the form is cancelled.
  * @returns A Journey form with controlled Folders, nested Tasks, and root Tasks.
  */
-const JourneyForm = ({ cancelHref = '/dashboard/home' }: JourneyFormProps) => {
+const JourneyForm = ({ cancelHref = '/dashboard/home', onSubmit }: JourneyFormProps) => {
   const router = useRouter()
   const [formState, setFormState] = useState<CreateJourneyFormState>(() => createInitialCreateJourneyFormState())
   const [validationErrors, setValidationErrors] = useState<string[]>([])
+  const queryClient = useQueryClient()
+  const createJourneyMutation = useMutation({ mutationFn: onSubmit })
 
   const updateFormState = (update: (currentState: CreateJourneyFormState) => CreateJourneyFormState) => {
     setFormState(update)
@@ -41,8 +48,10 @@ const JourneyForm = ({ cancelHref = '/dashboard/home' }: JourneyFormProps) => {
     router.push(cancelHref)
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (createJourneyMutation.isPending) return
+
     const errors = getCreateJourneyValidationErrors(formState)
     setValidationErrors(errors)
 
@@ -50,7 +59,29 @@ const JourneyForm = ({ cancelHref = '/dashboard/home' }: JourneyFormProps) => {
       return
     }
 
-    console.log('Create Journey draft payload:', buildCreateJourneyPayload(formState))
+    const payload = buildCreateJourneyPayload(formState)
+
+    void toast
+      .promise(createJourneyMutation.mutateAsync(payload), {
+        loading: 'Creating Journey...',
+        success: (_) => {
+          void queryClient.invalidateQueries({
+            queryKey: ['navigation', 'root-resources']
+          })
+
+          router.push(`/dashboard/home`)
+
+          return 'Journey created successfully!'
+        },
+        error: (error) => {
+          console.debug(error)
+          return 'Failed'
+        }
+      })
+      .catch((error) => {
+        // El toast ya mostró el error.
+        console.error(error)
+      })
   }
 
   return (
@@ -235,7 +266,11 @@ const JourneyForm = ({ cancelHref = '/dashboard/home' }: JourneyFormProps) => {
         )}
       </section>
 
-      <ActionButtons onCancel={handleClose} primaryLabel="Create Journey" />
+      <ActionButtons
+        disableSubmitAction={createJourneyMutation.isPending}
+        onCancel={handleClose}
+        primaryLabel="Create Journey"
+      />
     </form>
   )
 }

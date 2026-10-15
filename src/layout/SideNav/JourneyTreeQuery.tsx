@@ -5,7 +5,8 @@ import type { ReactNode } from 'react'
 import useJourneyTreeQuery from '@/hooks/useJourneyTreeQuery'
 import JourneyTree from '@/layout/SideNav/JourneyTree'
 import JourneyTreeSkeleton from '@/layout/SideNav/JourneyTreeSkeleton'
-import type { JourneyTreeData, ResourceType } from '@/types/resources'
+import type { JourneyTreeData } from '@/types/navigation.type'
+import type { ResourceType } from '@/types/resource.type'
 
 interface JourneyTreeQueryProps {
   resourceType: ResourceType

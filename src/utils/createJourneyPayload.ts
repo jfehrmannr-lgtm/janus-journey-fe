@@ -1,5 +1,6 @@
 import type {
   CreateJourneyFolderDraft,
+  CreateJourneyDraftTaskPayload,
   CreateJourneyFormState,
   CreateJourneyPayload,
   CreateJourneyTaskDraft
@@ -57,10 +58,10 @@ const createInitialCreateJourneyFormState = (): CreateJourneyFormState => ({
  * @param orderIndex - Deterministic position within its parent collection.
  * @returns A payload Task without client-only identifiers.
  */
-const buildTaskPayload = (task: CreateJourneyTaskDraft, orderIndex: number) => ({
+const buildTaskPayload = (task: CreateJourneyTaskDraft, orderIndex: number): CreateJourneyDraftTaskPayload => ({
   name: task.name.trim(),
   description: task.description.trim() || null,
-  state: task.state,
+  state: task.state === 'completed' ? 'complete' : task.state,
   isVisible: task.isVisible,
   orderIndex
 })
@@ -76,6 +77,7 @@ const buildCreateJourneyPayload = (formState: CreateJourneyFormState): CreateJou
   description: formState.description.trim() || null,
   folders: formState.folders.map((folder, folderIndex) => ({
     name: folder.name.trim(),
+    clientId: folder.clientId.trim(),
     description: folder.description.trim() || null,
     orderIndex: folderIndex,
     tasks: folder.tasks.map((task, taskIndex) => buildTaskPayload(task, taskIndex))

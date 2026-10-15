@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { calculateProgress, calculateProgressPercentage } from './progress'
-import type { Task, TaskStatus } from '@/types/resources'
+import type { Task, TaskStatus } from '@/types/resource.type'
 
 const createTask = (uid: string, status: TaskStatus, isVisible = true, parentUid = 'journey-1'): Task => ({
   uid,

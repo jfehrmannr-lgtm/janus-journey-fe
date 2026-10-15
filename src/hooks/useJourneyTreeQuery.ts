@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { requestBff } from '@/services/bffClient'
 import { getResourceTree } from '@/services/navigationService'
-import type { ResourceType } from '@/types/resources'
+import type { ResourceType } from '@/types/resource.type'
 
 /**
  * Reads and caches one Journey tree by Journey ID.

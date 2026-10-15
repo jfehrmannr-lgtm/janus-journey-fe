@@ -1,5 +1,17 @@
 ## 2026-10-15
 
+### #JANUS-FE-0043: Reorganize Frontend Domain Types
+
+**Work**: Refactor / Type System; Reorganized frontend types around the authoritative BFF DTO composition while preserving application-facing normalized models and existing UI contracts.
+
+- Added small generic API response and collection wrappers plus explicit BFF resource, root-resource, navigation, User, dashboard, and application resource types.
+- Separated BFF fields such as `parent`, nullable descriptions, optional order indexes, and `complete` task state from normalized frontend fields such as `parentUid`, non-null descriptions, numeric ordering, and `completed` status.
+- Centralized BFF-to-application resource mapping and removed mock-only resource and dashboard types, JSON fixtures, and imports.
+- Derived Dashboard Home metrics from normalized root resources while preserving the existing React Query keys, server hydration, and dashboard presentation.
+- Updated Create Journey payload typing to translate the frontend `completed` state to the BFF contract’s `complete` state.
+
+## 2026-10-15
+
 ### #JANUS-FE-0042: Scope Authentication to Protected Routes
 
 **Work**: Refactor / Authentication Routing; Removed the client authentication boundary from the global root layout and mounted it only on Dashboard and provisioning routes.

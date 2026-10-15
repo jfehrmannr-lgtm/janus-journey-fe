@@ -9,7 +9,7 @@ import Icon from '@/components/Icon/Icon'
 import { authClient } from '@/services/authClient'
 import { invalidateBffToken } from '@/services/bffClient'
 import useAppUiStore from '@/stores/appUiStore'
-import type { NavigationRootResources } from '@/types/resources'
+import type { NavigationRootResources } from '@/types/navigation.type'
 import JourneyAccordionItem from '@/layout/SideNav/JourneyAccordionItem'
 
 interface SideNavProps {

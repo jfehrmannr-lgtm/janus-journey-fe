@@ -4,8 +4,8 @@ interface ActionButtonsProps {
   cancelLabel?: string
   isCancelDisabled?: boolean
   isPrimaryDisabled?: boolean
-  isSubmitting?: boolean
   onCancel: () => void
+  disableSubmitAction?: boolean
   primaryLabel: string
 }
 
@@ -24,15 +24,15 @@ const ActionButtons = ({
   cancelLabel = 'Cancel',
   isCancelDisabled = false,
   isPrimaryDisabled = false,
-  isSubmitting = false,
   onCancel,
+  disableSubmitAction = false,
   primaryLabel
 }: ActionButtonsProps) => {
   return (
     <footer className="flex justify-end gap-3 border-t border-border pt-5">
       <button
         className="rounded-lg border border-border-strong px-4 py-2.5 text-sm font-semibold text-text-body transition-colors hover:bg-surface-subtle focus:outline-none focus:ring-4 focus:ring-focus/20 disabled:cursor-not-allowed disabled:opacity-60"
-        disabled={isCancelDisabled || isSubmitting}
+        disabled={isCancelDisabled || disableSubmitAction}
         onClick={onCancel}
         type="button"
       >
@@ -40,10 +40,10 @@ const ActionButtons = ({
       </button>
       <button
         className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover focus:outline-none focus:ring-4 focus:ring-focus/20 disabled:cursor-not-allowed disabled:opacity-60"
-        disabled={isPrimaryDisabled || isSubmitting}
+        disabled={isPrimaryDisabled || disableSubmitAction}
         type="submit"
       >
-        {isSubmitting ? 'Saving...' : primaryLabel}
+        {disableSubmitAction ? 'Saving...' : primaryLabel}
       </button>
     </footer>
   )

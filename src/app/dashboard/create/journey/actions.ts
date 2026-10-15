@@ -3,9 +3,11 @@
 import { headers } from 'next/headers'
 import { auth } from '@/services/auth'
 import { requestServerBffWithToken } from '@/services/serverBffClient'
-import { CreateJourneyPayload } from '@/types/createJourney'
+import type { CreateJourneyPayload } from '@/types/createJourney'
+import { ApiResponse } from '@/types/api.type'
+import { Journey } from '@/types/resource.type'
 
-export const createJourneyAction = async (payload: CreateJourneyPayload) => {
+export const createJourneyAction = async (payload: CreateJourneyPayload): Promise<ApiResponse<Journey>> => {
   const { token } = await auth.api.getToken({
     headers: await headers()
   })

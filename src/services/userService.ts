@@ -1,5 +1,6 @@
 import { getBffToken, getBffTokenSubject, requestBff, requestBffWithToken } from '@/services/bffClient'
-import type { User } from '@/types/resources'
+import type { CreateUserInput } from '@/types/user-api.type'
+import type { User } from '@/types/user.type'
 
 /**
  * Resolves the Janus User addressed by the authenticated Better Auth JWT subject.
@@ -11,23 +12,6 @@ const getUser = async (): Promise<User> => {
   const subject = getBffTokenSubject(token)
 
   return requestBffWithToken<User>(`/users/${encodeURIComponent(subject)}`, token)
-}
-
-export interface CreateUserInput {
-  authLogins: Array<{
-    authLogin: string
-    metadata: Record<string, unknown>
-    provider: 'google'
-    providerAvatarUrl: string | null
-    providerEmail: string | null
-    providerUsername: string | null
-  }>
-  config: {
-    avatarUrl: string | null
-    username: string
-  }
-  email: string
-  metadata?: Record<string, unknown>
 }
 
 /**

@@ -11,8 +11,8 @@ import DashboardHomeSkeleton from '@/components/Dashboard/DashboardHomeSkeleton'
  * @returns The Dashboard Home query boundary.
  */
 const DashboardHomeQuery = () => {
-  const dashboardQuery = useDashboardHomeQuery()
   const navigationQuery = useNavigationResourcesQuery()
+  const dashboardQuery = useDashboardHomeQuery(navigationQuery.data)
   const { data, error, isLoading } = dashboardQuery
 
   if (isLoading || navigationQuery.isLoading) {

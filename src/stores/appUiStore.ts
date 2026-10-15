@@ -1,7 +1,7 @@
 'use client'
 
 import { create } from 'zustand'
-import type { ResourceType } from '@/types/resources'
+import type { ResourceType } from '@/types/resource.type'
 
 interface AppUiState {
   expandedJourneyUid: string | null

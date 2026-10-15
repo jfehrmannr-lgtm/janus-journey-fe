@@ -3,7 +3,7 @@
 import backgroundImage from '@/assets/janus-journey-background.png'
 import Icon from '@/components/Icon/Icon'
 import JourneyTree from '@/layout/SideNav/JourneyTree'
-import type { JourneyTreeData } from '@/types/resources'
+import type { JourneyTreeData } from '@/types/navigation.type'
 import { calculateProgress, calculateProgressPercentage } from '@/utils/progress'
 
 interface JourneyWorkspaceProps {

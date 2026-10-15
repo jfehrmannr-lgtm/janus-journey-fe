@@ -34,20 +34,21 @@ const createFormState = (): CreateJourneyFormState => ({
 })
 
 describe('buildCreateJourneyPayload', () => {
-  it('creates a parentless hierarchy without temporary client identifiers', () => {
+  it('creates a parentless hierarchy with Folder correlation identifiers', () => {
     expect(buildCreateJourneyPayload(createFormState())).toEqual({
       name: 'Learn web development',
       description: 'A structured learning path.',
       folders: [
         {
           name: 'HTML and CSS',
+          clientId: 'folder-client-1',
           description: 'Frontend foundations.',
           orderIndex: 0,
           tasks: [
             {
               name: 'Learn semantic HTML',
               description: 'Study semantic elements.',
-              state: 'completed',
+              state: 'complete',
               isVisible: true,
               orderIndex: 0
             }

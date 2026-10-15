@@ -29,16 +29,12 @@ const DashboardHomePage = async () => {
     }
   })
 
-  await Promise.all([
-    queryClient.query({
-      queryKey: ['dashboard', 'home'],
-      queryFn: getDashboardHomeData
-    }),
-    queryClient.query({
-      queryKey: ['navigation', 'root-resources'],
-      queryFn: () => getNavigationRootResources((path, init) => requestServerBffWithToken(path, token, init))
-    })
-  ])
+  const navigationResources = await queryClient.fetchQuery({
+    queryKey: ['navigation', 'root-resources'],
+    queryFn: () => getNavigationRootResources((path, init) => requestServerBffWithToken(path, token, init))
+  })
+
+  queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(navigationResources))
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

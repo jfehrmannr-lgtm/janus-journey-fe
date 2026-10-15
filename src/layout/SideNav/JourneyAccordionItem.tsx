@@ -2,7 +2,7 @@
 
 import Icon from '@/components/Icon/Icon'
 import useAppUiStore from '@/stores/appUiStore'
-import type { Journey } from '@/types/resources'
+import type { Journey } from '@/types/resource.type'
 
 interface JourneyAccordionItemProps {
   journey: Journey
