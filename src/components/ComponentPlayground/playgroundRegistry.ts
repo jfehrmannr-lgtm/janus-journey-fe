@@ -1,6 +1,7 @@
-import ButtonPlayground from './ButtonPlayground'
+import ButtonPlayground from './ButtonPlayground/ButtonPlayground'
 import type { ComponentPlaygroundRegistration } from './ComponentPlayground.types'
-import JourneyCardPlayground from './JourneyCardPlayground'
+import IconPlayground from './IconPlayground/IconPlayground'
+import JourneyCardPlayground from './JourneyCardPlayground/JourneyCardPlayground'
 
 export const PLAYGROUND_REGISTRY: ComponentPlaygroundRegistration[] = [
   {
@@ -12,5 +13,10 @@ export const PLAYGROUND_REGISTRY: ComponentPlaygroundRegistration[] = [
     id: 'journey-card',
     name: 'Journey Card',
     playground: JourneyCardPlayground
+  },
+  {
+    id: 'icon',
+    name: 'Icon',
+    playground: IconPlayground
   }
 ]

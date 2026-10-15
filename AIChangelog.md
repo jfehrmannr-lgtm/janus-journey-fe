@@ -1,5 +1,25 @@
 ## 2026-10-15
 
+### #JANUS-FE-0050: Add Icon Playground
+
+**Work**: Build / Development Tooling; Added an isolated Icon playground and registered it in the existing component testing environment.
+
+- Added visual examples for every supported Icon name.
+- Added examples for outlined, filled, and two-tone types, multiple sizes, theme colors, and combined configurations.
+- Reused the existing Icon component and preserved all production Icon behavior.
+
+## 2026-10-15
+
+### #JANUS-FE-0051: Organize Playground Components By Folder
+
+**Work**: Refactor / Development Tooling; Moved each registered component playground into its own folder without changing playground behavior.
+
+- Added dedicated `ButtonPlayground`, `JourneyCardPlayground`, and `IconPlayground` folders.
+- Updated the shared registry imports to use the new component-specific paths.
+- Preserved the existing component playground shell and registration mechanism.
+
+## 2026-10-15
+
 ### #JANUS-FE-0048: Add JourneyCard Playground
 
 **Work**: Build / Components; Refactored the existing JourneyCard into a presentational, strongly typed card and registered an isolated JourneyCard playground without integrating it into Dashboard behavior.
