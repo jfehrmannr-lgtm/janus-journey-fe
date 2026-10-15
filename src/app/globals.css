@@ -48,6 +48,7 @@
 
   --color-task-in-pause: #fef3c7;
   --color-task-in-pause-foreground: #92400e;
+  --animate-button-wave: button-wave 500ms ease-out forwards;
 }
 
 body {
@@ -63,6 +64,18 @@ body {
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes button-wave {
+  from {
+    opacity: 0.35;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(20);
   }
 }
 

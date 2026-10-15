@@ -37,7 +37,34 @@ const JourneyForm = ({ cancelHref = '/dashboard/home', onSubmit }: JourneyFormPr
   const [formState, setFormState] = useState<CreateJourneyFormState>(() => createInitialCreateJourneyFormState())
   const [validationErrors, setValidationErrors] = useState<string[]>([])
   const queryClient = useQueryClient()
-  const createJourneyMutation = useMutation({ mutationFn: onSubmit })
+  const createJourneyMutation = useMutation({
+    mutationFn: async (payload: CreateJourneyPayload) => {
+      const toastId = toast.loading('Creating Journey...')
+
+      try {
+        const response = await onSubmit(payload)
+
+        toast.success('Journey created successfully!', { id: toastId })
+
+        return response
+      } catch (error) {
+        toast.error('Failed to create Journey.', { id: toastId })
+        throw error
+      }
+    },
+
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['navigation', 'root-resources']
+      })
+
+      router.push('/dashboard/home')
+    },
+
+    onError: (error) => {
+      console.error(error)
+    }
+  })
 
   const updateFormState = (update: (currentState: CreateJourneyFormState) => CreateJourneyFormState) => {
     setFormState(update)
@@ -48,40 +75,19 @@ const JourneyForm = ({ cancelHref = '/dashboard/home', onSubmit }: JourneyFormPr
     router.push(cancelHref)
   }
 
-  const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
     if (createJourneyMutation.isPending) return
 
     const errors = getCreateJourneyValidationErrors(formState)
     setValidationErrors(errors)
 
-    if (errors.length > 0) {
-      return
-    }
+    if (errors.length > 0) return
 
     const payload = buildCreateJourneyPayload(formState)
 
-    void toast
-      .promise(createJourneyMutation.mutateAsync(payload), {
-        loading: 'Creating Journey...',
-        success: (_) => {
-          void queryClient.invalidateQueries({
-            queryKey: ['navigation', 'root-resources']
-          })
-
-          router.push(`/dashboard/home`)
-
-          return 'Journey created successfully!'
-        },
-        error: (error) => {
-          console.debug(error)
-          return 'Failed'
-        }
-      })
-      .catch((error) => {
-        // El toast ya mostró el error.
-        console.error(error)
-      })
+    createJourneyMutation.mutate(payload)
   }
 
   return (

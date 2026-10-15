@@ -22,7 +22,7 @@ interface AppUiState {
  */
 const useAppUiStore = create<AppUiState>((set) => ({
   expandedJourneyUid: null,
-  isWorkSidebarOpen: true,
+  isWorkSidebarOpen: false,
   isSideNavCollapsed: false,
   selectedResourceType: null,
   selectedResourceUid: null,

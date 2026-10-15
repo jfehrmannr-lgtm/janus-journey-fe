@@ -1,5 +1,58 @@
 ## 2026-10-15
 
+### #JANUS-FE-0048: Add JourneyCard Playground
+
+**Work**: Build / Components; Refactored the existing JourneyCard into a presentational, strongly typed card and registered an isolated JourneyCard playground without integrating it into Dashboard behavior.
+
+- Removed direct Zustand access from JourneyCard and added selected state, click callback, class-name extension, visibility controls, optional progress, and optional last-modified inputs.
+- Reused the existing Journey domain type, `Progress` type, and percentage calculation utility while preserving missing-data behavior through optional display sections.
+- Added JourneyCard examples for progress states, selection, long content, unavailable progress, hidden metadata, and responsive three-card layouts.
+- Registered JourneyCard alongside Button in the existing component playground registry without adding application navigation or new routes.
+
+## 2026-10-15
+
+### #JANUS-FE-0047: Refactor Component Playground Structure
+
+**Work**: Refactor / Development Tooling; Split the component testing route into a registry-driven playground shell and an isolated Button playground while preserving the existing Button examples and interactions.
+
+- Added a reusable playground shell with responsive component navigation and selected-playground rendering.
+- Added a simple Button registration containing only its identifier, display name, and playground component.
+- Extracted the complete Button showcase into an independent `ButtonPlayground` component.
+- Kept the local-development gate and avoided changes to production UI components, application navigation, and routes.
+
+## 2026-10-15
+
+### #JANUS-FE-0046: Restrict Component Playground To Local Mode
+
+**Work**: Refactor / Development Tooling; Restricted the `/component-testing` Button playground to Next.js development mode and added a user-facing production message.
+
+- Rendered the visual component gallery only when `NODE_ENV` is `development`.
+- Added a clear message for non-local environments without changing the reusable Button component.
+
+## 2026-10-15
+
+### #JANUS-FE-0045: Add Button Click Wave Effect
+
+**Work**: Refactor / Components; Extended the reusable Button with a Tailwind-powered click wave effect and separated its type contracts and styling constants into dedicated files.
+
+- Added `Button.types.ts` for Button props, supported values, and ripple-wave state.
+- Added `constants.ts` for Button dimensions, supported gallery values, and explicit theme class mappings.
+- Added pointer-positioned click waves with keyboard-click center fallback and automatic animation cleanup.
+- Preserved native click callbacks, disabled behavior, accessibility attributes, variants, counts, icons, and independent width/padding controls.
+
+## 2026-10-15
+
+### #JANUS-FE-0044: Add Reusable Button Playground
+
+**Work**: Build / Components; Added a strongly typed reusable Button component and a standalone visual testing route at `/component-testing` without changing existing application buttons or Dashboard UI.
+
+- Added filled, outlined, and dotted variants with explicit semantic color mappings from existing Janus Journey theme tokens.
+- Added independent width and visual-size controls, icon placement, numeric counts, native button types, disabled behavior, focus styles, and class-name extension support.
+- Reused the existing shared `Icon` component for gallery examples.
+- Added visual examples covering variants, colors, widths, sizes, icons, counts, states, combinations, and form submission behavior.
+
+## 2026-10-15
+
 ### #JANUS-FE-0043: Reorganize Frontend Domain Types
 
 **Work**: Refactor / Type System; Reorganized frontend types around the authoritative BFF DTO composition while preserving application-facing normalized models and existing UI contracts.
