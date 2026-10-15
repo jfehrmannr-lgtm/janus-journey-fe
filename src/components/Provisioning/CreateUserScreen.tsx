@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -37,21 +38,24 @@ const CreateUserScreen = () => {
   const sessionUser = sessionResult.data?.user
 
   useEffect(() => {
+    console.log('[Accounts] SETUP')
+
     if (!sessionResult.data) {
+      console.log('[Accounts] NO SESSION')
       return
     }
+
+    console.log('[Accounts] REQUEST')
 
     let isCancelled = false
 
     const loadAccounts = async () => {
       const { data, error } = await authClient.listAccounts()
 
-      if (isCancelled) {
-        return
-      }
+      if (isCancelled) return
 
       if (error || !data) {
-        setAccountError(error?.message ?? 'The Google authentication identity could not be resolved.')
+        setAccountError(error?.message ?? 'Account lookup failed')
         setIsLoadingAccounts(false)
         return
       }
@@ -64,8 +68,9 @@ const CreateUserScreen = () => {
 
     return () => {
       isCancelled = true
+      console.log('[Accounts] CLEANUP')
     }
-  }, [sessionResult.data])
+  }, [sessionResult.data?.user.id])
 
   const handleCreate = async () => {
     setErrorMessage(null)
@@ -185,4 +190,4 @@ const CreateUserScreen = () => {
   )
 }
 
-export default CreateUserScreen
+export default React.memo(CreateUserScreen)

@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 
+import { requestBff } from '@/services/bffClient'
 import { getResourceTree } from '@/services/navigationService'
 import type { ResourceType } from '@/types/resources'
 
@@ -20,7 +21,7 @@ const useJourneyTreeQuery = (resourceType: ResourceType | null, resourceId: stri
         throw new Error('A resource type and ID are required to load its tree.')
       }
 
-      return getResourceTree(resourceType, resourceId)
+      return getResourceTree(requestBff, resourceType, resourceId)
     },
     enabled: (resourceType === 'journey' || resourceType === 'folder') && Boolean(resourceId)
   })

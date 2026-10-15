@@ -1,3 +1,4 @@
+import JanusAuthBoundary from '@/components/Authentication/JanusAuthBoundary'
 import CreateUserScreen from '@/components/Provisioning/CreateUserScreen'
 
 /**
@@ -6,7 +7,11 @@ import CreateUserScreen from '@/components/Provisioning/CreateUserScreen'
  * @returns The provisioning screen.
  */
 const ProvisioningPage = () => {
-  return <CreateUserScreen />
+  return (
+    <JanusAuthBoundary>
+      <CreateUserScreen />
+    </JanusAuthBoundary>
+  )
 }
 
 export default ProvisioningPage

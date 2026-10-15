@@ -7,6 +7,7 @@ import { useState } from 'react'
 import BrandLogo from '@/components/BrandLogo/BrandLogo'
 import Icon from '@/components/Icon/Icon'
 import { authClient } from '@/services/authClient'
+import { invalidateBffToken } from '@/services/bffClient'
 import useAppUiStore from '@/stores/appUiStore'
 import type { NavigationRootResources } from '@/types/resources'
 import JourneyAccordionItem from '@/layout/SideNav/JourneyAccordionItem'
@@ -40,7 +41,12 @@ const SideNav = ({ resources }: SideNavProps) => {
    * @returns A promise that resolves after the session is cleared.
    */
   const handleLogout = async () => {
-    await authClient.signOut()
+    try {
+      await authClient.signOut()
+    } finally {
+      invalidateBffToken()
+    }
+
     router.replace('/')
     router.refresh()
   }

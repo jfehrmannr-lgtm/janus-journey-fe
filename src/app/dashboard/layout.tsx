@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 
 import type { ReactNode } from 'react'
 
+import JanusAuthBoundary from '@/components/Authentication/JanusAuthBoundary'
 import AppLayout from '@/layout/AppLayout/AppLayout'
 import { auth } from '@/services/auth'
 
@@ -23,7 +24,11 @@ const DashboardRouteLayout = async ({ children }: DashboardRouteLayoutProps) => 
     redirect('/auth/login')
   }
 
-  return <AppLayout>{children}</AppLayout>
+  return (
+    <JanusAuthBoundary>
+      <AppLayout>{children}</AppLayout>
+    </JanusAuthBoundary>
+  )
 }
 
 export default DashboardRouteLayout

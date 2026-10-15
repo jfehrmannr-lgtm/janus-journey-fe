@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 
 import QueryProvider from '@/components/QueryProvider/QueryProvider'
-import JanusAuthBoundary from '@/components/Authentication/JanusAuthBoundary'
 
 import './globals.css'
 import '../index.css'
@@ -32,9 +31,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col has-data-mobile-nav-open:overflow-hidden lg:has-data-mobile-nav-open:overflow-visible">
-        <QueryProvider>
-          <JanusAuthBoundary>{children}</JanusAuthBoundary>
-        </QueryProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   )

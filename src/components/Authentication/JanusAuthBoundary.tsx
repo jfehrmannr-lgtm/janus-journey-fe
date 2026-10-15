@@ -2,10 +2,10 @@
 
 import { usePathname, useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { authClient } from '@/services/authClient'
-import { BffRequestError } from '@/services/bffClient'
+import { BffRequestError, invalidateBffToken } from '@/services/bffClient'
 import AuthErrorState from '@/components/Authentication/AuthErrorState'
 import AuthLoadingState from '@/components/Authentication/AuthLoadingState'
 import useJanusAuthStore from '@/stores/janusAuthStore'
@@ -25,6 +25,8 @@ const JanusAuthBoundary = ({ children }: JanusAuthBoundaryProps) => {
   const pathname = usePathname()
   const router = useRouter()
   const session = authClient.useSession()
+  const hasObservedAuthenticatedSession = useRef(false)
+  const previousSessionUserId = useRef<string | null>(null)
   const userQuery = useUserQuery({ enabled: Boolean(session.data) && !session.isPending })
   const { isAuthenticated, isError, isProvisioning } = useJanusAuthStore()
   const setState = useJanusAuthStore((state) => state.setState)
@@ -32,6 +34,21 @@ const JanusAuthBoundary = ({ children }: JanusAuthBoundaryProps) => {
   const isProvisioningRoute = pathname === '/auth/create-user'
 
   useEffect(() => {
+    const sessionUserId = session.data?.user.id ?? null
+
+    if (session.data) {
+      if (hasObservedAuthenticatedSession.current && previousSessionUserId.current !== sessionUserId) {
+        invalidateBffToken()
+      }
+
+      hasObservedAuthenticatedSession.current = true
+      previousSessionUserId.current = sessionUserId
+    } else if (!session.isPending && hasObservedAuthenticatedSession.current) {
+      invalidateBffToken()
+      hasObservedAuthenticatedSession.current = false
+      previousSessionUserId.current = sessionUserId
+    }
+
     if (session.isPending) {
       setState({ isAuthenticated: false, isError: false, isLoading: true, isProvisioning: false })
       return
@@ -77,6 +94,11 @@ const JanusAuthBoundary = ({ children }: JanusAuthBoundaryProps) => {
   ])
 
   useEffect(() => {
+    if (!session.isPending && !session.data && isDashboardRoute) {
+      router.replace('/auth/login')
+      return
+    }
+
     if (isProvisioning && isDashboardRoute) {
       router.replace('/auth/create-user')
       return

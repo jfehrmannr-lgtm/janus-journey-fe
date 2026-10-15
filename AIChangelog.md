@@ -1,3 +1,36 @@
+## 2026-10-15
+
+### #JANUS-FE-0042: Scope Authentication to Protected Routes
+
+**Work**: Refactor / Authentication Routing; Removed the client authentication boundary from the global root layout and mounted it only on Dashboard and provisioning routes.
+
+- Kept the global Query Provider available to all routes without triggering session resolution for public pages.
+- Preserved Dashboard authentication orchestration inside the authenticated Dashboard layout.
+- Preserved provisioning authentication behavior around the Create User route.
+- Left the public landing page and login page outside the client authentication boundary.
+
+## 2026-10-15
+
+### #JANUS-FE-0041: Reuse Client BFF JWTs
+
+**Work**: Build / Authentication; Added in-memory Better Auth JWT reuse and concurrent issuance deduplication for authenticated browser BFF requests without changing server-side token handling.
+
+- Cached valid client JWTs using their `exp` claim with a 30-second expiration safety margin.
+- Shared concurrent token issuance promises and cleared failed or completed in-flight requests safely.
+- Invalidated cached and in-flight token state on sign-out, session termination, and authenticated user changes.
+- Added focused tests covering reuse, concurrency, expiry, failures, explicit invalidation, and stale in-flight results.
+
+## 2026-10-15
+
+### #JANUS-FE-0040: Prefetch Dashboard Home on the Server
+
+**Work**: Refactor / SSR Hydration; Migrated Dashboard Home initial data loading to request-scoped TanStack Query server prefetching while preserving existing client query consumers and Dashboard interactions.
+
+- Added a server-safe authenticated BFF adapter that forwards only the Better Auth JWT from the server request to the BFF.
+- Prefetched Dashboard Home and root navigation queries in the `/dashboard/home` Server Component and dehydrated them through a React Query `HydrationBoundary`.
+- Reused the existing navigation response mapping and query contracts across browser and server request transports.
+- Preserved client-side navigation resource-tree queries, loading/error handling, Zustand state, layouts, and presentation components.
+
 ## 2026-10-14
 
 ### #JANUS-FE-0039: Refine Create Journey Visual Layout

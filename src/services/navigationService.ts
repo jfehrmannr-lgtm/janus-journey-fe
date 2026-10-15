@@ -1,4 +1,3 @@
-import { requestBff } from '@/services/bffClient'
 import type {
   Folder,
   JourneyTreeData,
@@ -8,6 +7,8 @@ import type {
   ResourceType,
   Task
 } from '@/types/resources'
+
+type BffRequester = <T>(path: string, init?: RequestInit) => Promise<T>
 
 interface NavigationRootResponse {
   items?: Pick<MockDashboardData, 'tasks' | 'folders' | 'journeys'>
@@ -22,10 +23,11 @@ type ApiJourney = Extract<ResourceApiResponse['payload'], { type: 'journey' }>
 /**
  * Returns the root resources required by the authenticated application navigation.
  *
+ * @param requester - BFF requester used to retrieve the root resources.
  * @returns A promise containing the authenticated User's root Journeys, Folders, and Tasks.
  */
-const getNavigationRootResources = async (): Promise<NavigationRootResources> => {
-  const response = await requestBff<NavigationRootResponse>('/journeys/root')
+const getNavigationRootResources = async (requester: BffRequester): Promise<NavigationRootResources> => {
+  const response = await requester<NavigationRootResponse>('/journeys/root')
   const rootItems = response.items ?? response.payload
 
   if (!rootItems) {
@@ -46,12 +48,17 @@ const getNavigationRootResources = async (): Promise<NavigationRootResources> =>
 /**
  * Returns the selected Journey or Folder and its descendants in the Tree data shape.
  *
+ * @param requester - BFF requester used to retrieve the selected resource.
  * @param resourceType - Type of the selected resource.
  * @param resourceId - Stable identifier of the selected resource.
  * @returns A promise containing the selected resource tree resources.
  */
-const getResourceTree = async (resourceType: ResourceType, resourceId: string): Promise<JourneyTreeData> => {
-  const response = await requestBff<ResourceApiResponse>(
+const getResourceTree = async (
+  requester: BffRequester,
+  resourceType: ResourceType,
+  resourceId: string
+): Promise<JourneyTreeData> => {
+  const response = await requester<ResourceApiResponse>(
     `/journeys/resources/${encodeURIComponent(resourceType)}/${encodeURIComponent(resourceId)}`
   )
 
