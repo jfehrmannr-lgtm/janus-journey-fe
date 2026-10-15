@@ -126,6 +126,17 @@ const JourneyCardPlayground = () => {
         </div>
       </section>
 
+      <section className="space-y-4" aria-labelledby="journey-card-types-title">
+        <h3 className="text-2xl font-semibold" id="journey-card-types-title">
+          Resource icons
+        </h3>
+        <div className="grid gap-4 md:grid-cols-3">
+          <JourneyCard journey={journeyExamples[1].journey} type="journey" />
+          <JourneyCard journey={journeyExamples[1].journey} type="folder" />
+          <JourneyCard journey={journeyExamples[1].journey} type="task" />
+        </div>
+      </section>
+
       <section className="space-y-4" aria-labelledby="journey-card-content-title">
         <h3 className="text-2xl font-semibold" id="journey-card-content-title">
           Content and optional data

@@ -2,6 +2,7 @@ import ButtonPlayground from './ButtonPlayground/ButtonPlayground'
 import type { ComponentPlaygroundRegistration } from './ComponentPlayground.types'
 import IconPlayground from './IconPlayground/IconPlayground'
 import JourneyCardPlayground from './JourneyCardPlayground/JourneyCardPlayground'
+import ProgressBarPlayground from './ProgressBarPlayground/ProgressBarPlayground'
 
 export const PLAYGROUND_REGISTRY: ComponentPlaygroundRegistration[] = [
   {
@@ -18,5 +19,10 @@ export const PLAYGROUND_REGISTRY: ComponentPlaygroundRegistration[] = [
     id: 'icon',
     name: 'Icon',
     playground: IconPlayground
+  },
+  {
+    id: 'progress-bar',
+    name: 'Progress Bar',
+    playground: ProgressBarPlayground
   }
 ]

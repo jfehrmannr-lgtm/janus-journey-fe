@@ -1,5 +1,35 @@
 ## 2026-10-15
 
+### #JANUS-FE-0055: Remove Button Playground Auto Focus
+
+**Work**: Fix / Development Tooling; Removed the automatic focus behavior that caused the Button playground to scroll down when selected.
+
+- Removed the `autoFocus` prop from the Button playground example.
+- Preserved the Button component and manual keyboard-focus demonstration.
+
+## 2026-10-15
+
+### #JANUS-FE-0053: Add Reusable ProgressBar
+
+**Work**: Build / Components and Development Tooling; Added a presentational ProgressBar component and isolated playground registration without changing existing application pages or production components.
+
+- Added typed size, percentage-position, semantic-color, progress, and class-name props with defaults of `md`, `right`, and `primary`.
+- Added finite-value normalization, 0–100 clamping, whole-number percentage labels, responsive track sizing, and semantic progressbar attributes.
+- Added explicit theme color and thickness mappings without dynamically generated Tailwind classes.
+- Added ProgressBar playground examples for all supported sizes, percentage positions, colors, values, normalization, interaction, and responsive containers.
+
+## 2026-10-15
+
+### #JANUS-FE-0052: Support JourneyCard Resource Icons
+
+**Work**: Refactor / Components; Added a typed resource-type prop to JourneyCard so the shared card can display Journey, Folder, or Task icons without changing its default Journey behavior.
+
+- Added `type?: ResourceType` with a default of `journey`.
+- Mapped Journey, Folder, and Task values to existing shared icons.
+- Added resource-icon examples to the JourneyCard playground.
+
+## 2026-10-15
+
 ### #JANUS-FE-0050: Add Icon Playground
 
 **Work**: Build / Development Tooling; Added an isolated Icon playground and registered it in the existing component testing environment.

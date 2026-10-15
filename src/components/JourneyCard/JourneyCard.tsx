@@ -1,12 +1,14 @@
 'use client'
 
 import Icon from '@/components/Icon/Icon'
-import type { Journey } from '@/types/resource.type'
+import type { IconName } from '@/components/Icon/Icon'
+import type { Journey, ResourceType } from '@/types/resource.type'
 import { calculateProgressPercentage } from '@/utils/progress'
 import type { Progress } from '@/utils/progress'
 
 interface JourneyCardProps {
   journey: Journey
+  type?: ResourceType
   onClick?: () => void
   className?: string
   selected?: boolean
@@ -51,6 +53,7 @@ const formatRelativeModification = (value: string): string => {
  * Renders a presentational Journey summary card.
  *
  * @param journey - Journey resource represented by the card.
+ * @param type - Resource type that determines the card icon.
  * @param onClick - Callback invoked when the card is selected.
  * @param className - Additional classes appended to the card base styles.
  * @param selected - Whether the card is currently selected.
@@ -62,6 +65,7 @@ const formatRelativeModification = (value: string): string => {
  */
 const JourneyCard = ({
   journey,
+  type = 'journey',
   onClick,
   className,
   selected = false,
@@ -72,6 +76,11 @@ const JourneyCard = ({
 }: JourneyCardProps) => {
   const shouldShowProgress = showProgress && progress !== undefined
   const shouldShowLastModified = showLastModified && lastModified !== undefined
+  const resourceIcons: Record<ResourceType, IconName> = {
+    journey: 'AppstoreOutlined',
+    folder: 'FolderOutlined',
+    task: 'CheckSquareOutlined'
+  }
   const progressPercentage = progress === undefined ? 0 : Math.min(100, calculateProgressPercentage(progress))
   const resolvedTasks = progress === undefined ? 0 : progress.completed + progress.discarded
   const classes = [
@@ -87,7 +96,7 @@ const JourneyCard = ({
     <button aria-pressed={selected} className={classes} onClick={onClick} type="button">
       <span className="flex min-w-0 items-start gap-4">
         <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-lg text-primary-foreground">
-          <Icon icon="AppstoreOutlined" />
+          <Icon icon={resourceIcons[type]} />
         </span>
         <span className="min-w-0 flex-1">
           <span className="block truncate text-lg font-semibold text-text-primary">{journey.name}</span>

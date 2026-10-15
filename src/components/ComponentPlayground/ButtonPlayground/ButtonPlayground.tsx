@@ -133,7 +133,7 @@ const ButtonPlayground = () => {
         </p>
         <div className="flex flex-wrap gap-3">
           <Button label="Normal" />
-          <Button autoFocus label="Focus" variant="outlined" />
+          <Button label="Focus" variant="outlined" />
           <Button disabled label="Disabled" />
           <Button
             className="shadow-lg"
