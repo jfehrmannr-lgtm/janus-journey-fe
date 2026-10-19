@@ -77,7 +77,7 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
   return (
     <div className="min-h-screen  bg-surface-page px-4 py-4 sm:px-6 sm:py-6">
       <div className="mx-auto max-w-7xl space-y-1 sm:space-y-2">
-        <div className="sticky top-0 z-10">
+        <div className="sticky top-0 z-20">
           <DashboardHead onCreateJourney={handleJourneyCreation} username={username} />
         </div>
         <DashboardContinue

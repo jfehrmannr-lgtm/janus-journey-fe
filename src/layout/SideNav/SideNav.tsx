@@ -51,12 +51,7 @@ const SideNav = ({ resources }: SideNavProps) => {
     router.refresh()
   }
 
-  const navigationItems = [
-    { label: 'Home', icon: <Icon icon="HomeOutlined" />, active: true },
-    { label: 'My Tasks', icon: <Icon icon="CheckSquareOutlined" />, badge: resources.rootTasks.length },
-    { label: 'Favorites', icon: <Icon icon="StarOutlined" /> },
-    { label: 'Explore', icon: <Icon icon="AppstoreOutlined" /> }
-  ]
+  const navigationItems = [{ label: 'Home', icon: <Icon icon="HomeOutlined" />, active: true }]
 
   return (
     <>
@@ -122,7 +117,6 @@ const SideNav = ({ resources }: SideNavProps) => {
                   >
                     <span className="flex size-5 items-center justify-center text-base">{item.icon}</span>
                     <span className="flex-1">{item.label}</span>
-                    {item.badge !== undefined && <span className="text-xs text-text-subtle">{item.badge}</span>}
                   </Link>
                 ))}
               </nav>
