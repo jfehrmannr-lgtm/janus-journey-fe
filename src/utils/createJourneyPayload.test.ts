@@ -48,7 +48,7 @@ describe('buildCreateJourneyPayload', () => {
             {
               name: 'Learn semantic HTML',
               description: 'Study semantic elements.',
-              state: 'complete',
+              state: 'completed',
               isVisible: true,
               orderIndex: 0
             }

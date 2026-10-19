@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Icon from '@/components/Icon/Icon'
 import type { IconName } from '@/components/Icon/Icon'
 import type { JourneyTreeData } from '@/types/navigation.type'
-import type { TaskStatus } from '@/types/resource.type'
+import type { TaskState } from '@/types/resource.type'
 import useAppUiStore from '@/stores/appUiStore'
 import { calculateProgress } from '@/utils/progress'
 
@@ -13,7 +13,7 @@ interface JourneyTreeProps {
   data: JourneyTreeData
 }
 
-const taskStatusStyles: Record<TaskStatus, { icon: IconName; colorClass: string; colorIcon: string }> = {
+const taskStateStyles: Record<TaskState, { icon: IconName; colorClass: string; colorIcon: string }> = {
   completed: {
     icon: 'CheckCircleOutlined',
     colorIcon: 'text-task-completed-foreground!',
@@ -61,7 +61,7 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
   }
 
   const renderTask = (task: JourneyTreeData['tasks'][number]) => {
-    const statusStyle = taskStatusStyles[task.status]
+    const stateStyle = taskStateStyles[task.state]
 
     return (
       <button
@@ -70,8 +70,8 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
         onClick={openWorkSidebar}
         type="button"
       >
-        <Icon className={`shrink-0 ${statusStyle.colorIcon}`} icon={statusStyle.icon} />
-        <span className={`min-w-0 flex-1  ${statusStyle.colorClass}`}>{task.name}</span>
+        <Icon className={`shrink-0 ${stateStyle.colorIcon}`} icon={stateStyle.icon} />
+        <span className={`min-w-0 flex-1  ${stateStyle.colorClass}`}>{task.name}</span>
         <span aria-hidden="true" className="shrink-0 text-text-subtle">
           <Icon icon="EllipsisOutlined" />
         </span>

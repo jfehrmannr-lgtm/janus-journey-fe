@@ -20,7 +20,7 @@ const calculateProgress = (tasks: Task[]): Progress => {
 
   return visibleTasks.reduce<Progress>(
     (progress, task) => {
-      switch (task.status) {
+      switch (task.state) {
         case 'completed':
           progress.completed += 1
           break

@@ -5,7 +5,6 @@ import type {
   ApiJourney,
   ApiJourneyWithResources,
   ApiTask,
-  ApiTaskState,
   ResourceResponse,
   RootResourceResponse
 } from '@/types/resource-api.type'
@@ -111,14 +110,10 @@ const mapTask = (task: ApiTask): Task => ({
   name: task.name,
   description: task.description ?? '',
   updatedAt: task.updatedAt,
-  status: mapTaskStatus(task.state),
+  state: task.state,
   isVisible: task.isVisible,
   orderIndex: normalizeOrderIndex(task.orderIndex)
 })
-
-const mapTaskStatus = (state: ApiTaskState): Task['status'] => {
-  return state === 'complete' ? 'completed' : state
-}
 
 /**
  * Converts an API progress summary to the frontend progress shape.

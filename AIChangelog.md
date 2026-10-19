@@ -1,3 +1,21 @@
+## 2026-10-19
+
+### #JANUS-FE-0061: Align Task Domain State Property
+
+**Work**: Fix / Task Contracts; Replaced the Frontend Task `status` domain property with the canonical `state` property and removed the unnecessary API state transformation.
+
+- Renamed the Task state type and updated Task creation, navigation, progress, dashboard, tree, and table consumers.
+- Preserved canonical API Task states without aliases or fallback mappings while leaving legitimate HTTP status handling unchanged.
+
+## 2026-10-19
+
+### #JANUS-FE-0060: Standardize Completed Task State
+
+**Work**: Fix / Task Contracts; Updated frontend Task API types and payload mapping to use `completed` as the only completed Task state.
+
+- Removed the frontend conversion from `completed` to the invalid `complete` API state.
+- Updated API navigation typing, payload tests, and existing historical contract wording.
+
 ## 2026-10-15
 
 ### #JANUS-FE-0059: Default Dashboard Progress To Zero
@@ -151,10 +169,10 @@
 **Work**: Refactor / Type System; Reorganized frontend types around the authoritative BFF DTO composition while preserving application-facing normalized models and existing UI contracts.
 
 - Added small generic API response and collection wrappers plus explicit BFF resource, root-resource, navigation, User, dashboard, and application resource types.
-- Separated BFF fields such as `parent`, nullable descriptions, optional order indexes, and `complete` task state from normalized frontend fields such as `parentUid`, non-null descriptions, numeric ordering, and `completed` status.
+- Separated BFF fields such as `parent`, nullable descriptions, optional order indexes, and `completed` task state from normalized frontend fields such as `parentUid`, non-null descriptions, numeric ordering, and `completed` status.
 - Centralized BFF-to-application resource mapping and removed mock-only resource and dashboard types, JSON fixtures, and imports.
 - Derived Dashboard Home metrics from normalized root resources while preserving the existing React Query keys, server hydration, and dashboard presentation.
-- Updated Create Journey payload typing to translate the frontend `completed` state to the BFF contract’s `complete` state.
+- Updated Create Journey payload typing to preserve the frontend `completed` state in the BFF contract.
 
 ## 2026-10-15
 

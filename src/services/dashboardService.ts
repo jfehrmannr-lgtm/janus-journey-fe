@@ -8,10 +8,10 @@ import type { NavigationRootResources } from '@/types/navigation.type'
  * @returns Dashboard Home metrics and quick actions.
  */
 const getDashboardHomeData = (resources: NavigationRootResources): DashboardHomeData => {
-  const completedTasks = resources.rootTasks.filter((task) => task.status === 'completed').length
-  const inProgressTasks = resources.rootTasks.filter((task) => task.status === 'in-progress').length
+  const completedTasks = resources.rootTasks.filter((task) => task.state === 'completed').length
+  const inProgressTasks = resources.rootTasks.filter((task) => task.state === 'in-progress').length
   const remainingTasks = resources.rootTasks.filter(
-    (task) => task.status !== 'completed' && task.status !== 'discarded'
+    (task) => task.state !== 'completed' && task.state !== 'discarded'
   ).length
 
   return {

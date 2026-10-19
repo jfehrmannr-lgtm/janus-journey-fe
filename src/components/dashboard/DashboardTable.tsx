@@ -62,13 +62,13 @@ const getResourceProgressPercentage = (resource: Resource) => {
 }
 
 /**
- * Returns the display status for a Task resource.
+ * Returns the display state for a Task resource.
  *
  * @param resource - Root resource being rendered.
- * @returns Human-readable Task status or undefined for other resource types.
+ * @returns Human-readable Task state or undefined for other resource types.
  */
 const getResourceStatus = (resource: Resource): string | undefined => {
-  return resource.type === 'task' ? resource.status.replace('-', ' ') : undefined
+  return resource.type === 'task' ? resource.state.replace('-', ' ') : undefined
 }
 
 /**

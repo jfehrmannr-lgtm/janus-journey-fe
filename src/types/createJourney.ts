@@ -1,7 +1,7 @@
 import type { ApiTaskState } from '@/types/resource-api.type'
-import type { TaskStatus } from '@/types/resource.type'
+import type { TaskState } from '@/types/resource.type'
 
-export type CreateJourneyTaskState = TaskStatus
+export type CreateJourneyTaskState = TaskState
 
 export interface CreateJourneyTaskDraft {
   clientId: string

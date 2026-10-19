@@ -2,7 +2,7 @@ import type { ApiResponse } from '@/types/api.type'
 import type { ResourceType } from '@/types/resource.type'
 
 export type ApiParentType = 'user' | 'journey' | 'folder'
-export type ApiTaskState = 'pending' | 'in-progress' | 'complete' | 'in-pause' | 'discarded'
+export type ApiTaskState = 'pending' | 'in-progress' | 'completed' | 'in-pause' | 'discarded'
 
 export interface ApiParentReference {
   uid: string

@@ -61,7 +61,7 @@ const createInitialCreateJourneyFormState = (): CreateJourneyFormState => ({
 const buildTaskPayload = (task: CreateJourneyTaskDraft, orderIndex: number): CreateJourneyDraftTaskPayload => ({
   name: task.name.trim(),
   description: task.description.trim() || null,
-  state: task.state === 'completed' ? 'complete' : task.state,
+  state: task.state,
   isVisible: task.isVisible,
   orderIndex
 })

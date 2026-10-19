@@ -1,6 +1,6 @@
 export type ResourceType = 'journey' | 'folder' | 'task'
 
-export type TaskStatus = 'pending' | 'in-progress' | 'in-pause' | 'completed' | 'discarded'
+export type TaskState = 'pending' | 'in-progress' | 'in-pause' | 'completed' | 'discarded'
 
 export interface BaseResource<TType extends ResourceType> {
   uid: string
@@ -30,7 +30,7 @@ export interface Folder extends BaseResource<'folder'> {
 }
 
 export interface Task extends BaseResource<'task'> {
-  status: TaskStatus
+  state: TaskState
   isVisible: boolean
   orderIndex: number
 }

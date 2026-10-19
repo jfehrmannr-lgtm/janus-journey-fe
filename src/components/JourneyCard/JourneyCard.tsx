@@ -92,6 +92,8 @@ const JourneyCard = ({
     .filter(Boolean)
     .join(' ')
 
+  console.debug('', progressPercentage)
+
   return (
     <button aria-pressed={selected} className={classes} onClick={onClick} type="button">
       <span className="flex min-w-0 items-start gap-4">
@@ -109,7 +111,7 @@ const JourneyCard = ({
           icon="RightOutlined"
         />
       </span>
-      {!shouldShowProgress && (
+      {shouldShowProgress && (
         <span className="block">
           <span className="flex items-center justify-between gap-3 text-xs font-semibold text-text-muted">
             <span>Progress</span>

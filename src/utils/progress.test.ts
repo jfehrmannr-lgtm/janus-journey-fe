@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest'
 
 import { calculateProgress, calculateProgressPercentage } from './progress'
-import type { Task, TaskStatus } from '@/types/resource.type'
+import type { Task, TaskState } from '@/types/resource.type'
 
-const createTask = (uid: string, status: TaskStatus, isVisible = true, parentUid = 'journey-1'): Task => ({
+const createTask = (uid: string, state: TaskState, isVisible = true, parentUid = 'journey-1'): Task => ({
   uid,
   type: 'task',
   parentUid,
   name: uid,
   description: '',
-  status,
+  state,
   isVisible,
   orderIndex: 0
 })
