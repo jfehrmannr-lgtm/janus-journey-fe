@@ -1,5 +1,3 @@
-'use client'
-
 import type { ReactNode } from 'react'
 
 import CollapseSidenav from '@/components/WorkSidebar/CollapseSidenav'
