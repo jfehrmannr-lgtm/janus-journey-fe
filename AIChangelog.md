@@ -1,5 +1,32 @@
 ## 2026-10-19
 
+### #JANUS-FE-0069: Add WorkSidebar Fullscreen Width Toggle
+
+**Work**: Build / WorkSidebar UI; Added a local fullscreen-width toggle to the existing animated `CollapseSidenavEffect`.
+
+- Preserved the default sidebar width, collapse control, route-driven visibility, and transition behavior.
+- Added accessible expand and restore labels with shared fullscreen icons without introducing global state.
+
+## 2026-10-19
+
+### #JANUS-FE-0068: Add Create Resource Button Playground
+
+**Work**: Build / Development Tooling; Registered a focused component playground for contextual Folder and Task creation entry points.
+
+- Added examples for Journey-owned Folders, Folder-owned Tasks, and root Tasks under Journey and Folder parents.
+- Preserved the presentational-only creation scope while making parent context combinations easy to review.
+
+## 2026-10-19
+
+### #JANUS-FE-0067: Add Journey Workspace Creation Entry Points
+
+**Work**: Build / Journey Workspace; Added persistent Folder and Task creation entry points with explicit parent resource context without implementing forms, routes, mutations, or new state.
+
+- Added a reusable contextual creation button for Journey-owned Folders, Folder-owned Tasks, and root-level Journey/Folder Tasks.
+- Kept creation actions visible for empty lists and preserved existing folder expansion, task ordering, and resource rendering.
+
+## 2026-10-19
+
 ### #JANUS-FE-0066: Open WorkSidebar During Route Loading
 
 **Work**: Fix / WorkSidebar Navigation; Started the existing WorkSidebar animation as soon as the contextual parallel route provides its loading content, without adding global or temporary navigation state.

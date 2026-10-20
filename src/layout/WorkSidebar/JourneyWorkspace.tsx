@@ -79,10 +79,9 @@ const JourneyWorkspace = ({ data }: JourneyWorkspaceProps) => {
       )}
 
       <nav aria-label="Journey sections" className="flex items-center gap-5 border-b border-border px-5 pt-4">
-        <span className="border-b-2 border-primary pb-3 text-sm font-semibold text-text-primary">Tasks</span>
-        <span className="pb-3 text-sm text-text-muted">Overview</span>
-        <span className="pb-3 text-sm text-text-muted">Notes</span>
-        <span className="pb-3 text-sm text-text-muted">Share</span>
+        <span className="border-b-2 border-primary pb-3 text-sm font-semibold text-text-primary cursor-pointer">
+          Tasks
+        </span>
       </nav>
 
       <section aria-labelledby="workspace-tasks" className="px-5 py-4">

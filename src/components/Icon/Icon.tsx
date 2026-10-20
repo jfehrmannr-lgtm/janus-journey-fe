@@ -14,6 +14,8 @@ import {
   EyeInvisibleOutlined,
   EyeOutlined,
   EllipsisOutlined,
+  FullscreenExitOutlined,
+  FullscreenOutlined,
   FolderOpenOutlined,
   FolderOutlined,
   HomeOutlined,
@@ -47,6 +49,8 @@ const iconComponents = {
   EyeInvisibleOutlined,
   EyeOutlined,
   EllipsisOutlined,
+  FullscreenExitOutlined,
+  FullscreenOutlined,
   FolderOpenOutlined,
   FolderOutlined,
   HomeOutlined,
@@ -80,6 +84,8 @@ export type IconName =
   | 'EyeInvisibleOutlined'
   | 'EyeOutlined'
   | 'EllipsisOutlined'
+  | 'FullscreenExitOutlined'
+  | 'FullscreenOutlined'
   | 'FolderOpenOutlined'
   | 'FolderOutlined'
   | 'HomeOutlined'

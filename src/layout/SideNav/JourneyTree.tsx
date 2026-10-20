@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 
+import CreateResourceButton from '@/components/CreateResourceButton/CreateResourceButton'
 import Icon from '@/components/Icon/Icon'
 import type { IconName } from '@/components/Icon/Icon'
 import type { JourneyTreeData } from '@/types/navigation.type'
@@ -78,6 +79,9 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
 
   return (
     <div className="space-y-3 py-3">
+      {data.rootResource.type === 'journey' && (
+        <CreateResourceButton parentResourceType="journey" parentUid={data.rootResourceUid} resourceType="folder" />
+      )}
       {data.folders.map((folder) => {
         const folderTasks = data.tasks.filter((task) => task.parentUid === folder.uid)
         const folderProgress = calculateProgress(folderTasks)
@@ -99,16 +103,28 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
               </span>
               <Icon className="text-xs text-text-muted" icon={isExpanded ? 'DownOutlined' : 'RightOutlined'} />
             </button>
-            {isExpanded && <div>{folderTasks.map(renderTask)}</div>}
+            {isExpanded && (
+              <div>
+                <div className="border-t border-border-subtle px-3 py-2">
+                  <CreateResourceButton parentResourceType="folder" parentUid={folder.uid} resourceType="task" />
+                </div>
+                {folderTasks.map(renderTask)}
+              </div>
+            )}
           </div>
         )
       })}
-      {directTasks.length > 0 && (
-        <div className="overflow-hidden rounded-xl border border-border-subtle">
-          <div className="bg-surface-subtle px-3 py-3 text-sm font-semibold text-text-strong">Tasks</div>
-          {directTasks.map(renderTask)}
+      <div className="overflow-hidden rounded-xl border border-border-subtle">
+        <div className="bg-surface-subtle px-3 py-3 text-sm font-semibold text-text-strong">Tasks</div>
+        <div className="border-t border-border-subtle px-3 py-2">
+          <CreateResourceButton
+            parentResourceType={data.rootResource.type}
+            parentUid={data.rootResourceUid}
+            resourceType="task"
+          />
         </div>
-      )}
+        {directTasks.map(renderTask)}
+      </div>
     </div>
   )
 }
