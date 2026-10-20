@@ -1,3 +1,13 @@
+class ServerBffRequestError extends Error {
+  readonly status: number
+
+  constructor(status: number, message: string) {
+    super(message)
+    this.name = 'ServerBffRequestError'
+    this.status = status
+  }
+}
+
 /**
  * Sends an authenticated server-side request to the Janus BFF.
  *
@@ -8,7 +18,7 @@
  * @param token - Better Auth JWT obtained from the current server request.
  * @param init - Fetch options for the BFF request.
  * @returns The decoded JSON response.
- * @throws Error when the BFF returns a non-success response.
+ * @throws ServerBffRequestError when the BFF returns a non-success response.
  */
 const requestServerBffWithToken = async <T>(path: string, token: string, init: RequestInit = {}): Promise<T> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BFF_URL ?? 'http://localhost:5000'}${path}`, {
@@ -31,10 +41,10 @@ const requestServerBffWithToken = async <T>(path: string, token: string, init: R
         ? String(responseBody.message)
         : `The BFF request failed with status ${response.status}.`
 
-    throw new Error(message)
+    throw new ServerBffRequestError(response.status, message)
   }
 
   return responseBody as T
 }
 
-export { requestServerBffWithToken }
+export { requestServerBffWithToken, ServerBffRequestError }

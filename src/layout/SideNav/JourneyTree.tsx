@@ -6,7 +6,6 @@ import Icon from '@/components/Icon/Icon'
 import type { IconName } from '@/components/Icon/Icon'
 import type { JourneyTreeData } from '@/types/navigation.type'
 import type { TaskState } from '@/types/resource.type'
-import useAppUiStore from '@/stores/appUiStore'
 import { calculateProgress } from '@/utils/progress'
 
 interface JourneyTreeProps {
@@ -49,7 +48,6 @@ const taskStateStyles: Record<TaskState, { icon: IconName; colorClass: string; c
  */
 const JourneyTree = ({ data }: JourneyTreeProps) => {
   const [expandedFolderUids, setExpandedFolderUids] = useState<string[]>(() => data.folders.map((folder) => folder.uid))
-  const openWorkSidebar = useAppUiStore((state) => state.openWorkSidebar)
   const directTasks = data.tasks.filter((task) => task.parentUid === data.rootResourceUid)
 
   const toggleFolder = (folderUid: string) => {
@@ -67,7 +65,6 @@ const JourneyTree = ({ data }: JourneyTreeProps) => {
       <button
         className="flex min-h-10 w-full items-center gap-3 border-t border-border-subtle px-3 py-2 text-left transition-colors hover:bg-surface-subtle"
         key={task.uid}
-        onClick={openWorkSidebar}
         type="button"
       >
         <Icon className={`shrink-0 ${stateStyle.colorIcon}`} icon={stateStyle.icon} />

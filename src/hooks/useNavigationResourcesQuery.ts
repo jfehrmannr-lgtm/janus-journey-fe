@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { requestBff } from '@/services/bffClient'
 import { getNavigationRootResources } from '@/services/navigationService'
+import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 
 /**
  * Reads and caches root resources required by the authenticated application navigation.
@@ -12,7 +13,7 @@ import { getNavigationRootResources } from '@/services/navigationService'
  */
 const useNavigationResourcesQuery = () => {
   return useQuery({
-    queryKey: ['navigation', 'root-resources'],
+    queryKey: navigationQueryKeys.rootResources(),
     queryFn: () => getNavigationRootResources(requestBff)
   })
 }

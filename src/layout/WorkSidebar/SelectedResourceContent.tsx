@@ -2,27 +2,22 @@
 
 import JourneyTreeQuery from '@/layout/SideNav/JourneyTreeQuery'
 import JourneyWorkspace from '@/layout/WorkSidebar/JourneyWorkspace'
-import useAppUiStore from '@/stores/appUiStore'
+
+interface SelectedResourceContentProps {
+  resourceId: string
+  resourceType: 'journey' | 'folder'
+}
 
 /**
  * Composes the existing selected-resource Tree inside the generic Work Sidebar.
  *
- * @returns The selected resource Tree, or an empty selection state.
+ * @param resourceId - Stable identifier from the active route.
+ * @param resourceType - Selected Journey or Folder route type.
+ * @returns The selected resource Tree.
  */
-const SelectedResourceContent = () => {
-  const selectedResourceType = useAppUiStore((state) => state.selectedResourceType)
-  const selectedResourceUid = useAppUiStore((state) => state.selectedResourceUid)
-
-  if (!selectedResourceUid || (selectedResourceType !== 'journey' && selectedResourceType !== 'folder')) {
-    return (
-      <div className="flex h-full min-h-48 items-center justify-center px-6 text-center">
-        <p className="max-w-xs text-sm leading-6 text-text-muted">Select a Journey or Folder to view its work here.</p>
-      </div>
-    )
-  }
-
+const SelectedResourceContent = ({ resourceId, resourceType }: SelectedResourceContentProps) => {
   return (
-    <JourneyTreeQuery resourceId={selectedResourceUid} resourceType={selectedResourceType}>
+    <JourneyTreeQuery resourceId={resourceId} resourceType={resourceType}>
       {(data) => <JourneyWorkspace data={data} />}
     </JourneyTreeQuery>
   )

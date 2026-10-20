@@ -6,10 +6,9 @@ import useJourneyTreeQuery from '@/hooks/useJourneyTreeQuery'
 import JourneyTree from '@/layout/SideNav/JourneyTree'
 import JourneyTreeSkeleton from '@/layout/SideNav/JourneyTreeSkeleton'
 import type { JourneyTreeData } from '@/types/navigation.type'
-import type { ResourceType } from '@/types/resource.type'
 
 interface JourneyTreeQueryProps {
-  resourceType: ResourceType
+  resourceType: 'journey' | 'folder'
   resourceId: string
   children?: (data: JourneyTreeData) => ReactNode
 }
@@ -26,7 +25,7 @@ const JourneyTreeQuery = ({ resourceType, resourceId, children }: JourneyTreeQue
   const { data, error, isLoading } = useJourneyTreeQuery(resourceType, resourceId)
 
   if (isLoading) {
-    return <JourneyTreeSkeleton />
+    return <JourneyTreeSkeleton resourceType={resourceType} />
   }
 
   if (error || !data) {

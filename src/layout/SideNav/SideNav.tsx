@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import BrandLogo from '@/components/BrandLogo/BrandLogo'
@@ -11,6 +11,7 @@ import { invalidateBffToken } from '@/services/bffClient'
 import useAppUiStore from '@/stores/appUiStore'
 import type { NavigationRootResources } from '@/types/navigation.type'
 import JourneyAccordionItem from '@/layout/SideNav/JourneyAccordionItem'
+import { getResourcePath, getSelectedResourceFromPathname } from '@/utils/dashboardRoutes'
 
 interface SideNavProps {
   resources: NavigationRootResources
@@ -24,13 +25,12 @@ interface SideNavProps {
  */
 const SideNav = ({ resources }: SideNavProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
   const router = useRouter()
   const { data: session } = authClient.useSession()
   const isSideNavCollapsed = useAppUiStore((state) => state.isSideNavCollapsed)
   const toggleSideNav = useAppUiStore((state) => state.toggleSideNav)
-  const selectedResourceType = useAppUiStore((state) => state.selectedResourceType)
-  const selectedResourceUid = useAppUiStore((state) => state.selectedResourceUid)
-  const selectResource = useAppUiStore((state) => state.selectResource)
+  const selectedResource = getSelectedResourceFromPathname(pathname)
   const showExpandedContent = isMobileMenuOpen || !isSideNavCollapsed
   const displayName = session?.user.name ?? 'Janus User'
   const userInitials = displayName.slice(0, 2).toUpperCase()
@@ -83,7 +83,11 @@ const SideNav = ({ resources }: SideNavProps) => {
       >
         <div className={`flex items-center gap-3 ${isSideNavCollapsed ? 'justify-center' : 'justify-between'}`}>
           {showExpandedContent && (
-            <Link className="text-xl font-semibold tracking-tight text-text-primary" href="/dashboard/home">
+            <Link
+              className="text-xl font-semibold tracking-tight text-text-primary"
+              href="/dashboard/home"
+              scroll={false}
+            >
               <BrandLogo size="sm" />
             </Link>
           )}
@@ -114,6 +118,7 @@ const SideNav = ({ resources }: SideNavProps) => {
                     className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${item.active ? 'bg-primary-soft text-primary-foreground' : 'text-text-body hover:bg-surface-subtle hover:text-text-primary'}`}
                     href={item.active ? '/dashboard/home' : '#'}
                     key={item.label}
+                    scroll={item.active ? false : undefined}
                   >
                     <span className="flex size-5 items-center justify-center text-base">{item.icon}</span>
                     <span className="flex-1">{item.label}</span>
@@ -140,18 +145,19 @@ const SideNav = ({ resources }: SideNavProps) => {
                 </div>
                 <div className="mt-2 space-y-1">
                   {resources.rootFolders.map((folder) => {
-                    const isSelected = selectedResourceType === 'folder' && selectedResourceUid === folder.uid
+                    const isSelected =
+                      selectedResource?.resourceType === 'folder' && selectedResource.resourceId === folder.uid
 
                     return (
                       <div key={folder.uid}>
-                        <button
+                        <Link
                           className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-colors ${isSelected ? 'bg-primary-soft font-semibold text-primary-foreground' : 'text-text-body hover:bg-surface-subtle hover:text-text-primary'}`}
-                          onClick={() => selectResource(folder.uid, 'folder')}
-                          type="button"
+                          href={getResourcePath('folder', folder.uid)}
+                          scroll={false}
                         >
                           <Icon className="text-text-subtle" icon="FolderOutlined" />
                           <span className="truncate">{folder.name}</span>
-                        </button>
+                        </Link>
                       </div>
                     )
                   })}

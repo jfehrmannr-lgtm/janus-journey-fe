@@ -1,8 +1,11 @@
 'use client'
 
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+
 import Icon from '@/components/Icon/Icon'
-import useAppUiStore from '@/stores/appUiStore'
 import type { Journey } from '@/types/resource.type'
+import { getResourcePath, getSelectedResourceFromPathname } from '@/utils/dashboardRoutes'
 
 interface JourneyAccordionItemProps {
   journey: Journey
@@ -15,26 +18,24 @@ interface JourneyAccordionItemProps {
  * @returns The Journey accordion item.
  */
 const JourneyAccordionItem = ({ journey }: JourneyAccordionItemProps) => {
-  const expandedJourneyUid = useAppUiStore((state) => state.expandedJourneyUid)
-  const selectedJourneyUid = useAppUiStore((state) => state.selectedJourneyUid)
-  const selectJourney = useAppUiStore((state) => state.selectJourney)
-  const isExpanded = expandedJourneyUid === journey.uid
-  const selectedResourceType = useAppUiStore((state) => state.selectedResourceType)
-  const isSelected = selectedJourneyUid === journey.uid && selectedResourceType === 'journey'
+  const pathname = usePathname()
+  const selectedResource = getSelectedResourceFromPathname(pathname)
+  const isExpanded = selectedResource?.resourceType === 'journey' && selectedResource.resourceId === journey.uid
+  const isSelected = isExpanded
 
   return (
     <div>
-      <button
+      <Link
         aria-expanded={isExpanded}
         className={`flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm transition-colors ${isSelected ? 'bg-primary-soft font-semibold text-primary-foreground' : 'text-text-body hover:bg-surface-subtle hover:text-text-primary'}`}
-        onClick={() => selectJourney(journey.uid)}
-        type="button"
+        href={getResourcePath('journey', journey.uid)}
+        scroll={false}
       >
         <span className="flex size-4 items-center justify-center text-xs text-text-subtle">
           {isExpanded ? <Icon icon="DownOutlined" /> : <Icon icon="RightOutlined" />}
         </span>
         <span className="truncate">{journey.name}</span>
-      </button>
+      </Link>
     </div>
   )
 }

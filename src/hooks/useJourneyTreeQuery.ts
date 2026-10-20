@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { requestBff } from '@/services/bffClient'
 import { getResourceTree } from '@/services/navigationService'
+import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import type { ResourceType } from '@/types/resource.type'
 
 /**
@@ -15,7 +16,10 @@ import type { ResourceType } from '@/types/resource.type'
  */
 const useJourneyTreeQuery = (resourceType: ResourceType | null, resourceId: string | null) => {
   return useQuery({
-    queryKey: ['navigation', 'resource-tree', resourceType, resourceId],
+    queryKey:
+      resourceType && resourceId
+        ? navigationQueryKeys.resourceTree(resourceType, resourceId)
+        : ['navigation', 'resource-tree', resourceType, resourceId],
     queryFn: () => {
       if (!resourceType || !resourceId) {
         throw new Error('A resource type and ID are required to load its tree.')

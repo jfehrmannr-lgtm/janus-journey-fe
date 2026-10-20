@@ -9,6 +9,7 @@ import { auth } from '@/services/auth'
 
 interface DashboardRouteLayoutProps {
   children: ReactNode
+  workSidebar: ReactNode
 }
 
 /**
@@ -17,7 +18,7 @@ interface DashboardRouteLayoutProps {
  * @param children - Dashboard route content rendered in the main application area.
  * @returns The shared application layout for Dashboard routes.
  */
-const DashboardRouteLayout = async ({ children }: DashboardRouteLayoutProps) => {
+const DashboardRouteLayout = async ({ children, workSidebar }: DashboardRouteLayoutProps) => {
   const session = await auth.api.getSession({ headers: await headers() })
 
   if (!session) {
@@ -26,7 +27,7 @@ const DashboardRouteLayout = async ({ children }: DashboardRouteLayoutProps) => 
 
   return (
     <JanusAuthBoundary>
-      <AppLayout>{children}</AppLayout>
+      <AppLayout workSidebar={workSidebar}>{children}</AppLayout>
     </JanusAuthBoundary>
   )
 }

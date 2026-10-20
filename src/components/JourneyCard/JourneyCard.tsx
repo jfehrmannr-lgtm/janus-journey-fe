@@ -92,8 +92,6 @@ const JourneyCard = ({
     .filter(Boolean)
     .join(' ')
 
-  console.debug('', progressPercentage)
-
   return (
     <button aria-pressed={selected} className={classes} onClick={onClick} type="button">
       <span className="flex min-w-0 items-start gap-4">

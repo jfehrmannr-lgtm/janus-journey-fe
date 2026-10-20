@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { authClient } from '@/services/authClient'
-import useAppUiStore from '@/stores/appUiStore'
 import type { NavigationRootResources } from '@/types/navigation.type'
 import type { Resource } from '@/types/resource.type'
+import { getResourcePath, getSelectedResourceFromPathname } from '@/utils/dashboardRoutes'
 import { calculateProgressPercentage } from '@/utils/progress'
 
 import DashboardContinue from './DashboardContinue'
@@ -44,13 +44,11 @@ const getJourneyProgressPercentage = (journey: NavigationRootResources['journeys
  */
 const DashboardHome = ({ resources }: DashboardHomeProps) => {
   const { data: session } = authClient.useSession()
+  const pathname = usePathname()
   const router = useRouter()
   const [resourceFilter, setResourceFilter] = useState<DashboardResourceFilter>('journey')
   const [resourceView, setResourceView] = useState<DashboardResourceView>('table')
-  const selectedResourceType = useAppUiStore((state) => state.selectedResourceType)
-  const selectedResourceUid = useAppUiStore((state) => state.selectedResourceUid)
-  const selectResource = useAppUiStore((state) => state.selectResource)
-  const selectJourney = useAppUiStore((state) => state.selectJourney)
+  const selectedResource = getSelectedResourceFromPathname(pathname)
   const username = session?.user.name?.split(' ')[0] ?? 'there'
   const continueJourneys = resources.journeys
     .filter((journey) => {
@@ -65,13 +63,13 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
   }
 
   const handleResourceSelect = (resource: Resource) => {
-    if (resource.type === 'journey') {
-      selectJourney(resource.uid)
+    if (resource.type === 'journey' || resource.type === 'folder') {
+      router.push(getResourcePath(resource.type, resource.uid), { scroll: false })
     }
+  }
 
-    if (resource.type === 'folder') {
-      selectResource(resource.uid, 'folder')
-    }
+  const handleJourneySelect = (journeyUid: string) => {
+    router.push(getResourcePath('journey', journeyUid), { scroll: false })
   }
 
   return (
@@ -82,9 +80,9 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
         </div>
         <DashboardContinue
           journeys={continueJourneys}
-          onSelectJourney={selectJourney}
-          selectedResourceType={selectedResourceType}
-          selectedResourceUid={selectedResourceUid}
+          onSelectJourney={handleJourneySelect}
+          selectedResourceType={selectedResource?.resourceType ?? null}
+          selectedResourceUid={selectedResource?.resourceId ?? null}
         />
         <DashboardTable
           onFilterChange={setResourceFilter}
@@ -93,8 +91,8 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
           resourceFilter={resourceFilter}
           resources={resources}
           resourceView={resourceView}
-          selectedResourceType={selectedResourceType}
-          selectedResourceUid={selectedResourceUid}
+          selectedResourceType={selectedResource?.resourceType ?? null}
+          selectedResourceUid={selectedResource?.resourceId ?? null}
         />
       </div>
     </div>

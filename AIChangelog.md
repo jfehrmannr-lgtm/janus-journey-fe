@@ -1,5 +1,44 @@
 ## 2026-10-19
 
+### #JANUS-FE-0065: Mirror WorkSidebar Workspace Loading
+
+**Work**: Build / WorkSidebar UI; Redesigned the Journey and Folder loading skeletons to match the rendered workspace structure without changing data fetching or hydration behavior.
+
+- Added workspace-shaped header, progress, tabs, folder, and task skeleton regions with resource-specific Journey progress handling.
+- Added route-level loading states for dynamic Journey and Folder sidebar routes while preserving the existing query loading fallback and sidebar animations.
+
+## 2026-10-19
+
+### #JANUS-FE-0064: Handle Missing WorkSidebar Resources
+
+**Work**: Build / Dashboard Navigation; Added a reusable missing-resource state for server-resolved Journey and Folder routes without conflating 404 responses with authentication, authorization, or server failures.
+
+- Added `ResourceNotFound` to the existing WorkSidebar content flow while preserving the Dashboard Home and sidebar shell.
+- Preserved server BFF HTTP status codes and rendered the missing-resource state only for HTTP 404 responses.
+- Kept non-404 errors on their existing error path and preserved authentication redirects.
+
+## 2026-10-19
+
+### #JANUS-FE-0063: Preserve Dashboard Scroll During Contextual Navigation
+
+**Work**: Fix / Dashboard Navigation; Applied non-scrolling navigation to contextual Journey and Folder selection and WorkSidebar closing without changing unrelated route behavior.
+
+- Added `scroll: false` to contextual router navigation and `scroll={false}` to Journey, Folder, and Dashboard Home links that can close the WorkSidebar.
+- Preserved existing creation, authentication, logout, and other non-contextual navigation behavior.
+
+## 2026-10-19
+
+### #JANUS-FE-0062: Route-Driven WorkSidebar Navigation
+
+**Work**: Refactor / Dashboard Navigation; Replaced Zustand-based contextual resource selection and WorkSidebar visibility with Next.js route-driven navigation and parallel route slots.
+
+- Added Journey and Folder dynamic routes that keep Dashboard Home visible while rendering hydrated resource trees inside the persistent WorkSidebar.
+- Preserved the WorkSidebar, CollapseSidenav, and CollapseSidenavEffect composition while deriving visibility and closing behavior from the active URL.
+- Removed obsolete resource-selection, sidebar-visibility, and discontinued Journey expansion state from the shared UI store while preserving SideNav collapse state.
+- Added shared navigation query keys, server-side TanStack Query prefetching, hydration boundaries, route parsing utilities, and route coverage tests.
+
+## 2026-10-19
+
 ### #JANUS-FE-0061: Align Task Domain State Property
 
 **Work**: Fix / Task Contracts; Replaced the Frontend Task `status` domain property with the canonical `state` property and removed the unnecessary API state transformation.

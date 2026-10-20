@@ -1,9 +1,10 @@
 'use client'
 
+import { usePathname, useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
 
 import CollapseSidenavEffect from '@/components/WorkSidebar/CollapseSidenavEffect'
-import useAppUiStore from '@/stores/appUiStore'
+import { dashboardHomePath, getSelectedResourceFromPathname } from '@/utils/dashboardRoutes'
 
 interface CollapseSidenavProps {
   children: ReactNode
@@ -16,12 +17,18 @@ interface CollapseSidenavProps {
  * @returns A collapsible Work Sidebar.
  */
 const CollapseSidenav = ({ children }: CollapseSidenavProps) => {
-  const isOpen = useAppUiStore((state) => state.isWorkSidebarOpen)
-  const closeWorkSidebar = useAppUiStore((state) => state.closeWorkSidebar)
-  const openWorkSidebar = useAppUiStore((state) => state.openWorkSidebar)
+  const pathname = usePathname()
+  const router = useRouter()
+  const isOpen = getSelectedResourceFromPathname(pathname) !== null
+
+  const handleToggle = () => {
+    if (isOpen) {
+      router.push(dashboardHomePath, { scroll: false })
+    }
+  }
 
   return (
-    <CollapseSidenavEffect isOpen={isOpen} onToggle={isOpen ? closeWorkSidebar : openWorkSidebar}>
+    <CollapseSidenavEffect isOpen={isOpen} onToggle={handleToggle}>
       {children}
     </CollapseSidenavEffect>
   )
