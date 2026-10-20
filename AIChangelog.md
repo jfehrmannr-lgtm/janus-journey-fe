@@ -1,5 +1,14 @@
 ## 2026-10-19
 
+### #JANUS-FE-0066: Open WorkSidebar During Route Loading
+
+**Work**: Fix / WorkSidebar Navigation; Started the existing WorkSidebar animation as soon as the contextual parallel route provides its loading content, without adding global or temporary navigation state.
+
+- Combined the active contextual pathname with the parallel slot content when deriving sidebar visibility.
+- Preserved route-driven navigation, loading skeletons, hydration, browser history behavior, and existing animation components.
+
+## 2026-10-19
+
 ### #JANUS-FE-0065: Mirror WorkSidebar Workspace Loading
 
 **Work**: Build / WorkSidebar UI; Redesigned the Journey and Folder loading skeletons to match the rendered workspace structure without changing data fetching or hydration behavior.

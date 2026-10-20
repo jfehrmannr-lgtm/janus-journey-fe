@@ -1,7 +1,3 @@
-import DashboardHomeRoute from '@/components/Dashboard/DashboardHomeRoute'
+const DashboardHomePage = () => null
 
-const JourneyDashboardPage = () => {
-  return <DashboardHomeRoute />
-}
-
-export default JourneyDashboardPage
+export default DashboardHomePage
