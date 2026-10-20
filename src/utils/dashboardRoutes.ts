@@ -9,6 +9,10 @@ const getResourcePath = (resourceType: 'journey' | 'folder', resourceId: string)
   return `${dashboardHomePath}/${resourceType}/${encodeURIComponent(resourceId)}`
 }
 
+const isWorkSidebarOpen = (pathname: string): boolean => {
+  return pathname.startsWith('/dashboard/home/')
+}
+
 const getSelectedResourceFromPathname = (pathname: string): SelectedResourceRoute | null => {
   const segments = pathname.split('/').filter(Boolean)
 
@@ -29,5 +33,5 @@ const getSelectedResourceFromPathname = (pathname: string): SelectedResourceRout
   }
 }
 
-export { dashboardHomePath, getResourcePath, getSelectedResourceFromPathname }
+export { dashboardHomePath, getResourcePath, getSelectedResourceFromPathname, isWorkSidebarOpen }
 export type { SelectedResourceRoute }

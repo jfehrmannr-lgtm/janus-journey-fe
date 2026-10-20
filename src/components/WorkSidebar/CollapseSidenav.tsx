@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useRef, type ReactNode } from 'react'
 
 import CollapseSidenavEffect from '@/components/WorkSidebar/CollapseSidenavEffect'
-import { dashboardHomePath, getSelectedResourceFromPathname } from '@/utils/dashboardRoutes'
+import { dashboardHomePath, isWorkSidebarOpen } from '@/utils/dashboardRoutes'
 
 interface CollapseSidenavProps {
   children: ReactNode
@@ -19,7 +19,7 @@ interface CollapseSidenavProps {
 const CollapseSidenav = ({ children }: CollapseSidenavProps) => {
   const pathname = usePathname()
   const router = useRouter()
-  const isOpen = getSelectedResourceFromPathname(pathname) !== null
+  const isOpen = isWorkSidebarOpen(pathname)
   const lastPathname = useRef<string>(null)
 
   const handleToggle = () => {

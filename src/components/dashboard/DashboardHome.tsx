@@ -64,12 +64,12 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
 
   const handleResourceSelect = (resource: Resource) => {
     if (resource.type === 'journey' || resource.type === 'folder') {
-      router.push(getResourcePath(resource.type, resource.uid), { scroll: false })
+      router.push(getResourcePath(resource.type, resource.uid))
     }
   }
 
   const handleJourneySelect = (journeyUid: string) => {
-    router.push(getResourcePath('journey', journeyUid), { scroll: false })
+    router.push(getResourcePath('journey', journeyUid))
   }
 
   return (
