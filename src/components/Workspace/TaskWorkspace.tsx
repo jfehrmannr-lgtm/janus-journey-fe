@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import Button from '@/components/Button/Button'
+import CreateTaskForm from '@/components/Form/Task/CreateTaskForm'
 import Icon from '@/components/Icon/Icon'
 import type { ApiTask } from '@/types/resource-api.type'
 
@@ -22,8 +23,6 @@ interface TaskWorkspaceProps {
  */
 const TaskWorkspace = ({ tasks, returnHref }: TaskWorkspaceProps) => {
   const [isTaskFormOpen, setIsTaskFormOpen] = useState(false)
-
-  console.debug('tasks', tasks)
 
   return (
     <div>
@@ -59,9 +58,12 @@ const TaskWorkspace = ({ tasks, returnHref }: TaskWorkspaceProps) => {
             />
           </div>
           {isTaskFormOpen && (
-            <p className="border-t border-border-subtle px-3 py-4 text-sm text-text-muted">
-              Task creation is not available without parent resource context.
-            </p>
+            <CreateTaskForm
+              embedded
+              idPrefix="workspace-task"
+              onCancel={() => setIsTaskFormOpen(false)}
+              onSubmit={() => setIsTaskFormOpen(false)}
+            />
           )}
           {tasks.map((task) => (
             <TaskItem key={task.uid} task={task} />

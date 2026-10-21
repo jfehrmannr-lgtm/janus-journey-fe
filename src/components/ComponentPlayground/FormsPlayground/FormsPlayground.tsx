@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import ActionButtons from '@/components/Form/ActionButtons'
+import CreateFolderForm from '@/components/Form/Folder/CreateFolderForm'
 import FolderForm from '@/components/Form/Folder/FolderForm'
 import JourneyForm from '@/components/Form/Journey/JourneyForm'
 import CreateTaskForm from '@/components/Form/Task/CreateTaskForm'
@@ -90,11 +91,19 @@ const FormsPlayground = () => {
           </h3>
           <p className="text-sm text-text-muted">Local Task creation form with a provided Folder fixture.</p>
         </div>
-        <CreateTaskForm
-          folder={playgroundFolder}
-          folderId={playgroundFolder.uid}
-          idPrefix="forms-playground-task"
-          journeyId={playgroundJourneyUid}
+        <CreateTaskForm idPrefix="forms-playground-task" reference={{ name: playgroundFolder.name, type: 'folder' }} />
+      </section>
+
+      <section className="space-y-3" aria-labelledby="forms-create-folder-form">
+        <div>
+          <h3 className="text-lg font-semibold text-text-primary" id="forms-create-folder-form">
+            CreateFolderForm
+          </h3>
+          <p className="text-sm text-text-muted">Local Folder creation form with a parent reference.</p>
+        </div>
+        <CreateFolderForm
+          idPrefix="forms-playground-folder"
+          reference={{ name: 'Forms Playground Journey', type: 'journey' }}
         />
       </section>
 

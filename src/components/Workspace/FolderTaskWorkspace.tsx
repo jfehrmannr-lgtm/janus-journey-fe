@@ -58,10 +58,10 @@ const FolderTaskWorkspace = ({ folder, returnHref }: FolderTaskWorkspaceProps) =
           </div>
           {isTaskFormOpen && (
             <CreateTaskForm
-              folderId={folder.uid}
               idPrefix="embedded-task"
-              journeyId={folder.parent.uid}
               onCancel={() => setIsTaskFormOpen(false)}
+              onSubmit={() => setIsTaskFormOpen(false)}
+              reference={{ name: folder.name, type: 'folder' }}
             />
           )}
         </FolderItem>

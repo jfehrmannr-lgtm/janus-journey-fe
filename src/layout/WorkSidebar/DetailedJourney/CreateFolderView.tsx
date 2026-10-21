@@ -29,6 +29,7 @@ const CreateFolderView = ({ journeyId }: CreateFolderViewProps) => {
   return (
     <FolderWorkspace
       folders={journey.folders}
+      reference={{ name: journey.name, type: 'journey' }}
       returnHref={`/dashboard/home/journey/${encodeURIComponent(journeyId)}`}
     />
   )

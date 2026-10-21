@@ -3,12 +3,18 @@
 import Link from 'next/link'
 
 import Button from '@/components/Button/Button'
+import CreateFolderForm from '@/components/Form/Folder/CreateFolderForm'
 import Icon from '@/components/Icon/Icon'
+import { useState } from 'react'
 import FolderItem from '@/components/Workspace/FolderItem'
 import type { ApiFolder, ApiFolderWithTasks } from '@/types/resource-api.type'
 
 interface FolderWorkspaceProps {
   folders: ApiFolder[]
+  reference?: {
+    name: string
+    type: 'journey' | 'folder' | 'user'
+  }
   returnHref: string
 }
 
@@ -16,10 +22,13 @@ interface FolderWorkspaceProps {
  * Renders the shared Folder workspace.
  *
  * @param folders - Sibling Folders already resolved by the parent container.
+ * @param reference - Optional parent resource displayed in the Folder form.
  * @param returnHref - Destination used by the cancel navigation.
  * @returns The Folder workspace presentation and navigation.
  */
-const FolderWorkspace = ({ folders, returnHref }: FolderWorkspaceProps) => {
+const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProps) => {
+  const [isFolderFormOpen, setIsFolderFormOpen] = useState(false)
+
   return (
     <div>
       <header className="flex items-center justify-between gap-4 border-b border-border px-5 py-4">
@@ -50,8 +59,18 @@ const FolderWorkspace = ({ folders, returnHref }: FolderWorkspaceProps) => {
               size="full"
               type="button"
               variant="dotted"
+              onClick={() => setIsFolderFormOpen((current) => !current)}
             />
           </div>
+          {isFolderFormOpen && (
+            <CreateFolderForm
+              embedded
+              idPrefix="workspace-folder"
+              onCancel={() => setIsFolderFormOpen(false)}
+              onSubmit={() => setIsFolderFormOpen(false)}
+              reference={reference}
+            />
+          )}
           <div className="space-y-3 p-3">
             {folders.map((folder) => (
               <FolderItem

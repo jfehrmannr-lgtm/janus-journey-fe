@@ -1,22 +1,28 @@
 'use client'
 
-import Link from 'next/link'
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type SubmitEvent } from 'react'
 
 import Button from '@/components/Button/Button'
 import Icon from '@/components/Icon/Icon'
-import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
-import { navigationQueryKeys } from '@/services/navigationQueryKeys'
-import { useQueryClient } from '@tanstack/react-query'
-import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTaskState } from '@/types/resource-api.type'
+import type { ApiTaskState } from '@/types/resource-api.type'
+
+export interface TaskFormValues {
+  name: string
+  description: string
+  state: ApiTaskState
+  isVisible: boolean
+}
 
 interface CreateTaskFormProps {
   embedded?: boolean
-  folderId: string
-  folder?: ApiFolderWithTasks
   idPrefix?: string
-  journeyId: string
   onCancel?: () => void
+  onFormChange?: (values: TaskFormValues) => void
+  onSubmit?: () => void
+  reference?: {
+    name: string
+    type: 'journey' | 'folder' | 'user'
+  }
 }
 
 const taskStates: Array<{ label: string; value: ApiTaskState }> = [
@@ -28,29 +34,24 @@ const taskStates: Array<{ label: string; value: ApiTaskState }> = [
 ]
 
 /**
- * Renders the local-only Task creation form for a hydrated Journey Folder.
+ * Renders the local-only Task creation form.
  *
  * @param embedded - Whether to render only the fields for FolderItem composition.
- * @param folderId - Folder identifier from the current route.
- * @param folder - Optional Folder fixture used by isolated playground examples.
  * @param idPrefix - Prefix used to keep field identifiers unique in playgrounds.
- * @param journeyId - Journey identifier used to read the hydrated resource tree.
  * @param onCancel - Optional local callback used to close an embedded form.
- * @returns The Task creation form or a missing-Folder state.
+ * @param onFormChange - Optional debounced callback receiving the complete form values.
+ * @param onSubmit - Optional callback invoked after valid submission.
+ * @param reference - Optional contextual resource displayed in the form header.
+ * @returns The Task creation form.
  */
 const CreateTaskForm = ({
   embedded = false,
-  folderId,
-  folder: providedFolder,
   idPrefix = 'task',
-  journeyId,
-  onCancel
+  onCancel,
+  onFormChange,
+  onSubmit,
+  reference
 }: CreateTaskFormProps) => {
-  const queryClient = useQueryClient()
-  const journey = queryClient.getQueryData<ApiJourneyWithResources>(
-    navigationQueryKeys.resourceTree('journey', journeyId)
-  )
-  const folder = providedFolder ?? journey?.folders.find((currentFolder) => currentFolder.uid === folderId)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [state, setState] = useState<ApiTaskState>('pending')
@@ -58,20 +59,26 @@ const CreateTaskForm = ({
   const [hasNameBlurred, setHasNameBlurred] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
 
-  if (!folder) {
-    return <ResourceNotFound resourceType="folder" />
-  }
-
   const isNameValid = name.trim().length > 0
   const showNameError = (hasSubmitted || hasNameBlurred) && !isNameValid
-  const journeyHref = `/dashboard/home/journey/${encodeURIComponent(journeyId)}`
   const nameId = `${idPrefix}-name`
   const descriptionId = `${idPrefix}-description`
   const stateId = `${idPrefix}-state`
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (!onFormChange) return
+
+    const timeoutId = window.setTimeout(() => {
+      onFormChange({ name, description, state, isVisible })
+    }, 300)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [description, isVisible, name, onFormChange, state])
+
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
     setHasSubmitted(true)
+    if (isNameValid) onSubmit?.()
   }
 
   return (
@@ -84,21 +91,32 @@ const CreateTaskForm = ({
             </div>
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">New Task</p>
-              <h2 className="truncate text-lg font-semibold text-text-primary">Create task in {folder.name}</h2>
+              <h2 className="truncate text-lg font-semibold text-text-primary">
+                {reference ? `Create task in ${reference.name}` : 'Create task'}
+              </h2>
             </div>
           </div>
         </header>
       )}
 
       <section className={embedded ? 'space-y-4 px-3 py-4' : 'space-y-5 px-5 py-5'}>
-        {!embedded && (
+        {reference && (
           <div className="rounded-xl border border-border-subtle bg-surface-subtle px-4 py-3">
             <div className="flex items-center gap-2 text-sm text-text-body">
-              <Icon className="text-blue-700" icon="FolderOutlined" />
-              <span className="text-text-muted">Folder</span>
-              <span className="font-semibold text-text-strong">{folder.name}</span>
+              <Icon
+                className="text-blue-700"
+                icon={
+                  reference?.type === 'journey'
+                    ? 'AppstoreOutlined'
+                    : reference?.type === 'user'
+                      ? 'TeamOutlined'
+                      : 'FolderOutlined'
+                }
+              />
+              <span className="text-text-muted">{reference?.type.toUpperCase() ?? 'RESOURCE'}</span>
+              <span className="font-semibold text-text-strong">{reference?.name ?? 'Selected resource'}</span>
             </div>
-            <p className="mt-1 pl-6 text-xs text-text-muted">This task will be created inside the selected folder.</p>
+            <p className="mt-1 pl-6 text-xs text-text-muted">This task will be created inside the selected resource.</p>
           </div>
         )}
 

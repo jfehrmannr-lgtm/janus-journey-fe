@@ -102,12 +102,7 @@ const WorkspacePlayground = () => {
           </h3>
           <p className="text-sm text-text-muted">Standalone and contextual Folder compositions.</p>
         </div>
-        <CreateTaskForm
-          folder={populatedFolder}
-          folderId={populatedFolder.uid}
-          idPrefix="standalone-task"
-          journeyId={journeyUid}
-        />
+        <CreateTaskForm idPrefix="standalone-task" reference={{ name: populatedFolder.name, type: 'folder' }} />
         <div className="grid gap-4 xl:grid-cols-2">
           <FolderItem folder={populatedFolder} showCompletionProgress={false} showCreateTaskAction={false}>
             <div className="border-t border-border-subtle px-3 py-2">
@@ -125,11 +120,9 @@ const WorkspacePlayground = () => {
             {isPopulatedFormOpen && (
               <CreateTaskForm
                 embedded
-                folder={populatedFolder}
-                folderId={populatedFolder.uid}
                 idPrefix="populated-embedded-task"
-                journeyId={journeyUid}
                 onCancel={() => setIsPopulatedFormOpen(false)}
+                reference={{ name: populatedFolder.name, type: 'folder' }}
               />
             )}
           </FolderItem>
@@ -149,11 +142,9 @@ const WorkspacePlayground = () => {
             {isEmptyFormOpen && (
               <CreateTaskForm
                 embedded
-                folder={emptyFolder}
-                folderId={emptyFolder.uid}
                 idPrefix="empty-embedded-task"
-                journeyId={journeyUid}
                 onCancel={() => setIsEmptyFormOpen(false)}
+                reference={{ name: emptyFolder.name, type: 'folder' }}
               />
             )}
           </FolderItem>
