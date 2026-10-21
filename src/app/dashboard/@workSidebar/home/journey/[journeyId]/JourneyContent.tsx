@@ -9,6 +9,9 @@ import type { ApiResponse } from '@/types/api.type'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 
+import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
+import { requestServerBffWithToken, ServerBffRequestError } from '@/services/serverBffClient'
+
 interface JourneyContentProps {
   children: ReactNode
   journeyId: string
@@ -22,29 +25,29 @@ const JourneyContent = async ({ children, journeyId }: JourneyContentProps) => {
 
   const queryClient = new QueryClient()
 
-  const journey = await queryClient.query({
-    queryKey: navigationQueryKeys.resourceTree('journey', journeyId),
-    queryFn: async (): Promise<ApiJourneyWithResources> => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BFF_URL}/journeys/resources/journey/${encodeURIComponent(journeyId)}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-          cache: 'no-store'
-        }
-      )
+  let journey: ApiJourneyWithResources
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch Journey: ${response.status}`)
-      }
+  try {
+    journey = await queryClient.query({
+      queryKey: navigationQueryKeys.resourceTree('journey', journeyId),
+      queryFn: async (): Promise<ApiJourneyWithResources> => {
+        const result = await requestServerBffWithToken<ApiResponse<ApiJourneyWithResources>>(
+          `/journeys/resources/journey/${encodeURIComponent(journeyId)}`,
+          token
+        )
 
-      const result: ApiResponse<ApiJourneyWithResources> = await response.json()
+        return result.payload
+      },
+      staleTime: 60_000,
+      retry: false
+    })
+  } catch (error) {
+    if (error instanceof ServerBffRequestError && (error.status === 404 || error.status === 400)) {
+      return <ResourceNotFound resourceType="journey" />
+    }
 
-      return result.payload
-    },
-    staleTime: 60_000
-  })
+    throw error
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
