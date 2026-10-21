@@ -2,6 +2,7 @@
 
 import { useQueryClient } from '@tanstack/react-query'
 
+import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import FolderItem from '@/components/Workspace/FolderItem'
 import RootTasks from '@/components/Workspace/RootTasks'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
@@ -30,13 +31,21 @@ const JourneyPageContent = ({ journeyId }: JourneyPageContentProps) => {
       </nav>
 
       <section className="space-y-3 px-5 py-4">
-        {journey.folders.map((folder) => (
-          <FolderItem
-            createTaskHref={`/dashboard/home/journey/${journeyId}/folder/${folder.uid}/create-task`}
-            folder={folder}
-            key={folder.uid}
-          />
-        ))}
+        <div className="overflow-hidden rounded-xl border border-border-subtle">
+          <div className="bg-surface-subtle px-3 py-3 text-sm font-semibold text-text-strong">Folders</div>
+          <div className="border-t border-border-subtle px-3 pt-2">
+            <CreateResourceButton parentResourceType="journey" parentUid={journey.uid} resourceType="folder" />
+          </div>
+          <div className="space-y-3 p-3">
+            {journey.folders.map((folder) => (
+              <FolderItem
+                createTaskHref={`/dashboard/home/journey/${journeyId}/folder/${folder.uid}/create-task`}
+                folder={folder}
+                key={folder.uid}
+              />
+            ))}
+          </div>
+        </div>
         <RootTasks
           createTaskHref={`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-task`}
           journeyUid={journey.uid}

@@ -1,5 +1,14 @@
 ## 2026-10-21
 
+### #JANUS-FE-0088: Add Journey Folder Action
+
+**Work**: Build / Journey Workspace; Added the existing reusable Create Folder action immediately before the Journey Folder list.
+
+- Reused `CreateResourceButton` with the Journey resource context.
+- Preserved Folder rendering, route behavior, hydration, and existing layout structure.
+
+## 2026-10-21
+
 ### #JANUS-FE-0087: Simplify Create Task Actions
 
 **Work**: Refactor / Workspace UI; Reused `CreateResourceButton` for Folder and Journey Task actions while preserving parent-owned navigation.
