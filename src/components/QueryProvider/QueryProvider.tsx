@@ -21,6 +21,7 @@ const QueryProvider = ({ children }: QueryProviderProps) => {
         defaultOptions: {
           queries: {
             staleTime: 60_000,
+            gcTime: Infinity,
             refetchOnWindowFocus: false
           }
         }
