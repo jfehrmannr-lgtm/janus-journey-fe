@@ -257,7 +257,6 @@ const DashboardTable = ({
                     <td className="px-4 py-3">
                       <div className="flex min-w-56 items-center gap-3">
                         <ProgressBar className="min-w-32" progress={progressPercentage} size="sm" />
-                        <span className="shrink-0 text-sm font-semibold text-text-body">{progressPercentage}%</span>
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-sm text-text-muted">

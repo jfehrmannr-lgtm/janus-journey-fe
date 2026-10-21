@@ -1,5 +1,3 @@
-import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
-
 /**
  * Renders the contextual missing-Journey state for the WorkSidebar.
  *
