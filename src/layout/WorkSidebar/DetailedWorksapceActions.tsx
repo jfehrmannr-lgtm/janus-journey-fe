@@ -3,7 +3,6 @@ import type { ReactNode } from 'react'
 import type { ApiJourneyWithResources, ApiFolderWithTasks, ApiTask } from '@/types/resource-api.type'
 
 import JourneyWorkspaceQuery from './DetailedJourney/JourneyWorkspaceQuery'
-import { createTask } from '@/app/dashboard/@workSidebar/home/journey/[journeyId]/folder/[folderId]/create-task/actions'
 
 type WorkspaceResource = ApiJourneyWithResources | ApiFolderWithTasks | ApiTask
 
@@ -18,13 +17,13 @@ const DetailedWorkspaceActions = ({ resource, children }: DetailedWorkspaceProps
       return <JourneyWorkspaceQuery>{children}</JourneyWorkspaceQuery>
 
     case 'folder':
-      return <>Folder workspace pending</>
+      return <div className="px-5 py-6 text-sm text-text-muted">Folder workspace pending</div>
 
     case 'task':
-      return <>Task workspace pending</>
+      return <div className="px-5 py-6 text-sm text-text-muted">Task workspace pending</div>
 
     default:
-      return <>Unsupported resource type</>
+      return <div className="px-5 py-6 text-sm text-text-muted">Unsupported resource type</div>
   }
 }
 

@@ -1,3 +1,12 @@
+## 2026-10-20
+
+### #JANUS-FE-0070: Restore Workspace Sidebar Visuals
+
+**Work**: Build / WorkSidebar UI; Restored the reference workspace presentation while keeping the current parallel-route and persistent-header architecture.
+
+- Added the image-backed workspace header, progress summary, section navigation, folder cards, task rows, and contextual creation controls.
+- Styled the nested task creation view beneath the persistent header and preserved existing route navigation, loading boundaries, and placeholder behavior.
+
 ## 2026-10-19
 
 ### #JANUS-FE-0069: Add WorkSidebar Fullscreen Width Toggle
