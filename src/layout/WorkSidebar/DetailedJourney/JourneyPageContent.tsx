@@ -37,7 +37,11 @@ const JourneyPageContent = ({ journeyId }: JourneyPageContentProps) => {
             key={folder.uid}
           />
         ))}
-        <RootTasks journeyUid={journey.uid} tasks={journey.tasks} />
+        <RootTasks
+          createTaskHref={`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-task`}
+          journeyUid={journey.uid}
+          tasks={journey.tasks}
+        />
       </section>
     </div>
   )

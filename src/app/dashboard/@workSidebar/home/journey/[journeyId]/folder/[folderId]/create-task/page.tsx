@@ -1,4 +1,4 @@
-import CreateTaskView from '@/layout/WorkSidebar/DetailedJourney/CreateTaskView'
+import CreateFolderTaskView from '@/layout/WorkSidebar/DetailedJourney/CreateFolderTaskView'
 
 interface JourneyFolderPageCreateTaskProps {
   params: Promise<{
@@ -10,7 +10,7 @@ interface JourneyFolderPageCreateTaskProps {
 const JourneyFolderPageCreateTask = async ({ params }: JourneyFolderPageCreateTaskProps) => {
   const { journeyId, folderId } = await params
 
-  return <CreateTaskView folderId={folderId} journeyId={journeyId} />
+  return <CreateFolderTaskView folderId={folderId} journeyId={journeyId} />
 }
 
 export default JourneyFolderPageCreateTask

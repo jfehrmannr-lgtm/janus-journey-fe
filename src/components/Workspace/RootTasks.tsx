@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import CreateResourceButton from '@/components/CreateResourceButton/CreateResourceButton'
 import type { ApiTask } from '@/types/resource-api.type'
 
@@ -12,7 +14,7 @@ interface RootTasksProps {
 /**
  * Renders tasks owned directly by a Journey in the workspace card style.
  *
- * @param createTaskHref - Reserved destination for a future root-task route.
+ * @param createTaskHref - Destination for the root-task creation route.
  * @param journeyUid - Journey identifier used by the contextual action.
  * @param tasks - Root-level Journey tasks.
  * @returns A presentational root task collection.
@@ -23,12 +25,13 @@ const RootTasks = ({ createTaskHref, journeyUid, tasks }: RootTasksProps) => {
       <div className="bg-surface-subtle px-3 py-3 text-sm font-semibold text-text-strong">Tasks</div>
       <div className="border-t border-border-subtle px-3 py-2">
         {createTaskHref ? (
-          <a
+          <Link
             className="flex min-h-10 w-full items-center gap-2 rounded-lg border border-dotted border-border-subtle px-3 text-sm font-semibold text-text-muted transition-colors hover:border-primary/50 hover:text-primary"
             href={createTaskHref}
+            scroll={false}
           >
             Create Task
-          </a>
+          </Link>
         ) : (
           <CreateResourceButton parentResourceType="journey" parentUid={journeyUid} resourceType="task" />
         )}

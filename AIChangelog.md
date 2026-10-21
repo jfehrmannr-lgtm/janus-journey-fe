@@ -1,3 +1,40 @@
+## 2026-10-21
+
+### #JANUS-FE-0084: Navigate Journey Root Task Creation
+
+**Work**: Integrate / Journey Workspace; Connected the Journey root-task Add Task action to the existing parallel create-task route.
+
+- Passed the encoded Journey create-task destination from `JourneyPageContent` to `RootTasks`.
+- Rendered the existing creation link with Next.js navigation and preserved non-scrolling navigation behavior.
+
+## 2026-10-21
+
+### #JANUS-FE-0083: Add Journey Task Route
+
+**Work**: Build / Journey Routing; Added the Journey-level parallel route for the initial Task creation navigation state.
+
+- Added the `@workSidebar` `journey/[journeyId]/create-task` page and passed its route parameter to `CreateTaskView`.
+- Added the minimal cancel navigation view without introducing form, persistence, or data-fetching behavior.
+
+## 2026-10-21
+
+### #JANUS-FE-0082: Derive Folder Task Form Identifiers
+
+**Work**: Refactor / Workspace UI; Simplified `FolderTaskWorkspace` props by using identifiers already present on the resolved Folder.
+
+- Removed `folderId` and `journeyId` from the reusable workspace component contract.
+- Preserved the embedded `CreateTaskForm` behavior by passing the Folder UID and parent UID from the Folder value.
+
+## 2026-10-21
+
+### #JANUS-FE-0081: Extract Folder Task Workspace
+
+**Work**: Refactor / Workspace UI; Extracted the Folder task creation presentation and interactions into a reusable workspace component.
+
+- Kept Journey cache resolution, Folder lookup, and missing-resource handling in the route-level view.
+- Preserved the existing Folder card, local form toggle, Save Changes placeholder, and cancel navigation behavior.
+- Kept the extracted workspace independent of React Query and Journey resource resolution by receiving its Folder and navigation/form values through props.
+
 ## 2026-10-20
 
 ### #JANUS-FE-0080: Toggle Contextual Task Form
