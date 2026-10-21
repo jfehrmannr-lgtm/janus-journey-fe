@@ -1,5 +1,49 @@
 ## 2026-10-20
 
+### #JANUS-FE-0075: Collapse Empty Workspace Folders
+
+**Work**: Polish / Workspace UI; Updated FolderItem’s initial expansion behavior for empty folders.
+
+- Populated folders remain expanded by default, while folders without tasks start collapsed.
+- Preserved manual expansion and collapse behavior for every folder.
+
+## 2026-10-20
+
+### #JANUS-FE-0074: Render Workspace Task States
+
+**Work**: Integrate / Workspace UI; Replaced the Journey workspace’s duplicated folder and task markup with the isolated workspace components.
+
+- TaskItem now renders each production task icon from its real API `state`, including completed, discarded, in-progress, paused, and pending states.
+- Preserved the existing Journey query cache, folder task navigation URL, persistent workspace header, and root-task presentation.
+
+## 2026-10-20
+
+### #JANUS-FE-0073: Show Folders Expanded by Default
+
+**Work**: Polish / Component Playground; Demonstrated FolderItem’s default expanded state without requiring callers to pass an explicit flag.
+
+- Kept the optional initial-state prop available for isolated component evaluation.
+
+## 2026-10-20
+
+### #JANUS-FE-0072: Label Workspace Task States
+
+**Work**: Polish / Component Playground; Added human-readable labels for the isolated TaskItem state examples.
+
+- Replaced raw state identifiers with labels such as “In progress” and “Pending” in the workspace component playground.
+
+## 2026-10-20
+
+### #JANUS-FE-0071: Add Isolated Workspace Component Playground
+
+**Work**: Build / Component Playground; Added standalone FolderItem, RootTasks, and TaskItem components for visual evaluation without integrating them into the production WorkspaceSidebar.
+
+- Reused the existing folder, task, state-icon, progress, expansion, and action-control presentation.
+- Added mock populated, empty, root-task, and task-state examples to the component playground.
+- Preserved the existing WorkspaceSidebar implementation, routes, fetching, hydration, and navigation behavior.
+
+## 2026-10-20
+
 ### #JANUS-FE-0070: Restore Workspace Sidebar Visuals
 
 **Work**: Build / WorkSidebar UI; Restored the reference workspace presentation while keeping the current parallel-route and persistent-header architecture.

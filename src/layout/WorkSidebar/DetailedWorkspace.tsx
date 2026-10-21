@@ -17,6 +17,8 @@ const DetailedWorkspace = ({ resource, children }: DetailedWorkspaceProps) => {
   const progress = isJourney ? resource.progress : undefined
   const resolvedTasks = progress ? progress.completed + progress.discarded : 0
 
+  console.log(JSON.stringify(resource, null, 2))
+
   return (
     <div className="min-h-full bg-white">
       <header

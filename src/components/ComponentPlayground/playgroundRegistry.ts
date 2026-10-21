@@ -4,6 +4,7 @@ import CreateResourceButtonPlayground from './CreateResourceButtonPlayground/Cre
 import IconPlayground from './IconPlayground/IconPlayground'
 import JourneyCardPlayground from './JourneyCardPlayground/JourneyCardPlayground'
 import ProgressBarPlayground from './ProgressBarPlayground/ProgressBarPlayground'
+import WorkspacePlayground from './WorkspacePlayground/WorkspacePlayground'
 
 export const PLAYGROUND_REGISTRY: ComponentPlaygroundRegistration[] = [
   {
@@ -30,5 +31,10 @@ export const PLAYGROUND_REGISTRY: ComponentPlaygroundRegistration[] = [
     id: 'progress-bar',
     name: 'Progress Bar',
     playground: ProgressBarPlayground
+  },
+  {
+    id: 'workspace-components',
+    name: 'Workspace Components',
+    playground: WorkspacePlayground
   }
 ]
