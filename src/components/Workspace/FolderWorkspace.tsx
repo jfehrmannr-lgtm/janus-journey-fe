@@ -81,7 +81,7 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
     const timer = setTimeout(() => {
       if (validationVersions.current.get(formId) !== nextVersion) return
       validateFolderForm(formId)
-    }, 3000)
+    }, 300)
 
     validationTimers.current.set(formId, timer)
   }
@@ -178,17 +178,20 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
           {createFolderForm.map((form) => {
             return (
               <div className="mx-3 mt-3" key={form.id}>
-                <FolderItem
-                  isInvalid={Boolean(formErrors[form.id] && Object.keys(formErrors[form.id]).length > 0)}
-                  isValid={formValidity[form.id] === true}
-                  onRemove={() => handleRemoveFolder(form.id)}
-                  onSelect={() => handlePendingFolderClick(form.id)}
-                  pendingFolder={form}
-                />
+                <button className="cursor-pointer w-full">
+                  <FolderItem
+                    isInvalid={Boolean(formErrors[form.id] && Object.keys(formErrors[form.id]).length > 0)}
+                    isValid={formValidity[form.id] === true}
+                    onRemove={() => handleRemoveFolder(form.id)}
+                    onSelect={() => handlePendingFolderClick(form.id)}
+                    pendingFolder={form}
+                  />
+                </button>
                 {activeFormId === form.id && isFolderFormOpen && (
                   <div className="border-t border-border-subtle" onClick={(event) => event.stopPropagation()}>
                     <CreateFolderForm
                       idPrefix={`workspace-folder-${form.id}`}
+                      initialValues={{ description: form.description, name: form.name }}
                       onCancel={() => {
                         if (formValidity[form.id] === true && !isValidating) {
                           useCreateFolderForm.getState().setActiveFormId(null)

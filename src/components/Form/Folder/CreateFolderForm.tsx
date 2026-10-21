@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, type SubmitEvent } from 'react'
+import { useState, type SubmitEvent } from 'react'
 
 import Button from '@/components/Button/Button'
 import Icon from '@/components/Icon/Icon'
@@ -13,6 +13,7 @@ export interface FolderFormValues {
 interface CreateFolderFormProps {
   embedded?: boolean
   idPrefix?: string
+  initialValues?: FolderFormValues
   onCancel?: () => void
   onFormChange?: (values: FolderFormValues) => void
   onSubmit?: () => void
@@ -27,6 +28,7 @@ interface CreateFolderFormProps {
  *
  * @param embedded - Whether to render only the fields for workspace composition.
  * @param idPrefix - Prefix used to keep field identifiers unique.
+ * @param initialValues - Optional values used to initialize the form.
  * @param onCancel - Optional callback used to close an embedded form.
  * @param onFormChange - Optional debounced callback receiving the complete form values.
  * @param onSubmit - Optional callback invoked after valid submission.
@@ -36,29 +38,20 @@ interface CreateFolderFormProps {
 const CreateFolderForm = ({
   embedded = false,
   idPrefix = 'folder',
+  initialValues,
   onCancel,
   onFormChange,
   onSubmit,
   reference
 }: CreateFolderFormProps) => {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
+  const [name, setName] = useState(() => initialValues?.name ?? '')
+  const [description, setDescription] = useState(() => initialValues?.description ?? '')
   const [hasNameBlurred, setHasNameBlurred] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const isNameValid = name.trim().length > 0
   const showNameError = (hasSubmitted || hasNameBlurred) && !isNameValid
   const nameId = `${idPrefix}-name`
   const descriptionId = `${idPrefix}-description`
-
-  useEffect(() => {
-    if (!onFormChange) return
-
-    const timeoutId = window.setTimeout(() => {
-      onFormChange({ name, description })
-    }, 300)
-
-    return () => window.clearTimeout(timeoutId)
-  }, [description, name, onFormChange])
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -116,7 +109,12 @@ const CreateFolderForm = ({
               id={nameId}
               maxLength={255}
               onBlur={() => setHasNameBlurred(true)}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => {
+                const nextName = event.target.value
+
+                setName(nextName)
+                onFormChange?.({ description, name: nextName })
+              }}
               placeholder="e.g. HTML and CSS"
               value={name}
             />
@@ -135,7 +133,12 @@ const CreateFolderForm = ({
               className="mt-2 min-h-28 w-full resize-y rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10"
               id={descriptionId}
               maxLength={2000}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(event) => {
+                const nextDescription = event.target.value
+
+                setDescription(nextDescription)
+                onFormChange?.({ description: nextDescription, name })
+              }}
               placeholder="Add context for this Folder"
               value={description}
             />

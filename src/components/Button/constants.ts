@@ -15,7 +15,7 @@ export const BUTTON_WIDTH_CLASSES: Record<ButtonWidth, string> = {
 }
 
 export const BUTTON_VISUAL_SIZE_CLASSES: Record<ButtonVisualSize, string> = {
-  thin: 'min-h-6 px-2 py-0 text-xs',
+  thin: 'min-h-5 px-2 py-0 text-xs',
   normal: 'min-h-8 px-3 py-1 text-sm',
   large: 'min-h-10 px-4 py-2 text-base',
   biggest: 'min-h-12 px-5 py-3 text-base'

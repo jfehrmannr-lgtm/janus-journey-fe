@@ -9,6 +9,7 @@ import type { ApiFolderWithTasks } from '@/types/resource-api.type'
 import type { FolderFormValues } from '@/stores/workspaceFromStore'
 
 import TaskItem from './TaskItem'
+import Button from '../Button/Button'
 
 interface FolderItemBaseProps {
   children?: ReactNode
@@ -120,17 +121,16 @@ const FolderItem = (props: FolderItemProps) => {
           tabIndex={0}
         >
           {headerContent}
-          <button
-            aria-label={`Remove ${folderName}`}
-            className="flex size-5 shrink-0 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-danger-surface hover:text-danger-foreground focus:outline-none focus:ring-4 focus:ring-focus/20"
+          <Button
+            icon={<Icon icon="DeleteOutlined" />}
+            variant="dotted"
+            buttonSize="thin"
+            color="neutral"
             onClick={(event) => {
               event.stopPropagation()
               pendingProps?.onRemove()
             }}
-            type="button"
-          >
-            <Icon icon="DeleteOutlined" />
-          </button>
+          />
         </div>
       ) : (
         <button
