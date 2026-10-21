@@ -1,6 +1,8 @@
-import Link from 'next/link'
+'use client'
 
-import CreateResourceButton from '@/components/CreateResourceButton/CreateResourceButton'
+import { useRouter } from 'next/navigation'
+
+import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import type { ApiTask } from '@/types/resource-api.type'
 
 import TaskItem from './TaskItem'
@@ -20,21 +22,18 @@ interface RootTasksProps {
  * @returns A presentational root task collection.
  */
 const RootTasks = ({ createTaskHref, journeyUid, tasks }: RootTasksProps) => {
+  const router = useRouter()
+
   return (
     <div className="overflow-hidden rounded-xl border border-border-subtle">
       <div className="bg-surface-subtle px-3 py-3 text-sm font-semibold text-text-strong">Tasks</div>
       <div className="border-t border-border-subtle px-3 py-2">
-        {createTaskHref ? (
-          <Link
-            className="flex min-h-10 w-full items-center gap-2 rounded-lg border border-dotted border-border-subtle px-3 text-sm font-semibold text-text-muted transition-colors hover:border-primary/50 hover:text-primary"
-            href={createTaskHref}
-            scroll={false}
-          >
-            Create Task
-          </Link>
-        ) : (
-          <CreateResourceButton parentResourceType="journey" parentUid={journeyUid} resourceType="task" />
-        )}
+        <CreateResourceButton
+          onClick={createTaskHref ? () => router.push(createTaskHref, { scroll: false }) : undefined}
+          parentResourceType="journey"
+          parentUid={journeyUid}
+          resourceType="task"
+        />
       </div>
       {tasks.length > 0 ? (
         tasks.map((task) => <TaskItem key={task.uid} task={task} />)

@@ -1,9 +1,11 @@
 'use client'
 
 import Button from '@/components/Button/Button'
+import type { ButtonProps } from '@/components/Button/Button.types'
 import Icon from '@/components/Icon/Icon'
 
 interface CreateResourceButtonProps {
+  onClick?: ButtonProps['onClick']
   parentResourceType: 'journey' | 'folder'
   parentUid: string
   resourceType: 'folder' | 'task'
@@ -12,12 +14,13 @@ interface CreateResourceButtonProps {
 /**
  * Renders a reusable creation entry point with its parent resource context.
  *
+ * @param onClick - Optional action supplied by the parent resource context.
  * @param parentResourceType - Type of the resource that will own the new resource.
  * @param parentUid - Stable identifier of the resource that will own the new resource.
  * @param resourceType - Type of resource represented by the creation action.
  * @returns The contextual creation button.
  */
-const CreateResourceButton = ({ parentResourceType, parentUid, resourceType }: CreateResourceButtonProps) => {
+const CreateResourceButton = ({ onClick, parentResourceType, parentUid, resourceType }: CreateResourceButtonProps) => {
   const isFolder = resourceType === 'folder'
   const resourceLabel = isFolder ? 'Folder' : 'Task'
 
@@ -32,6 +35,7 @@ const CreateResourceButton = ({ parentResourceType, parentUid, resourceType }: C
       color="neutral"
       icon={<Icon icon={isFolder ? 'FolderOutlined' : 'CheckSquareOutlined'} />}
       label={`Create ${resourceLabel}`}
+      onClick={onClick}
       size="full"
       type="button"
       variant="dotted"

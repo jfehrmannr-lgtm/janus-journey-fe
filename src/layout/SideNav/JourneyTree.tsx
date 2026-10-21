@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import CreateResourceButton from '@/components/CreateResourceButton/CreateResourceButton'
+import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import Icon from '@/components/Icon/Icon'
 import type { IconName } from '@/components/Icon/Icon'
 import type { JourneyTreeData } from '@/types/navigation.type'

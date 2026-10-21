@@ -1,6 +1,6 @@
 'use client'
 
-import CreateResourceButton from '@/components/CreateResourceButton/CreateResourceButton'
+import CreateResourceButton from '@/components/Button/CreateResourceButton'
 
 /**
  * Demonstrates contextual Folder and Task creation entry points.

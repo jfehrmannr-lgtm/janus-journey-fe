@@ -1,5 +1,15 @@
 ## 2026-10-21
 
+### #JANUS-FE-0087: Simplify Create Task Actions
+
+**Work**: Refactor / Workspace UI; Reused `CreateResourceButton` for Folder and Journey Task actions while preserving parent-owned navigation.
+
+- Removed duplicated custom Create Task link markup from `FolderItem` and `RootTasks`.
+- Added an optional parent-supplied click handler to `CreateResourceButton` without moving route construction into it.
+- Preserved encoded destinations and `scroll: false` behavior through parent-owned router navigation.
+
+## 2026-10-21
+
 ### #JANUS-FE-0086: Build Task Workspace UI
 
 **Work**: Build / Workspace UI; Added the shared Task workspace shell, local Add Task toggle state, and ordered sibling Task rendering.

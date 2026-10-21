@@ -1,9 +1,9 @@
 'use client'
 
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState, type ReactNode } from 'react'
 
-import CreateResourceButton from '@/components/CreateResourceButton/CreateResourceButton'
+import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import Icon from '@/components/Icon/Icon'
 import type { ApiFolderWithTasks } from '@/types/resource-api.type'
 
@@ -37,20 +37,9 @@ const FolderItem = ({
   showCompletionProgress = true,
   showCreateTaskAction = true
 }: FolderItemProps) => {
+  const router = useRouter()
   const [isExpanded, setIsExpanded] = useState(initiallyExpanded && (folder.tasks.length > 0 || Boolean(children)))
   const completedTasks = folder.tasks.filter((task) => task.state === 'completed' || task.state === 'discarded').length
-
-  const createTaskAction = createTaskHref ? (
-    <Link
-      className="flex min-h-10 w-full items-center gap-2 rounded-lg border border-dotted border-border-subtle px-3 text-sm font-semibold text-text-muted transition-colors hover:border-primary/50 hover:text-primary"
-      href={createTaskHref}
-    >
-      <Icon icon="CheckSquareOutlined" />
-      Create Task
-    </Link>
-  ) : (
-    <CreateResourceButton parentResourceType="folder" parentUid={folder.uid} resourceType="task" />
-  )
 
   return (
     <div className="overflow-hidden rounded-xl border border-border-subtle">
@@ -70,7 +59,16 @@ const FolderItem = ({
 
       {isExpanded && (
         <div>
-          {showCreateTaskAction && <div className="border-t border-border-subtle px-3 py-2">{createTaskAction}</div>}
+          {showCreateTaskAction && (
+            <div className="border-t border-border-subtle px-3 py-2">
+              <CreateResourceButton
+                onClick={createTaskHref ? () => router.push(createTaskHref, { scroll: false }) : undefined}
+                parentResourceType="folder"
+                parentUid={folder.uid}
+                resourceType="task"
+              />
+            </div>
+          )}
           {children}
           {folder.tasks.length > 0 ? (
             folder.tasks.map((task) => <TaskItem key={task.uid} task={task} />)
