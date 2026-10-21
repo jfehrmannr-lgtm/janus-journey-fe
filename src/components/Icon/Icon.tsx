@@ -10,6 +10,7 @@ import {
   ClockCircleOutlined,
   CloseCircleOutlined,
   CloseOutlined,
+  DeleteOutlined,
   DownOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
@@ -45,6 +46,7 @@ const iconComponents = {
   ClockCircleOutlined,
   CloseCircleOutlined,
   CloseOutlined,
+  DeleteOutlined,
   DownOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
@@ -80,6 +82,7 @@ export type IconName =
   | 'ClockCircleOutlined'
   | 'CloseCircleOutlined'
   | 'CloseOutlined'
+  | 'DeleteOutlined'
   | 'DownOutlined'
   | 'EyeInvisibleOutlined'
   | 'EyeOutlined'

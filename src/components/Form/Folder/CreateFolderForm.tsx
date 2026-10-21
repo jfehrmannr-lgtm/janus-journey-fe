@@ -141,29 +141,6 @@ const CreateFolderForm = ({
             />
           </div>
         </div>
-
-        {(!embedded || onCancel) && (
-          <footer className="flex flex-wrap justify-end gap-3 border-t border-border pt-5">
-            {embedded && (
-              <Button
-                buttonSize="normal"
-                color="neutral"
-                label="Cancel"
-                onClick={onCancel}
-                type="button"
-                variant="outlined"
-              />
-            )}
-            <button
-              className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={!isNameValid}
-              title="Folder persistence is not implemented yet"
-              type="submit"
-            >
-              Save unavailable
-            </button>
-          </footer>
-        )}
       </section>
     </form>
   )

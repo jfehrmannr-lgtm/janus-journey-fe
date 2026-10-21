@@ -140,15 +140,6 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
     setIsFolderFormOpen(true)
   }
 
-  const getPendingFolderClassName = (formId: string) => {
-    if (formErrors[formId] && Object.keys(formErrors[formId]).length > 0) {
-      return 'rounded-xl border-2 border-danger-border'
-    }
-
-    if (formValidity[formId] === true) return 'rounded-xl border-2 border-emerald-500'
-    return 'rounded-xl border-2 border-border-subtle'
-  }
-
   return (
     <div>
       <header className="flex items-center justify-between gap-4 border-b border-border px-5 py-4">
@@ -185,36 +176,15 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
             />
           </div>
           {createFolderForm.map((form) => {
-            const pendingFolder: ApiFolderWithTasks = {
-              uid: form.id,
-              type: 'folder',
-              parent: { uid: form.id, type: reference?.type ?? 'journey' },
-              name: form.name || 'New Folder',
-              description: form.description,
-              metadata: {},
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              tasks: []
-            }
-
             return (
-              <div
-                className={`relative mx-3 mt-3 ${getPendingFolderClassName(form.id)}`}
-                key={form.id}
-                onClick={() => handlePendingFolderClick(form.id)}
-              >
-                <FolderItem disableCollapse folder={pendingFolder} showCreateTaskAction={false} />
-                <button
-                  aria-label={`Remove ${form.name || 'new Folder'}`}
-                  className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-danger-surface hover:text-danger-foreground"
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    handleRemoveFolder(form.id)
-                  }}
-                  type="button"
-                >
-                  <Icon icon="CloseOutlined" />
-                </button>
+              <div className="mx-3 mt-3" key={form.id}>
+                <FolderItem
+                  isInvalid={Boolean(formErrors[form.id] && Object.keys(formErrors[form.id]).length > 0)}
+                  isValid={formValidity[form.id] === true}
+                  onRemove={() => handleRemoveFolder(form.id)}
+                  onSelect={() => handlePendingFolderClick(form.id)}
+                  pendingFolder={form}
+                />
                 {activeFormId === form.id && isFolderFormOpen && (
                   <div className="border-t border-border-subtle" onClick={(event) => event.stopPropagation()}>
                     <CreateFolderForm
