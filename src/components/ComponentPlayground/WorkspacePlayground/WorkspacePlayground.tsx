@@ -1,5 +1,10 @@
 'use client'
 
+import { useState } from 'react'
+
+import Button from '@/components/Button/Button'
+import CreateTaskForm from '@/components/Form/Task/CreateTaskForm'
+import Icon from '@/components/Icon/Icon'
 import FolderItem from '@/components/Workspace/FolderItem'
 import RootTasks from '@/components/Workspace/RootTasks'
 import TaskItem from '@/components/Workspace/TaskItem'
@@ -72,6 +77,9 @@ const rootTasks = [
  * @returns A visual playground for FolderItem, RootTasks, and TaskItem.
  */
 const WorkspacePlayground = () => {
+  const [isPopulatedFormOpen, setIsPopulatedFormOpen] = useState(false)
+  const [isEmptyFormOpen, setIsEmptyFormOpen] = useState(false)
+
   return (
     <div className="space-y-8">
       <section className="space-y-3" aria-labelledby="workspace-folder-examples">
@@ -84,6 +92,71 @@ const WorkspacePlayground = () => {
         <div className="grid gap-4 xl:grid-cols-2">
           <FolderItem folder={populatedFolder} />
           <FolderItem folder={emptyFolder} />
+        </div>
+      </section>
+
+      <section className="space-y-3" aria-labelledby="workspace-create-task">
+        <div>
+          <h3 className="text-lg font-semibold text-text-primary" id="workspace-create-task">
+            CreateTaskForm
+          </h3>
+          <p className="text-sm text-text-muted">Standalone and contextual Folder compositions.</p>
+        </div>
+        <CreateTaskForm
+          folder={populatedFolder}
+          folderId={populatedFolder.uid}
+          idPrefix="standalone-task"
+          journeyId={journeyUid}
+        />
+        <div className="grid gap-4 xl:grid-cols-2">
+          <FolderItem folder={populatedFolder} showCompletionProgress={false} showCreateTaskAction={false}>
+            <div className="border-t border-border-subtle px-3 py-2">
+              <Button
+                buttonSize="normal"
+                color="neutral"
+                icon={<Icon icon="PlusOutlined" />}
+                label="Add Task"
+                onClick={() => setIsPopulatedFormOpen((current) => !current)}
+                size="full"
+                type="button"
+                variant="dotted"
+              />
+            </div>
+            {isPopulatedFormOpen && (
+              <CreateTaskForm
+                embedded
+                folder={populatedFolder}
+                folderId={populatedFolder.uid}
+                idPrefix="populated-embedded-task"
+                journeyId={journeyUid}
+                onCancel={() => setIsPopulatedFormOpen(false)}
+              />
+            )}
+          </FolderItem>
+          <FolderItem folder={emptyFolder} showCompletionProgress={false} showCreateTaskAction={false}>
+            <div className="border-t border-border-subtle px-3 py-2">
+              <Button
+                buttonSize="normal"
+                color="neutral"
+                icon={<Icon icon="PlusOutlined" />}
+                label="Add Task"
+                onClick={() => setIsEmptyFormOpen((current) => !current)}
+                size="full"
+                type="button"
+                variant="dotted"
+              />
+            </div>
+            {isEmptyFormOpen && (
+              <CreateTaskForm
+                embedded
+                folder={emptyFolder}
+                folderId={emptyFolder.uid}
+                idPrefix="empty-embedded-task"
+                journeyId={journeyUid}
+                onCancel={() => setIsEmptyFormOpen(false)}
+              />
+            )}
+          </FolderItem>
         </div>
       </section>
 

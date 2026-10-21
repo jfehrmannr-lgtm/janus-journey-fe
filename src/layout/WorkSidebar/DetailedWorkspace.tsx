@@ -15,9 +15,8 @@ interface DetailedWorkspaceProps {
 const DetailedWorkspace = ({ resource, children }: DetailedWorkspaceProps) => {
   const isJourney = resource.type === 'journey'
   const progress = isJourney ? resource.progress : undefined
-  const resolvedTasks = progress ? progress.completed + progress.discarded : 0
 
-  console.log(JSON.stringify(resource, null, 2))
+  const resolvedTasks = progress ? progress.completed + progress.discarded : 0
 
   return (
     <div className="min-h-full bg-white">

@@ -1,5 +1,38 @@
 ## 2026-10-20
 
+### #JANUS-FE-0080: Toggle Contextual Task Form
+
+**Work**: Build / Journey Workspace; Added an inline Add Task toggle for the contextual Folder creation view.
+
+- Replaced the always-visible embedded form with a shared Button-controlled form that can be opened and cancelled locally.
+- Preserved the Folder header, existing TaskItem rows, route navigation, and draft state while the form remains open.
+- Updated the Workspace playground with populated and empty Folder toggle examples.
+- Kept task creation persistence and batch creation deferred.
+
+## 2026-10-20
+
+### #JANUS-FE-0079: Add Contextual Folder Task Creation
+
+**Work**: Build / Journey Workspace; Composed the local Task creation form inside the selected Folder alongside its existing Tasks.
+
+- Added a Journey-specific CreateTaskView with an action bar, hydrated Folder lookup, total task count, inline form, and existing TaskItem rows.
+- Extended FolderItem with composition support and an optional total-only count mode while preserving its normal workspace behavior.
+- Added standalone, populated-folder, and empty-folder CreateTaskForm playground examples.
+- Kept persistence and Save Changes intentionally unavailable.
+
+## 2026-10-20
+
+### #JANUS-FE-0078: Build Folder Task Creation Form
+
+**Work**: Build / Journey Workspace; Replaced the folder Create Task placeholder with a hydrated, local-only task form.
+
+- Resolved and displayed the selected Folder name from the existing hydrated Journey cache without adding a request.
+- Added controlled name, description, state, and visibility fields with required-name validation and accessible invalid feedback.
+- Added Cancel navigation and an explicitly unavailable Save action until task persistence is implemented.
+- Preserved the persistent Journey header, nested route structure, hydration, and existing not-found behavior.
+
+## 2026-10-20
+
 ### #JANUS-FE-0075: Collapse Empty Workspace Folders
 
 **Work**: Polish / Workspace UI; Updated FolderItem’s initial expansion behavior for empty folders.
