@@ -1,3 +1,3 @@
-const CreateTaskPage = () => null
+const CreateFolderTaskPage = () => null
 
-export default CreateTaskPage
+export default CreateFolderTaskPage

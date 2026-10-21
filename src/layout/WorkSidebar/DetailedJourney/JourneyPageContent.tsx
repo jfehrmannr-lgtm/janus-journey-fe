@@ -1,6 +1,7 @@
 'use client'
 
 import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 
 import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import FolderItem from '@/components/Workspace/FolderItem'
@@ -14,6 +15,7 @@ interface JourneyPageContentProps {
 
 const JourneyPageContent = ({ journeyId }: JourneyPageContentProps) => {
   const queryClient = useQueryClient()
+  const router = useRouter()
 
   const journey = queryClient.getQueryData<ApiJourneyWithResources>(
     navigationQueryKeys.resourceTree('journey', journeyId)
@@ -34,7 +36,16 @@ const JourneyPageContent = ({ journeyId }: JourneyPageContentProps) => {
         <div className="overflow-hidden rounded-xl border border-border-subtle">
           <div className="bg-surface-subtle px-3 py-3 text-sm font-semibold text-text-strong">Folders</div>
           <div className="border-t border-border-subtle px-3 pt-2">
-            <CreateResourceButton parentResourceType="journey" parentUid={journey.uid} resourceType="folder" />
+            <CreateResourceButton
+              onClick={() =>
+                router.push(`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-folder`, {
+                  scroll: false
+                })
+              }
+              parentResourceType="journey"
+              parentUid={journey.uid}
+              resourceType="folder"
+            />
           </div>
           <div className="space-y-3 p-3">
             {journey.folders.map((folder) => (

@@ -12,6 +12,7 @@ import TaskItem from './TaskItem'
 interface FolderItemProps {
   children?: ReactNode
   createTaskHref?: string
+  disableCollapse?: boolean
   folder: ApiFolderWithTasks
   initiallyExpanded?: boolean
   showCompletionProgress?: boolean
@@ -23,6 +24,7 @@ interface FolderItemProps {
  *
  * @param children - Optional content rendered before the existing folder tasks.
  * @param createTaskHref - Optional destination for the Create Task action.
+ * @param disableCollapse - Whether to prevent collapsing and hide child Tasks.
  * @param folder - Folder and nested tasks displayed by the card.
  * @param initiallyExpanded - Whether the folder starts expanded.
  * @param showCompletionProgress - Whether to show completed versus total task count.
@@ -32,6 +34,7 @@ interface FolderItemProps {
 const FolderItem = ({
   children,
   createTaskHref,
+  disableCollapse = false,
   folder,
   initiallyExpanded = true,
   showCompletionProgress = true,
@@ -44,9 +47,9 @@ const FolderItem = ({
   return (
     <div className="overflow-hidden rounded-xl border border-border-subtle">
       <button
-        aria-expanded={isExpanded}
+        aria-expanded={!disableCollapse && isExpanded}
         className="flex w-full items-center gap-3 bg-surface-subtle px-3 py-3 text-left transition-colors hover:bg-slate-200"
-        onClick={() => setIsExpanded((current) => !current)}
+        onClick={disableCollapse ? undefined : () => setIsExpanded((current) => !current)}
         type="button"
       >
         <Icon className="text-blue-700" icon="FolderOutlined" />
@@ -54,10 +57,13 @@ const FolderItem = ({
         <span className="text-xs text-text-muted">
           {showCompletionProgress ? `${completedTasks} / ${folder.tasks.length}` : folder.tasks.length}
         </span>
-        <Icon className="text-xs text-text-muted" icon={isExpanded ? 'DownOutlined' : 'RightOutlined'} />
+        <Icon
+          className="text-xs text-text-muted"
+          icon={!disableCollapse && isExpanded ? 'DownOutlined' : 'RightOutlined'}
+        />
       </button>
 
-      {isExpanded && (
+      {!disableCollapse && isExpanded && (
         <div>
           {showCreateTaskAction && (
             <div className="border-t border-border-subtle px-3 py-2">
