@@ -1,10 +1,10 @@
 'use client'
 
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
+import TaskWorkspace from '@/components/Workspace/TaskWorkspace'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
-import { ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { ApiJourneyWithResources } from '@/types/resource-api.type'
 import { useQueryClient } from '@tanstack/react-query'
-import Link from 'next/link'
 
 interface CreateTaskViewProps {
   journeyId: string
@@ -29,15 +29,7 @@ const CreateTaskView = ({ journeyId }: CreateTaskViewProps) => {
     return <ResourceNotFound resourceType="journey" />
   }
 
-  return (
-    <Link
-      className="mt-4 inline-block text-sm font-semibold text-primary hover:underline"
-      href={returnHref}
-      scroll={false}
-    >
-      Cancel and return to Journey
-    </Link>
-  )
+  return <TaskWorkspace tasks={journey.tasks} returnHref={returnHref} />
 }
 
 export default CreateTaskView

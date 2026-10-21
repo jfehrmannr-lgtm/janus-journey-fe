@@ -1,5 +1,25 @@
 ## 2026-10-21
 
+### #JANUS-FE-0086: Build Task Workspace UI
+
+**Work**: Build / Workspace UI; Added the shared Task workspace shell, local Add Task toggle state, and ordered sibling Task rendering.
+
+- Reused the Folder workspace spacing, controls, header, disabled Save Changes action, and return navigation patterns.
+- Rendered each provided Task through `TaskItem` without filtering or reordering.
+- Deferred `CreateTaskForm` rendering because its required Folder and Journey identifiers are unavailable in the parent-independent component contract.
+
+## 2026-10-21
+
+### #JANUS-FE-0085: Extract Task Workspace Contract
+
+**Work**: Refactor / Workspace UI; Extracted the Journey Task route’s navigation into a reusable `TaskWorkspace` component.
+
+- Kept Journey cache resolution and missing-Journey handling in `CreateTaskView`.
+- Passed the resolved Journey sibling Tasks directly to the context-independent workspace component.
+- Preserved the existing cancel link styling, destination, and non-scrolling navigation.
+
+## 2026-10-21
+
 ### #JANUS-FE-0084: Navigate Journey Root Task Creation
 
 **Work**: Integrate / Journey Workspace; Connected the Journey root-task Add Task action to the existing parallel create-task route.
