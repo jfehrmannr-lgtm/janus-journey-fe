@@ -24,7 +24,7 @@ const CollapseSidenavEffect = ({ children, isOpen, onToggle }: CollapseSidenavEf
   const sidebarWidthClass = !isOpen
     ? 'w-0 max-w-[calc(100vw-2.5rem)]'
     : isFullscreen
-      ? 'w-screen max-w-none px-8'
+      ? 'w-[calc(100vw-20rem)]'
       : 'w-140 max-w-[calc(100vw-2.5rem)]'
 
   return (
@@ -43,8 +43,8 @@ const CollapseSidenavEffect = ({ children, isOpen, onToggle }: CollapseSidenavEf
       </button>
       {isOpen && (
         <button
-          aria-label={isFullscreen ? 'Restore work sidebar width' : 'Expand work sidebar to fullscreen'}
-          className="absolute right-4 top-30 z-10 flex size-9 items-center justify-center rounded-lg border border-border bg-surface text-text-muted shadow-sm transition-colors hover:bg-surface-subtle hover:text-text-primary"
+          aria-label={isOpen ? 'Collapse work sidebar' : 'Expand work sidebar'}
+          className="absolute -left-9 top-15 z-10 flex size-9 items-center justify-center rounded-l-lg border border-r-0 border-border bg-surface text-text-muted shadow-sm transition-colors hover:bg-surface-subtle hover:text-text-primary"
           onClick={() => setIsFullscreen((currentIsFullscreen) => !currentIsFullscreen)}
           type="button"
         >
