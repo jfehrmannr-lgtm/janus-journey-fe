@@ -57,10 +57,9 @@ const FolderItem = ({
         <span className="text-xs text-text-muted">
           {showCompletionProgress ? `${completedTasks} / ${folder.tasks.length}` : folder.tasks.length}
         </span>
-        <Icon
-          className="text-xs text-text-muted"
-          icon={!disableCollapse && isExpanded ? 'DownOutlined' : 'RightOutlined'}
-        />
+        {!disableCollapse && (
+          <Icon className="text-xs text-text-muted" icon={isExpanded ? 'DownOutlined' : 'RightOutlined'} />
+        )}
       </button>
 
       {!disableCollapse && isExpanded && (

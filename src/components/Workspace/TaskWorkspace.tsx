@@ -23,6 +23,8 @@ interface TaskWorkspaceProps {
 const TaskWorkspace = ({ tasks, returnHref }: TaskWorkspaceProps) => {
   const [isTaskFormOpen, setIsTaskFormOpen] = useState(false)
 
+  console.debug('tasks', tasks)
+
   return (
     <div>
       <header className="flex items-center justify-between gap-4 border-b border-border px-5 py-4">

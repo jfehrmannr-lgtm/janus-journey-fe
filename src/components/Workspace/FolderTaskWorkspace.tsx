@@ -58,7 +58,6 @@ const FolderTaskWorkspace = ({ folder, returnHref }: FolderTaskWorkspaceProps) =
           </div>
           {isTaskFormOpen && (
             <CreateTaskForm
-              embedded
               folderId={folder.uid}
               idPrefix="embedded-task"
               journeyId={folder.parent.uid}

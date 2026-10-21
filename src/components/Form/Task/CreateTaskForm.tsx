@@ -170,42 +170,16 @@ const CreateTaskForm = ({
           </div>
         </div>
 
-        {!embedded && (
-          <div className="rounded-lg border border-dashed border-border-strong bg-surface-subtle px-3 py-2.5 text-xs leading-5 text-text-muted">
-            Saving tasks is not available yet. Your entries will remain local to this form.
-          </div>
-        )}
-
         {(!embedded || onCancel) && (
           <footer className="flex flex-wrap justify-end gap-3 border-t border-border pt-5">
-            {embedded ? (
-              <Button
-                buttonSize="normal"
-                color="neutral"
-                label="Cancel"
-                onClick={onCancel}
-                type="button"
-                variant="outlined"
-              />
-            ) : (
-              <>
-                <Link
-                  className="rounded-lg border border-border-strong px-4 py-2.5 text-sm font-semibold text-text-body transition-colors hover:bg-surface-subtle"
-                  href={journeyHref}
-                  scroll={false}
-                >
-                  Cancel
-                </Link>
-                <button
-                  className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
-                  disabled={!isNameValid}
-                  title="Task persistence is not implemented yet"
-                  type="submit"
-                >
-                  Save unavailable
-                </button>
-              </>
-            )}
+            <Button
+              buttonSize="normal"
+              color="neutral"
+              label="Cancel"
+              onClick={onCancel}
+              type="button"
+              variant="outlined"
+            />
           </footer>
         )}
       </section>

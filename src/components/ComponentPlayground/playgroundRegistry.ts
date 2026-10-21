@@ -1,6 +1,7 @@
 import ButtonPlayground from './ButtonPlayground/ButtonPlayground'
 import type { ComponentPlaygroundRegistration } from './ComponentPlayground.types'
 import CreateResourceButtonPlayground from './CreateResourceButtonPlayground/CreateResourceButtonPlayground'
+import FormsPlayground from './FormsPlayground/FormsPlayground'
 import IconPlayground from './IconPlayground/IconPlayground'
 import JourneyCardPlayground from './JourneyCardPlayground/JourneyCardPlayground'
 import ProgressBarPlayground from './ProgressBarPlayground/ProgressBarPlayground'
@@ -16,6 +17,11 @@ export const PLAYGROUND_REGISTRY: ComponentPlaygroundRegistration[] = [
     id: 'create-resource-button',
     name: 'Create Resource Button',
     playground: CreateResourceButtonPlayground
+  },
+  {
+    id: 'forms',
+    name: 'Forms',
+    playground: FormsPlayground
   },
   {
     id: 'journey-card',
