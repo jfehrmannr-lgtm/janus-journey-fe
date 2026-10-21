@@ -1,12 +1,13 @@
 'use client'
 
 import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
 
 import Button from '@/components/Button/Button'
 import CreateFolderForm from '@/components/Form/Folder/CreateFolderForm'
 import Icon from '@/components/Icon/Icon'
-import { useState } from 'react'
 import FolderItem from '@/components/Workspace/FolderItem'
+import { initFolderForm, useCreateFolderForm, type FolderFormValues } from '@/stores/workspaceFromStore'
 import type { ApiFolder, ApiFolderWithTasks } from '@/types/resource-api.type'
 
 interface FolderWorkspaceProps {
@@ -28,6 +29,125 @@ interface FolderWorkspaceProps {
  */
 const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProps) => {
   const [isFolderFormOpen, setIsFolderFormOpen] = useState(false)
+  const [folderStore] = useState(() => useCreateFolderForm.getState())
+  const validationTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>())
+  const validationVersions = useRef(new Map<string, number>())
+
+  const { createFolderForm, formErrors, formValidity, isSubmitting, isValidating, activeFormId } = useCreateFolderForm()
+
+  useEffect(() => {
+    const timers = validationTimers.current
+
+    return () => {
+      timers.forEach((timer) => clearTimeout(timer))
+      folderStore.setIsValidating(false)
+    }
+  }, [folderStore])
+
+  const validateFolderForm = (formId: string) => {
+    const currentStore = useCreateFolderForm.getState()
+    const form = currentStore.createFolderForm.find((currentForm) => currentForm.id === formId)
+
+    if (!form) return
+
+    const errors = form.name.trim() ? {} : { name: 'Folder name is required.' }
+    const nextTimers = validationTimers.current
+
+    nextTimers.delete(formId)
+    currentStore.setFormValidity({
+      ...currentStore.formValidity,
+      [formId]: Object.keys(errors).length === 0
+    })
+    currentStore.setFormErrors({ ...currentStore.formErrors, [formId]: errors })
+
+    if (nextTimers.size === 0) currentStore.setIsValidating(false)
+  }
+
+  const handleFormChange = (formId: string, values: Omit<FolderFormValues, 'id'>) => {
+    const currentStore = useCreateFolderForm.getState()
+    const nextVersion = (validationVersions.current.get(formId) ?? 0) + 1
+    const previousTimer = validationTimers.current.get(formId)
+
+    if (previousTimer) clearTimeout(previousTimer)
+
+    validationVersions.current.set(formId, nextVersion)
+    currentStore.setCreateFolderForm(
+      currentStore.createFolderForm.map((form) => (form.id === formId ? { ...form, ...values } : form))
+    )
+    currentStore.setFormValidity({ ...currentStore.formValidity, [formId]: false })
+    currentStore.setFormErrors({ ...currentStore.formErrors, [formId]: {} })
+    currentStore.setIsValidating(true)
+
+    const timer = setTimeout(() => {
+      if (validationVersions.current.get(formId) !== nextVersion) return
+      validateFolderForm(formId)
+    }, 3000)
+
+    validationTimers.current.set(formId, timer)
+  }
+
+  const canAddFolder = !isValidating && createFolderForm.every((form) => formValidity[form.id] === true)
+  const canSaveChanges = createFolderForm.length > 0 && canAddFolder && !isSubmitting
+
+  const handleAddFolder = () => {
+    if (!canAddFolder) return
+
+    const id = globalThis.crypto?.randomUUID?.() ?? `folder-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    const form = { ...initFolderForm, id }
+
+    folderStore.setCreateFolderForm([...useCreateFolderForm.getState().createFolderForm, form])
+    folderStore.setFormValidity({ ...useCreateFolderForm.getState().formValidity, [id]: false })
+    folderStore.setFormErrors({ ...useCreateFolderForm.getState().formErrors, [id]: {} })
+    folderStore.setActiveFormId(id)
+    setIsFolderFormOpen(true)
+  }
+
+  const handleRemoveFolder = (formId: string) => {
+    const currentStore = useCreateFolderForm.getState()
+    const timer = validationTimers.current.get(formId)
+
+    if (timer) clearTimeout(timer)
+    validationTimers.current.delete(formId)
+    validationVersions.current.delete(formId)
+
+    const nextValidity = { ...currentStore.formValidity }
+    const nextErrors = { ...currentStore.formErrors }
+    delete nextValidity[formId]
+    delete nextErrors[formId]
+
+    currentStore.setCreateFolderForm(currentStore.createFolderForm.filter((form) => form.id !== formId))
+    currentStore.setFormValidity(nextValidity)
+    currentStore.setFormErrors(nextErrors)
+    if (currentStore.activeFormId === formId) currentStore.setActiveFormId(null)
+    if (validationTimers.current.size === 0) currentStore.setIsValidating(false)
+  }
+
+  const handlePendingFolderClick = (formId: string) => {
+    const currentStore = useCreateFolderForm.getState()
+    const currentActiveId = currentStore.activeFormId
+    const activeIsBlocked =
+      currentActiveId !== null && (currentStore.formValidity[currentActiveId] !== true || isValidating)
+
+    if (currentActiveId !== null && currentActiveId !== formId && activeIsBlocked) return
+
+    if (currentActiveId === formId && currentStore.formValidity[formId] === true && !isValidating) {
+      currentStore.setActiveFormId(null)
+      setIsFolderFormOpen(false)
+      return
+    }
+
+    currentStore.setActiveFormId(formId)
+    setIsFolderFormOpen(true)
+  }
+
+  const getPendingFolderClassName = (formId: string) => {
+    if (formErrors[formId] && Object.keys(formErrors[formId]).length > 0) {
+      return 'rounded-xl border-2 border-danger-border'
+    }
+
+    if (formValidity[formId] === true) return 'rounded-xl border-2 border-emerald-500'
+    return 'rounded-xl border-2 border-border-subtle'
+  }
 
   return (
     <div>
@@ -37,9 +157,10 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
           <h2 className="truncate text-sm font-semibold text-text-primary">Create Folder</h2>
         </div>
         <button
-          className="shrink-0 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white opacity-50"
-          disabled
-          title="Folder persistence is not implemented yet"
+          className="shrink-0 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white disabled:opacity-50"
+          disabled={!canSaveChanges}
+          onClick={() => console.log(createFolderForm)}
+          title={canSaveChanges ? 'Save the current Folder forms' : 'Complete all Folder forms before saving'}
           type="button"
         >
           Save Changes
@@ -54,23 +175,64 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
               buttonSize="normal"
               className="text-text-muted hover:border-primary/50 hover:text-primary"
               color="neutral"
+              disabled={!canAddFolder}
               icon={<Icon icon="PlusOutlined" />}
               label="Add Folder"
               size="full"
               type="button"
+              onClick={handleAddFolder}
               variant="dotted"
-              onClick={() => setIsFolderFormOpen((current) => !current)}
             />
           </div>
-          {isFolderFormOpen && (
-            <CreateFolderForm
-              embedded
-              idPrefix="workspace-folder"
-              onCancel={() => setIsFolderFormOpen(false)}
-              onSubmit={() => setIsFolderFormOpen(false)}
-              reference={reference}
-            />
-          )}
+          {createFolderForm.map((form) => {
+            const pendingFolder: ApiFolderWithTasks = {
+              uid: form.id,
+              type: 'folder',
+              parent: { uid: form.id, type: reference?.type ?? 'journey' },
+              name: form.name || 'New Folder',
+              description: form.description,
+              metadata: {},
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              tasks: []
+            }
+
+            return (
+              <div
+                className={`relative mx-3 mt-3 ${getPendingFolderClassName(form.id)}`}
+                key={form.id}
+                onClick={() => handlePendingFolderClick(form.id)}
+              >
+                <FolderItem disableCollapse folder={pendingFolder} showCreateTaskAction={false} />
+                <button
+                  aria-label={`Remove ${form.name || 'new Folder'}`}
+                  className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-danger-surface hover:text-danger-foreground"
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    handleRemoveFolder(form.id)
+                  }}
+                  type="button"
+                >
+                  <Icon icon="CloseOutlined" />
+                </button>
+                {activeFormId === form.id && isFolderFormOpen && (
+                  <div className="border-t border-border-subtle" onClick={(event) => event.stopPropagation()}>
+                    <CreateFolderForm
+                      idPrefix={`workspace-folder-${form.id}`}
+                      onCancel={() => {
+                        if (formValidity[form.id] === true && !isValidating) {
+                          useCreateFolderForm.getState().setActiveFormId(null)
+                          setIsFolderFormOpen(false)
+                        }
+                      }}
+                      onFormChange={(values) => handleFormChange(form.id, values)}
+                      reference={reference}
+                    />
+                  </div>
+                )}
+              </div>
+            )
+          })}
           <div className="space-y-3 p-3">
             {folders.map((folder) => (
               <FolderItem
