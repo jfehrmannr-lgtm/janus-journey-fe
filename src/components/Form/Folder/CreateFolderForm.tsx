@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, type SubmitEvent } from 'react'
-
-import Button from '@/components/Button/Button'
 import Icon from '@/components/Icon/Icon'
 
 export interface FolderFormValues {
@@ -39,7 +37,6 @@ const CreateFolderForm = ({
   embedded = false,
   idPrefix = 'folder',
   initialValues,
-  onCancel,
   onFormChange,
   onSubmit,
   reference
