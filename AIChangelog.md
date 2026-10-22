@@ -1,3 +1,23 @@
+## 2026-10-22
+
+### #JANUS-FE-0090: Extract Folder Workspace Hook
+
+**Work**: Refactor / Folder Workspace; Moved Folder form interaction, validation, pending resource management, submission, and notifications into the dedicated `useFolderWorkspace` hook.
+
+- Kept the Folder workspace container responsible for composition and lifecycle cleanup.
+- Preserved the existing 500ms validation debounce, bulk payload, Server Action call, toast behavior, and Zustand reset semantics.
+- Exposed a stable cleanup callback so the container effect retains its existing `returnHref` dependency behavior without moving lifecycle logic into the hook.
+
+## 2026-10-22
+
+### #JANUS-FE-0089: Split Folder Workspace Components
+
+**Work**: Refactor / Folder Workspace; Grouped the Folder workspace into focused container, actions, and body components without changing its creation workflow.
+
+- Kept Zustand access, validation debounce, lifecycle cleanup, pending Folder management, payload construction, Server Action invocation, and notifications in `FolderWorkspace`.
+- Extracted the existing header controls into `FolderWorkspaceActions` and pending/persisted Folder rendering into `FolderWorkspaceBody`.
+- Updated the Journey Folder creation view to use the new component path while preserving existing behavior and styling.
+
 ## 2026-10-21
 
 ### #JANUS-FE-0088: Add Journey Folder Action
