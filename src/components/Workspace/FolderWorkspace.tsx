@@ -37,12 +37,15 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
 
   useEffect(() => {
     const timers = validationTimers.current
+    const versions = validationVersions.current
 
     return () => {
       timers.forEach((timer) => clearTimeout(timer))
-      folderStore.setIsValidating(false)
+      timers.clear()
+      versions.clear()
+      folderStore.setResetFolder()
     }
-  }, [folderStore])
+  }, [folderStore, returnHref])
 
   const validateFolderForm = (formId: string) => {
     const currentStore = useCreateFolderForm.getState()
@@ -81,7 +84,7 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
     const timer = setTimeout(() => {
       if (validationVersions.current.get(formId) !== nextVersion) return
       validateFolderForm(formId)
-    }, 300)
+    }, 500)
 
     validationTimers.current.set(formId, timer)
   }
@@ -147,15 +150,30 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
           <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Folder workspace</p>
           <h2 className="truncate text-sm font-semibold text-text-primary">Create Folder</h2>
         </div>
-        <button
-          className="shrink-0 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white disabled:opacity-50"
-          disabled={!canSaveChanges}
-          onClick={() => console.log(createFolderForm)}
-          title={canSaveChanges ? 'Save the current Folder forms' : 'Complete all Folder forms before saving'}
-          type="button"
-        >
-          Save Changes
-        </button>
+        <div className="flex shrink-0 items-center gap-3">
+          <Button
+            buttonSize="normal"
+            className="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white disabled:opacity-50"
+            color="primary"
+            disabled={!canSaveChanges}
+            label="Save Changes"
+            onClick={() => console.log(createFolderForm)}
+            size="nm"
+            title={canSaveChanges ? 'Save the current Folder forms' : 'Complete all Folder forms before saving'}
+            type="button"
+            variant="filled"
+          />
+          <Link href={returnHref} scroll={false}>
+            <Button
+              buttonSize="normal"
+              color="neutral"
+              icon={<Icon icon="AppstoreOutlined" />}
+              label="Return"
+              type="button"
+              variant="outlined"
+            />
+          </Link>
+        </div>
       </header>
 
       <section className="px-5 py-5">
@@ -178,7 +196,7 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
           {createFolderForm.map((form) => {
             return (
               <div className="mx-3 mt-3" key={form.id}>
-                <button className="cursor-pointer w-full">
+                <div className="cursor-pointer w-full">
                   <FolderItem
                     isInvalid={Boolean(formErrors[form.id] && Object.keys(formErrors[form.id]).length > 0)}
                     isValid={formValidity[form.id] === true}
@@ -186,7 +204,7 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
                     onSelect={() => handlePendingFolderClick(form.id)}
                     pendingFolder={form}
                   />
-                </button>
+                </div>
                 {activeFormId === form.id && isFolderFormOpen && (
                   <div className="border-t border-border-subtle" onClick={(event) => event.stopPropagation()}>
                     <CreateFolderForm
@@ -217,13 +235,6 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
             ))}
           </div>
         </div>
-        <Link
-          className="mt-4 inline-block text-sm font-semibold text-primary hover:underline"
-          href={returnHref}
-          scroll={false}
-        >
-          Cancel and return to Journey
-        </Link>
       </section>
     </div>
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, type SubmitEvent } from 'react'
+import { useState, type SubmitEvent } from 'react'
 
 import Button from '@/components/Button/Button'
 import Icon from '@/components/Icon/Icon'
@@ -15,6 +15,7 @@ export interface TaskFormValues {
 
 interface CreateTaskFormProps {
   embedded?: boolean
+  initialValues?: TaskFormValues
   idPrefix?: string
   onCancel?: () => void
   onFormChange?: (values: TaskFormValues) => void
@@ -37,6 +38,7 @@ const taskStates: Array<{ label: string; value: ApiTaskState }> = [
  * Renders the local-only Task creation form.
  *
  * @param embedded - Whether to render only the fields for FolderItem composition.
+ * @param initialValues - Optional values used to initialize the form.
  * @param idPrefix - Prefix used to keep field identifiers unique in playgrounds.
  * @param onCancel - Optional local callback used to close an embedded form.
  * @param onFormChange - Optional debounced callback receiving the complete form values.
@@ -46,16 +48,17 @@ const taskStates: Array<{ label: string; value: ApiTaskState }> = [
  */
 const CreateTaskForm = ({
   embedded = false,
+  initialValues,
   idPrefix = 'task',
   onCancel,
   onFormChange,
   onSubmit,
   reference
 }: CreateTaskFormProps) => {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [state, setState] = useState<ApiTaskState>('pending')
-  const [isVisible, setIsVisible] = useState(true)
+  const [name, setName] = useState(() => initialValues?.name ?? '')
+  const [description, setDescription] = useState(() => initialValues?.description ?? '')
+  const [state, setState] = useState<ApiTaskState>(() => initialValues?.state ?? 'pending')
+  const [isVisible, setIsVisible] = useState(() => initialValues?.isVisible ?? true)
   const [hasNameBlurred, setHasNameBlurred] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
 
@@ -64,16 +67,6 @@ const CreateTaskForm = ({
   const nameId = `${idPrefix}-name`
   const descriptionId = `${idPrefix}-description`
   const stateId = `${idPrefix}-state`
-
-  useEffect(() => {
-    if (!onFormChange) return
-
-    const timeoutId = window.setTimeout(() => {
-      onFormChange({ name, description, state, isVisible })
-    }, 300)
-
-    return () => window.clearTimeout(timeoutId)
-  }, [description, isVisible, name, onFormChange, state])
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -131,7 +124,12 @@ const CreateTaskForm = ({
               className={`mt-2 h-11 w-full rounded-lg border bg-surface px-3 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:ring-4 focus:ring-focus/10 ${showNameError ? 'border-danger-foreground focus:border-danger-foreground' : 'border-border focus:border-focus'}`}
               id={nameId}
               maxLength={255}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => {
+                const nextName = event.target.value
+
+                setName(nextName)
+                onFormChange?.({ description, isVisible, name: nextName, state })
+              }}
               onBlur={() => setHasNameBlurred(true)}
               placeholder="e.g. Build the login form"
               value={name}
@@ -151,7 +149,12 @@ const CreateTaskForm = ({
               className="mt-2 min-h-28 w-full resize-y rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10"
               id={descriptionId}
               maxLength={2000}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(event) => {
+                const nextDescription = event.target.value
+
+                setDescription(nextDescription)
+                onFormChange?.({ description: nextDescription, isVisible, name, state })
+              }}
               placeholder="Add context or a definition of done"
               value={description}
             />
@@ -165,7 +168,12 @@ const CreateTaskForm = ({
               <select
                 className="mt-2 h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm text-text-strong outline-none focus:border-focus focus:ring-4 focus:ring-focus/10"
                 id={stateId}
-                onChange={(event) => setState(event.target.value as ApiTaskState)}
+                onChange={(event) => {
+                  const nextState = event.target.value as ApiTaskState
+
+                  setState(nextState)
+                  onFormChange?.({ description, isVisible, name, state: nextState })
+                }}
                 value={state}
               >
                 {taskStates.map((taskState) => (
@@ -180,26 +188,18 @@ const CreateTaskForm = ({
               <input
                 checked={isVisible}
                 className="size-4 rounded border-border-strong text-primary focus:ring-focus"
-                onChange={(event) => setIsVisible(event.target.checked)}
+                onChange={(event) => {
+                  const nextIsVisible = event.target.checked
+
+                  setIsVisible(nextIsVisible)
+                  onFormChange?.({ description, isVisible: nextIsVisible, name, state })
+                }}
                 type="checkbox"
               />
               Visible task
             </label>
           </div>
         </div>
-
-        {(!embedded || onCancel) && (
-          <footer className="flex flex-wrap justify-end gap-3 border-t border-border pt-5">
-            <Button
-              buttonSize="normal"
-              color="neutral"
-              label="Cancel"
-              onClick={onCancel}
-              type="button"
-              variant="outlined"
-            />
-          </footer>
-        )}
       </section>
     </form>
   )

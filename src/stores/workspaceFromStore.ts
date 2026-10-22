@@ -40,8 +40,11 @@ export const initFolderForm: FolderFormValues = {
 export const initTaskState = {
   createTaskForm: [] as TaskFormValues[],
   formErrors: {} as Record<string, TaskFormErrors>,
+  formValidity: {} as Record<string, boolean>,
   isValid: false,
-  isSubmitting: false
+  isSubmitting: false,
+  activeFormId: null as string | null,
+  isValidating: false
 }
 
 export const initFolderState = {
@@ -58,14 +61,20 @@ export const initFolderState = {
 interface CreateTaskFormState {
   createTaskForm: TaskFormValues[]
   formErrors: Record<string, TaskFormErrors>
+  formValidity: Record<string, boolean>
   isValid: boolean
   isSubmitting: boolean
+  activeFormId: string | null
+  isValidating: boolean
 
   setCreateTaskForm: (forms: TaskFormValues[]) => void
   setFormErrors: (errors: Record<string, TaskFormErrors>) => void
+  setFormValidity: (validity: Record<string, boolean>) => void
   setIsValid: (isValid: boolean) => void
   setIsSubmitting: (isSubmitting: boolean) => void
   setResetTaskForm: () => void
+  setActiveFormId: (id: string | null) => void
+  setIsValidating: (isValidating: boolean) => void
 }
 
 export const useCreateTaskForm = create<CreateTaskFormState>((set) => ({
@@ -73,9 +82,12 @@ export const useCreateTaskForm = create<CreateTaskFormState>((set) => ({
 
   setCreateTaskForm: (forms) => set({ createTaskForm: forms }),
   setFormErrors: (errors) => set({ formErrors: errors }),
+  setFormValidity: (validity) => set({ formValidity: validity }),
   setIsValid: (isValid) => set({ isValid }),
   setIsSubmitting: (isSubmitting) => set({ isSubmitting }),
-  setResetTaskForm: () => set({ ...initTaskState })
+  setResetTaskForm: () => set({ ...initTaskState }),
+  setActiveFormId: (id: string | null) => set({ activeFormId: id }),
+  setIsValidating: (isValidating: boolean) => set({ isValidating })
 }))
 
 // Folder store
