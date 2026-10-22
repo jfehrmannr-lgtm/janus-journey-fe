@@ -1,4 +1,5 @@
 import CreateTaskView from '@/layout/WorkSidebar/DetailedJourney/CreateTaskView'
+import { createTaskAction } from './actions'
 
 interface JourneyPageCreateTaskProps {
   params: Promise<{
@@ -9,7 +10,7 @@ interface JourneyPageCreateTaskProps {
 const JourneyPageCreateTask = async ({ params }: JourneyPageCreateTaskProps) => {
   const { journeyId } = await params
 
-  return <CreateTaskView journeyId={journeyId} />
+  return <CreateTaskView actions={{ createTaskAction }} journeyId={journeyId} />
 }
 
 export default JourneyPageCreateTask

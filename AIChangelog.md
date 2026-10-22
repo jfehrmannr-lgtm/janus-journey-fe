@@ -1,5 +1,24 @@
 ## 2026-10-22
 
+### #JANUS-FE-0093: Add Task State Select Icons
+
+**Work**: Polish / Task Forms; Added shared state icons to Task state `SelectOption` entries.
+
+- Applied consistent pending, in-progress, paused, completed, and discarded icons to both controlled Task form variants.
+- Preserved the existing state values, labels, change handlers, and SelectOption behavior.
+
+## 2026-10-22
+
+### #JANUS-FE-0092: Implement Bulk Task Workspaces
+
+**Work**: Integrate / Task Workspace; Connected Journey and Folder Task workspaces to the authenticated BFF bulk Task action flow.
+
+- Added route-local authenticated Task bulk Server Actions using the verified `POST /journeys/tasks/bulk` contract.
+- Organized both workspaces into container, actions, body, and custom hook components while preserving existing validation, styling, and cleanup behavior.
+- Added mutation loading/error handling, parent-specific `setQueryData` cache updates, and success navigation without invalidation or refetching.
+
+## 2026-10-22
+
 ### #JANUS-FE-0091: Mutate and Navigate Folder Creation
 
 **Work**: Integrate / Folder Workspace; Replaced manual bulk Folder submission state handling with TanStack Query mutation lifecycle management.

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type SubmitEvent } from 'react'
+import { useState, type ReactNode, type SubmitEvent } from 'react'
 import Icon from '@/components/Icon/Icon'
 import Input from '@/components/Input/Input'
 import InputCheck from '@/components/InputCheck/InputCheck'
@@ -27,12 +27,12 @@ interface CreateTaskFormProps {
   }
 }
 
-const taskStates: Array<{ label: string; value: ApiTaskState }> = [
-  { label: 'Pending', value: 'pending' },
-  { label: 'In progress', value: 'in-progress' },
-  { label: 'In pause', value: 'in-pause' },
-  { label: 'Completed', value: 'completed' },
-  { label: 'Discarded', value: 'discarded' }
+const taskStates: Array<{ icon: ReactNode; label: string; value: ApiTaskState }> = [
+  { icon: <Icon icon="ClockCircleOutlined" />, label: 'Pending', value: 'pending' },
+  { icon: <Icon icon="SyncOutlined" />, label: 'In progress', value: 'in-progress' },
+  { icon: <Icon icon="PauseCircleOutlined" />, label: 'In pause', value: 'in-pause' },
+  { icon: <Icon icon="CheckCircleOutlined" />, label: 'Completed', value: 'completed' },
+  { icon: <Icon icon="CloseCircleOutlined" />, label: 'Discarded', value: 'discarded' }
 ]
 
 /**

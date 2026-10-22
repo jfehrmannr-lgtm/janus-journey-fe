@@ -1,6 +1,6 @@
 'use client'
 
-import type { ChangeEvent } from 'react'
+import type { ChangeEvent, ReactNode } from 'react'
 
 import Icon from '@/components/Icon/Icon'
 import Input from '@/components/Input/Input'
@@ -16,7 +16,13 @@ interface TaskFormProps {
   task: CreateJourneyTaskDraft
 }
 
-const taskStates: CreateJourneyTaskState[] = ['pending', 'in-progress', 'in-pause', 'completed', 'discarded']
+const taskStates: Array<{ label: string; value: CreateJourneyTaskState; icon: ReactNode }> = [
+  { icon: <Icon icon="ClockCircleOutlined" />, label: 'Pending', value: 'pending' },
+  { icon: <Icon icon="SyncOutlined" />, label: 'In progress', value: 'in-progress' },
+  { icon: <Icon icon="PauseCircleOutlined" />, label: 'In pause', value: 'in-pause' },
+  { icon: <Icon icon="CheckCircleOutlined" />, label: 'Completed', value: 'completed' },
+  { icon: <Icon icon="CloseCircleOutlined" />, label: 'Discarded', value: 'discarded' }
+]
 
 /**
  * Renders one controlled Task editor for a root or Folder Task.
@@ -78,7 +84,7 @@ const TaskForm = ({ label = 'Task', onChange, onRemove, removeLabel = 'Remove Ta
           className="h-10"
           isSearchable={false}
           onChange={(event) => onChange({ ...task, state: event.target.value as CreateJourneyTaskState })}
-          options={taskStates.map((state) => ({ label: state, value: state }))}
+          options={taskStates}
           value={task.state}
         />
         <InputCheck

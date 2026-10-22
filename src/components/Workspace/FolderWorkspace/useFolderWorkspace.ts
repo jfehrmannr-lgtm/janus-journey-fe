@@ -42,7 +42,7 @@ const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspac
     },
     onMutate: () => ({ toastId: toast.loading('Creating Folders...') }),
     onSuccess: (response, _payload, context) => {
-      const createdFolders = response.payload.map((folder) => ({
+      const createdFolders: ApiFolderWithTasks[] = response.payload.map((folder) => ({
         ...folder,
         tasks: []
       }))

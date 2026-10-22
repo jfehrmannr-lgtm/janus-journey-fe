@@ -1,7 +1,22 @@
 'use server'
 
-import { ApiTask } from '@/types/resource-api.type'
+import { headers } from 'next/headers'
 
-export const createFolderAction = async (): Promise<ApiTask> => {
-  return {} as ApiTask
+import { auth } from '@/services/auth'
+import { requestServerBffWithToken } from '@/services/serverBffClient'
+import type { CreateTaskBulkPayload, CreateTaskBulkResponse } from '@/types/task-api.type'
+
+export const createTaskAction = async (payload: CreateTaskBulkPayload): Promise<CreateTaskBulkResponse> => {
+  const { token } = await auth.api.getToken({
+    headers: await headers()
+  })
+
+  if (!token) {
+    throw new Error('Unauthorized')
+  }
+
+  return requestServerBffWithToken<CreateTaskBulkResponse>('/journeys/tasks/bulk', token, {
+    body: JSON.stringify(payload),
+    method: 'POST'
+  })
 }

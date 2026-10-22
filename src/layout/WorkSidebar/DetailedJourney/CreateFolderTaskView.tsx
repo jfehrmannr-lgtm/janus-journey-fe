@@ -1,16 +1,17 @@
 'use client'
 
-import FolderTaskWorkspace from '@/components/Workspace/FolderTaskWorkspace'
+import FolderTaskWorkspace from '@/components/Workspace/FolderTaskWorkspace/FolderTaskWorkspace'
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import { useQueryClient } from '@tanstack/react-query'
-import type { ApiFolderWithTasks, ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { CreateTaskBulkPayload, CreateTaskBulkResponse } from '@/types/task-api.type'
 
 interface CreateFolderTaskViewProps {
   folderId: string
   journeyId: string
   actions: {
-    createFolderTaskAction: () => Promise<ApiFolderWithTasks>
+    createFolderTaskAction: (payload: CreateTaskBulkPayload) => Promise<CreateTaskBulkResponse>
   }
 }
 
@@ -36,6 +37,7 @@ const CreateFolderTaskView = ({ folderId, journeyId, actions }: CreateFolderTask
     <FolderTaskWorkspace
       actions={actions}
       folder={folder}
+      journeyId={journeyId}
       returnHref={`/dashboard/home/journey/${encodeURIComponent(journeyId)}`}
     />
   )
