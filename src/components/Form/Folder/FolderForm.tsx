@@ -63,19 +63,15 @@ const FolderForm = ({ folder, folderIndex, onChange, onRemove }: FolderFormProps
           placeholder="e.g. HTML and CSS"
           value={folder.name}
         />
-        <label
-          className="grid gap-2 text-sm font-medium text-text-strong"
-          htmlFor={`folder-description-${folder.clientId}`}
-        >
-          Folder description
-          <textarea
-            className="min-h-20 resize-y rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10"
-            id={`folder-description-${folder.clientId}`}
-            onChange={(event) => onChange({ ...folder, description: event.target.value })}
-            placeholder="Optional Folder description"
-            value={folder.description}
-          />
-        </label>
+        <Input
+          className="min-h-20"
+          id={`folder-description-${folder.clientId}`}
+          label="Folder description"
+          onChange={(event) => onChange({ ...folder, description: event.target.value })}
+          placeholder="Optional Folder description"
+          type="textarea"
+          value={folder.description}
+        />
       </div>
 
       <div className="mt-5 space-y-3 border-t border-border-subtle pt-4">

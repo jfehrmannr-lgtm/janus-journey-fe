@@ -63,13 +63,16 @@ const TaskForm = ({ label = 'Task', onChange, onRemove, removeLabel = 'Remove Ta
             value={task.name}
           />
         </div>
-        <textarea
-          aria-label={`${label} description`}
-          className="min-h-20 resize-y rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10 sm:col-span-2"
-          onChange={handleTextChange('description')}
-          placeholder="Optional Task description"
-          value={task.description}
-        />
+        <div className="sm:col-span-2">
+          <Input
+            aria-label={`${label} description`}
+            className="min-h-20"
+            onChange={handleTextChange('description')}
+            placeholder="Optional Task description"
+            type="textarea"
+            value={task.description}
+          />
+        </div>
         <SelectOption
           aria-label={`${label} state`}
           className="h-10"

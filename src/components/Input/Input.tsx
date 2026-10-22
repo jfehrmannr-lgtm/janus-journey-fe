@@ -11,11 +11,11 @@ export interface InputProps extends Omit<ComponentProps<'input'>, 'onChange' | '
   label?: ReactNode
   onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   sideIcon?: 'left' | 'right'
-  type?: ComponentProps<'input'>['type'] | 'text-area'
+  type?: ComponentProps<'input'>['type'] | 'text-area' | 'textarea'
 }
 
 /**
- * Renders a reusable semantic text input with Janus Journey's standard field styling.
+ * Renders a reusable semantic input or textarea with Janus Journey's standard field styling.
  *
  * @param error - Optional validation message displayed below the input.
  * @param helperText - Optional supporting text displayed below the input.
@@ -47,7 +47,7 @@ const Input = ({
   const helperId = inputId ? `${inputId}-helper` : undefined
   const errorId = inputId ? `${inputId}-error` : undefined
   const isPassword = type === 'password'
-  const isTextArea = type === 'text-area'
+  const isTextArea = type === 'text-area' || type === 'textarea'
   const inputType = isPassword && isPasswordVisible ? 'text' : type
   const hasLeftIcon = icon !== undefined && sideIcon === 'left'
   const hasRightIcon = icon !== undefined && sideIcon === 'right'

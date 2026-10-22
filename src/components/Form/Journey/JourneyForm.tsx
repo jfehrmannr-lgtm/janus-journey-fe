@@ -138,18 +138,16 @@ const JourneyForm = ({ cancelHref = '/dashboard/home', onSubmit }: JourneyFormPr
             required
             value={formState.name}
           />
-          <label className="grid gap-2 text-sm font-medium text-text-strong" htmlFor="journey-description">
-            Description
-            <textarea
-              className="min-h-24 resize-y rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10"
-              id="journey-description"
-              onChange={(event) =>
-                updateFormState((currentState) => ({ ...currentState, description: event.target.value }))
-              }
-              placeholder="Describe what this Journey will help you accomplish."
-              value={formState.description}
-            />
-          </label>
+          <Input
+            id="journey-description"
+            label="Description"
+            onChange={(event) =>
+              updateFormState((currentState) => ({ ...currentState, description: event.target.value }))
+            }
+            placeholder="Describe what this Journey will help you accomplish."
+            type="textarea"
+            value={formState.description}
+          />
         </div>
       </section>
 

@@ -47,11 +47,11 @@ const InputPlayground = () => {
           </div>
           <div className="space-y-3 rounded-xl border border-border bg-surface-page p-5">
             <Input
-              helperText="Text-area mode renders a native textarea element."
+              helperText="Textarea mode renders a native textarea element."
               label="Description"
               name="description"
               placeholder="Add more context"
-              type="text-area"
+              type="textarea"
             />
             <p className="text-sm text-text-muted">Multiline text input using the shared component styling.</p>
           </div>

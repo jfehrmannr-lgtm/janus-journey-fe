@@ -134,12 +134,14 @@ const CreateTaskForm = ({
           </div>
 
           <div>
-            <label className="text-sm font-semibold text-text-body" htmlFor={descriptionId}>
-              Description <span className="font-normal text-text-muted">(optional)</span>
-            </label>
-            <textarea
-              className="mt-2 min-h-28 w-full resize-y rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10"
+            <Input
+              className="mt-2"
               id={descriptionId}
+              label={
+                <>
+                  Description <span className="font-normal text-text-muted">(optional)</span>
+                </>
+              }
               maxLength={2000}
               onChange={(event) => {
                 const nextDescription = event.target.value
@@ -148,6 +150,7 @@ const CreateTaskForm = ({
                 onFormChange?.({ description: nextDescription, isVisible, name, state })
               }}
               placeholder="Add context or a definition of done"
+              type="textarea"
               value={description}
             />
           </div>
