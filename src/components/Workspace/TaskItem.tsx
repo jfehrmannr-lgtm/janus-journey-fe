@@ -3,6 +3,7 @@ import type { KeyboardEvent, ReactNode } from 'react'
 import Icon, { type IconName } from '@/components/Icon/Icon'
 import type { ApiTask, ApiTaskState } from '@/types/resource-api.type'
 import type { TaskFormValues } from '@/stores/workspaceFromStore'
+import Button from '../Button/Button'
 
 interface TaskItemBaseProps {
   children?: ReactNode
@@ -50,14 +51,14 @@ const TaskItem = (props: TaskItemProps) => {
   const task = persistedProps?.task
   const pendingTask = pendingProps?.pendingTask
   const taskName = pendingTask?.name || task?.name || 'New Task'
-  const stateStyle = task ? taskStateStyles[task.state] : taskStateStyles.pending
+  const stateStyle = taskStateStyles[task?.state ?? pendingTask?.state ?? 'pending']
   const rowClassName = isPendingTask
     ? pendingProps?.isInvalid
       ? 'bg-danger-surface'
       : pendingProps?.isValid
         ? 'bg-task-completed'
-        : 'bg-surface'
-    : 'bg-surface'
+        : ''
+    : ''
 
   const handlePendingKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== 'Enter' && event.key !== ' ') return
@@ -83,17 +84,20 @@ const TaskItem = (props: TaskItemProps) => {
         tabIndex={0}
       >
         {content}
-        <button
-          aria-label={`Remove ${taskName}`}
-          className="shrink-0 rounded-lg p-1 text-text-subtle transition-colors hover:bg-danger-surface hover:text-danger-foreground focus:outline-none focus:ring-4 focus:ring-focus/20"
+        <Button
+          buttonSize="thin"
+          className="shrink-0 text-text-subtle transition-colors hover:text-text-body"
+          color="neutral"
+          icon={<Icon icon="DeleteOutlined" />}
           onClick={(event) => {
             event.stopPropagation()
             pendingProps?.onRemove()
           }}
+          size="nm"
+          title={`Remove ${taskName}`}
           type="button"
-        >
-          <Icon icon="DeleteOutlined" />
-        </button>
+          variant="outlined"
+        />
       </div>
     )
   }

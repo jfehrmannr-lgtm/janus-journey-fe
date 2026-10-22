@@ -141,18 +141,30 @@ const TaskWorkspace = ({ tasks, returnHref }: TaskWorkspaceProps) => {
           <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Task workspace</p>
           <h2 className="truncate text-sm font-semibold text-text-primary">Create Task</h2>
         </div>
-        <Button
-          buttonSize="normal"
-          className="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white disabled:opacity-50"
-          color="primary"
-          disabled={!canSaveChanges}
-          label="Save Changes"
-          onClick={() => console.log(createTaskForm)}
-          size="nm"
-          title={canSaveChanges ? 'Save the current Task forms' : 'Complete all Task forms before saving'}
-          type="button"
-          variant="filled"
-        />
+        <div className="flex shrink-0 items-center gap-3">
+          <Button
+            buttonSize="normal"
+            className="rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white disabled:opacity-50"
+            color="primary"
+            disabled={!canSaveChanges}
+            label="Save Changes"
+            onClick={() => console.log(createTaskForm)}
+            size="nm"
+            title={canSaveChanges ? 'Save the current Task forms' : 'Complete all Task forms before saving'}
+            type="button"
+            variant="filled"
+          />
+          <Link href={returnHref} scroll={false}>
+            <Button
+              buttonSize="normal"
+              color="neutral"
+              icon={<Icon icon="AppstoreOutlined" />}
+              label="Return"
+              type="button"
+              variant="outlined"
+            />
+          </Link>
+        </div>
       </header>
 
       <section className="px-5 py-5">
@@ -173,7 +185,7 @@ const TaskWorkspace = ({ tasks, returnHref }: TaskWorkspaceProps) => {
             />
           </div>
           {createTaskForm.map((form) => (
-            <div className="mx-3 mt-3" key={form.id}>
+            <div key={form.id}>
               <TaskItem
                 isInvalid={Boolean(formErrors[form.id] && Object.keys(formErrors[form.id]).length > 0)}
                 isValid={formValidity[form.id] === true}
@@ -207,13 +219,6 @@ const TaskWorkspace = ({ tasks, returnHref }: TaskWorkspaceProps) => {
             <TaskItem key={task.uid} task={task} />
           ))}
         </div>
-        <Link
-          className="mt-4 inline-block text-sm font-semibold text-primary hover:underline"
-          href={returnHref}
-          scroll={false}
-        >
-          Cancel and return to Journey
-        </Link>
       </section>
     </div>
   )
