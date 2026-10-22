@@ -1,6 +1,5 @@
 'use client'
 
-import type { CSSProperties } from 'react'
 import { isValidElement, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import Portal from '@/components/Portal/Portal'
@@ -14,11 +13,6 @@ const placementGap = 8
 const closeAnimationDuration = 150
 const focusableSelector =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-
-const toPixels = (value: CSSProperties['width'] | CSSProperties['maxHeight'] | undefined, fallback: number) => {
-  if (typeof value === 'number') return `${value}px`
-  return value ?? `${fallback}px`
-}
 
 const clamp = (value: number, minimum: number, maximum: number) => Math.min(Math.max(value, minimum), maximum)
 
