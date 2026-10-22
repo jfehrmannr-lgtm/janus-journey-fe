@@ -3,13 +3,14 @@
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
 import FolderWorkspace from '@/components/Workspace/FolderWorkspace'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
-import type { ApiFolder, ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { CreateFolderBulkPayload, CreateFolderBulkResponse } from '@/types/folder-api.type'
 import { useQueryClient } from '@tanstack/react-query'
 
 interface CreateFolderViewProps {
   journeyId: string
   actions: {
-    createFolderAction: () => Promise<ApiFolder>
+    createFolderAction: (payload: CreateFolderBulkPayload) => Promise<CreateFolderBulkResponse>
   }
 }
 
@@ -32,6 +33,7 @@ const CreateFolderView = ({ journeyId, actions }: CreateFolderViewProps) => {
   return (
     <FolderWorkspace
       folders={journey.folders}
+      journeyId={journeyId}
       reference={{ name: journey.name, type: 'journey' }}
       returnHref={`/dashboard/home/journey/${encodeURIComponent(journeyId)}`}
       actions={actions}

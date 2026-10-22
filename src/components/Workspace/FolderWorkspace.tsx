@@ -2,35 +2,40 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import Button from '@/components/Button/Button'
 import CreateFolderForm from '@/components/Form/Folder/CreateFolderForm'
 import Icon from '@/components/Icon/Icon'
 import FolderItem from '@/components/Workspace/FolderItem'
 import { initFolderForm, useCreateFolderForm, type FolderFormValues } from '@/stores/workspaceFromStore'
+import type { CreateFolderBulkPayload, CreateFolderBulkResponse } from '@/types/folder-api.type'
 import type { ApiFolder, ApiFolderWithTasks } from '@/types/resource-api.type'
 
 interface FolderWorkspaceProps {
   folders: ApiFolder[]
+  journeyId: string
   reference?: {
     name: string
     type: 'journey' | 'folder' | 'user'
   }
   returnHref: string
   actions: {
-    createFolderAction?: () => Promise<ApiFolder>
+    createFolderAction: (payload: CreateFolderBulkPayload) => Promise<CreateFolderBulkResponse>
   }
 }
 
 /**
  * Renders the shared Folder workspace.
  *
+ * @param actions - Server Actions used to submit the pending Folder batch.
  * @param folders - Sibling Folders already resolved by the parent container.
+ * @param journeyId - Journey UID used as the parent for created Folders.
  * @param reference - Optional parent resource displayed in the Folder form.
  * @param returnHref - Destination used by the cancel navigation.
  * @returns The Folder workspace presentation and navigation.
  */
-const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProps) => {
+const FolderWorkspace = ({ actions, folders, journeyId, reference, returnHref }: FolderWorkspaceProps) => {
   const [isFolderFormOpen, setIsFolderFormOpen] = useState(false)
   const [folderStore] = useState(() => useCreateFolderForm.getState())
   const validationTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>())
@@ -146,6 +151,28 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
     setIsFolderFormOpen(true)
   }
 
+  const handleSaveChanges = async () => {
+    if (!canSaveChanges) return
+
+    const currentStore = useCreateFolderForm.getState()
+    const payload: CreateFolderBulkPayload = currentStore.createFolderForm.map((form) => ({
+      description: form.description.trim() || null,
+      name: form.name.trim(),
+      parent: { type: 'journey', uid: journeyId }
+    }))
+
+    currentStore.setIsSubmitting(true)
+
+    try {
+      await actions.createFolderAction(payload)
+      toast.success('Folders created successfully.')
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Failed to create Folders.')
+    } finally {
+      useCreateFolderForm.getState().setIsSubmitting(false)
+    }
+  }
+
   return (
     <div>
       <header className="flex items-center justify-between gap-4 border-b border-border px-5 py-4">
@@ -160,7 +187,7 @@ const FolderWorkspace = ({ folders, reference, returnHref }: FolderWorkspaceProp
             color="primary"
             disabled={!canSaveChanges}
             label="Save Changes"
-            onClick={() => console.log(createFolderForm)}
+            onClick={handleSaveChanges}
             size="nm"
             title={canSaveChanges ? 'Save the current Folder forms' : 'Complete all Folder forms before saving'}
             type="button"
