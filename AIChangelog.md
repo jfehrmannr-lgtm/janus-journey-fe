@@ -1,5 +1,34 @@
 ## 2026-10-22
 
+### #JANUS-FE-0099: Use Shared Buttons in Journey Options
+
+**Work**: Refactor / Journey UI; Replaced Journey Options action markup with the shared Button component.
+
+- Preserved action labels, icons, alignment, destructive styling, and non-functional behavior.
+- Reused the existing Button focus, sizing, and interaction conventions without changing Journey Options logic.
+
+## 2026-10-22
+
+### #JANUS-FE-0098: Integrate Journey Options Header Menu
+
+**Work**: Integrate / Journey Workspace; Connected the existing Journey header overflow control to the reusable Journey Options interface.
+
+- Reused the shared Dropdown and JourneyOptions components with the selected Journey name.
+- Preserved the existing header placement and left folder/task overflow controls unchanged.
+- Kept all Journey Options actions presentational and non-functional.
+
+## 2026-10-22
+
+### #JANUS-FE-0097: Add Journey Options UI
+
+**Work**: Build / Journey UI; Added a presentational Journey Options panel for an existing Journey.
+
+- Added Journey name context, overflow control, Edit, Select Resources, Share, and separated destructive Delete actions.
+- Reused shared Button and Icon components with existing surface, border, focus, and destructive design tokens.
+- Kept all actions non-functional and introduced no navigation, API integration, dialogs, or state mutations.
+
+## 2026-10-22
+
 ### #JANUS-FE-0096: Extract Dropdown Types
 
 **Work**: Refactor / Shared UI; Moved Dropdown public and positioning types into the dedicated `Dropdown.type.ts` module.

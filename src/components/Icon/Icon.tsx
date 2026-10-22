@@ -12,6 +12,7 @@ import {
   CloseOutlined,
   DeleteOutlined,
   DownOutlined,
+  EditOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
   EllipsisOutlined,
@@ -28,6 +29,7 @@ import {
   PlusOutlined,
   RightOutlined,
   SearchOutlined,
+  ShareAltOutlined,
   SettingOutlined,
   StarOutlined,
   SyncOutlined,
@@ -48,6 +50,7 @@ const iconComponents = {
   CloseOutlined,
   DeleteOutlined,
   DownOutlined,
+  EditOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
   EllipsisOutlined,
@@ -64,6 +67,7 @@ const iconComponents = {
   PlusOutlined,
   RightOutlined,
   SearchOutlined,
+  ShareAltOutlined,
   SettingOutlined,
   StarOutlined,
   SyncOutlined,
@@ -84,6 +88,7 @@ export type IconName =
   | 'CloseOutlined'
   | 'DeleteOutlined'
   | 'DownOutlined'
+  | 'EditOutlined'
   | 'EyeInvisibleOutlined'
   | 'EyeOutlined'
   | 'EllipsisOutlined'
@@ -100,6 +105,7 @@ export type IconName =
   | 'PlusOutlined'
   | 'RightOutlined'
   | 'SearchOutlined'
+  | 'ShareAltOutlined'
   | 'SettingOutlined'
   | 'StarOutlined'
   | 'SyncOutlined'

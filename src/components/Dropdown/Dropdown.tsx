@@ -201,14 +201,12 @@ const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigge
         <Portal>
           <div
             aria-hidden={!isOpen}
-            className={`fixed z-50 overflow-y-auto rounded-xl border border-border bg-surface p-2 shadow-xl ${isClosing ? 'dropdown-fade-out' : 'dropdown-fade-in'} ${position ? 'opacity-100' : 'opacity-0'}`}
+            className={`fixed z-60 overflow-y-auto rounded-xl border border-border bg-surface p-2 shadow-xs ${isClosing ? 'dropdown-fade-out' : 'dropdown-fade-in'} ${position ? 'opacity-100' : 'opacity-0'}`}
             ref={dropdownRef}
             role="region"
             style={{
               left: position?.left ?? 0,
-              maxHeight: toPixels(maxHeight, 320),
-              top: position?.top ?? 0,
-              width: toPixels(width, 240)
+              top: position?.top ?? 0
             }}
           >
             {contentNode}
