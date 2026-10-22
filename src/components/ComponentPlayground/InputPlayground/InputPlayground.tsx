@@ -110,7 +110,7 @@ const InputPlayground = () => {
           <div className="space-y-3 rounded-xl border border-border bg-surface-page p-5">
             <SelectOption
               defaultValue="in-progress"
-              isSercheable={false}
+              isSearchable={false}
               name="task-state"
               options={[
                 { icon: <Icon icon="ClockCircleOutlined" />, label: 'Pending', value: 'pending' },
@@ -125,7 +125,7 @@ const InputPlayground = () => {
             <SelectOption
               defaultValue="in-progress"
               isError
-              isSercheable={false}
+              isSearchable={false}
               name="error-task-state"
               options={[
                 { icon: <Icon icon="ClockCircleOutlined" />, label: 'Pending', value: 'pending' },

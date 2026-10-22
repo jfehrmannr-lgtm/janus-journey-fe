@@ -3,6 +3,8 @@
 import type { ChangeEvent } from 'react'
 
 import Icon from '@/components/Icon/Icon'
+import Input from '@/components/Input/Input'
+import SelectOption from '@/components/SelectOption/SelectOption'
 import type { CreateJourneyTaskDraft, CreateJourneyTaskState } from '@/types/createJourney'
 
 interface TaskFormProps {
@@ -50,14 +52,16 @@ const TaskForm = ({ label = 'Task', onChange, onRemove, removeLabel = 'Remove Ta
         )}
       </div>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
-        <input
-          aria-label={`${label} name`}
-          className="h-10 rounded-lg border border-border bg-surface px-3 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10 sm:col-span-2"
-          maxLength={255}
-          onChange={handleTextChange('name')}
-          placeholder="Task name"
-          value={task.name}
-        />
+        <div className="sm:col-span-2">
+          <Input
+            aria-label={`${label} name`}
+            className="h-10"
+            maxLength={255}
+            onChange={handleTextChange('name')}
+            placeholder="Task name"
+            value={task.name}
+          />
+        </div>
         <textarea
           aria-label={`${label} description`}
           className="min-h-20 resize-y rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10 sm:col-span-2"
@@ -65,18 +69,14 @@ const TaskForm = ({ label = 'Task', onChange, onRemove, removeLabel = 'Remove Ta
           placeholder="Optional Task description"
           value={task.description}
         />
-        <select
+        <SelectOption
           aria-label={`${label} state`}
-          className="h-10 rounded-lg border border-border bg-surface px-3 text-sm text-text-strong outline-none focus:border-focus focus:ring-4 focus:ring-focus/10"
+          className="h-10"
+          isSearchable={false}
           onChange={(event) => onChange({ ...task, state: event.target.value as CreateJourneyTaskState })}
+          options={taskStates.map((state) => ({ label: state, value: state }))}
           value={task.state}
-        >
-          {taskStates.map((state) => (
-            <option key={state} value={state}>
-              {state}
-            </option>
-          ))}
-        </select>
+        />
         <label className="flex h-10 items-center gap-2 text-sm text-text-body">
           <input
             checked={task.isVisible}

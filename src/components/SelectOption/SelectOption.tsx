@@ -24,6 +24,7 @@ const dropdownMaxHeight = 300
  * @param enableUnselected Whether the dropdown includes a no-selection option.
  * @param isClereable Whether a selected option can be cleared.
  * @param isError Whether to render the selector in its error state.
+ * @param isSearchable Whether the open selector filters options as the user types.
  * @param isSercheable Whether the open selector filters options as the user types.
  * @param placeholder Placeholder displayed when no option is selected.
  * @param ref Ref forwarded to the underlying input.
@@ -39,6 +40,7 @@ const SelectOption = ({
   enableUnselected = false,
   isClereable = false,
   isError = false,
+  isSearchable,
   isSercheable = true,
   placeholder,
   ref,
@@ -54,9 +56,10 @@ const SelectOption = ({
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const currentSelectedValue = value ?? selectedValue
+  const searchable = isSearchable ?? isSercheable
   const selectedOption = options.find((option) => option.value === currentSelectedValue)
   const availableOptions = enableUnselected ? [{ label: 'No selection', value: '' }, ...options] : options
-  const filteredOptions = isSercheable
+  const filteredOptions = searchable
     ? availableOptions.filter((option) => option.label.toLowerCase().includes(searchText.toLowerCase()))
     : availableOptions
 
@@ -159,7 +162,7 @@ const SelectOption = ({
   }
 
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    if (isOpen && isSercheable) {
+    if (isOpen && searchable) {
       setSearchText(event.target.value)
     }
   }
@@ -178,7 +181,7 @@ const SelectOption = ({
         sideIcon="left"
         aria-invalid={isError || inputProps['aria-invalid']}
         className={`${isClereable ? 'pr-16' : 'pr-10'} ${className} cursor-pointer ${isOpen ? 'border-focus ring-2 ring-focus/40' : ''} ${isError ? 'border-danger-foreground focus:border-danger-foreground' : ''}`}
-        readOnly={!isOpen || !isSercheable}
+        readOnly={!isOpen || !searchable}
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"

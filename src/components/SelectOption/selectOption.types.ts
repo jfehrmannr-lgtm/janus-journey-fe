@@ -19,6 +19,7 @@ export interface SelectOptionProps extends Omit<
   enableUnselected?: boolean
   isClereable?: boolean
   isError?: boolean
+  isSearchable?: boolean
   isSercheable?: boolean
   placeholder?: string
   ref?: Ref<HTMLInputElement>

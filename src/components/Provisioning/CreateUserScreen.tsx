@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { authClient } from '@/services/authClient'
+import Input from '@/components/Input/Input'
 import { BffRequestError } from '@/services/bffClient'
 import { createUser } from '@/services/userService'
 import useJanusAuthStore from '@/stores/janusAuthStore'
@@ -137,16 +138,13 @@ const CreateUserScreen = () => {
             <p className="mt-1 text-sm text-slate-800">{sessionUser?.email ?? 'Unavailable'}</p>
           </div>
 
-          <label className="block text-sm font-semibold text-slate-800" htmlFor="janus-username">
-            Username
-            <input
-              className="mt-2 h-11 w-full rounded-lg border border-slate-200 px-3 text-sm font-normal text-slate-900 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
-              id="janus-username"
-              onChange={(event) => setUsername(event.target.value)}
-              placeholder={sessionUser?.name ?? 'Choose a username'}
-              value={username ?? ''}
-            />
-          </label>
+          <Input
+            id="janus-username"
+            label="Username"
+            onChange={(event) => setUsername(event.target.value)}
+            placeholder={sessionUser?.name ?? 'Choose a username'}
+            value={username ?? ''}
+          />
         </div>
 
         <label className="mt-6 flex items-start gap-3 text-sm text-slate-600" htmlFor="janus-account-confirmation">

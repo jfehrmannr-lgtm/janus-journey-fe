@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 
-import Icon from '@/components/Icon/Icon'
+import Input from '@/components/Input/Input'
 
 /**
  * Renders the login form with Better Auth Google sign-in.
@@ -11,7 +11,6 @@ import Icon from '@/components/Icon/Icon'
  * @returns The login form card content.
  */
 const LoginForm = () => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -69,39 +68,16 @@ const LoginForm = () => {
       {errorMessage && <p className="mt-4 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">{errorMessage}</p>}
 
       <div className="space-y-5">
-        <label className="block text-sm font-semibold text-slate-800" htmlFor="email">
-          Email
-          <input
-            autoComplete="email"
-            className="mt-2 h-12 w-full rounded-lg border border-slate-200 bg-white px-3.5 text-sm font-normal text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
-            id="email"
-            name="email"
-            placeholder="you@example.com"
-            type="email"
-          />
-        </label>
+        <Input autoComplete="email" id="email" label="Email" name="email" placeholder="you@example.com" type="email" />
 
-        <label className="block text-sm font-semibold text-slate-800" htmlFor="password">
-          Password
-          <span className="relative mt-2 block">
-            <input
-              autoComplete="current-password"
-              className="h-12 w-full rounded-lg border border-slate-200 bg-white px-3.5 pr-11 text-sm font-normal text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
-              id="password"
-              name="password"
-              placeholder="•••••••••"
-              type={isPasswordVisible ? 'text' : 'password'}
-            />
-            <button
-              aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
-              className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 transition-colors hover:text-slate-700"
-              onClick={() => setIsPasswordVisible((visible) => !visible)}
-              type="button"
-            >
-              {isPasswordVisible ? <Icon icon="EyeInvisibleOutlined" /> : <Icon icon="EyeOutlined" />}
-            </button>
-          </span>
-        </label>
+        <Input
+          autoComplete="current-password"
+          id="password"
+          label="Password"
+          name="password"
+          placeholder="•••••••••"
+          type="password"
+        />
       </div>
 
       <div className="mt-5 flex items-center justify-between gap-4 text-sm">

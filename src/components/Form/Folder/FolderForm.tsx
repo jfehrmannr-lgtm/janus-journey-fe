@@ -2,6 +2,7 @@
 
 import Icon from '@/components/Icon/Icon'
 import TaskForm from '@/components/Form/Task/TaskForm'
+import Input from '@/components/Input/Input'
 import type { CreateJourneyFolderDraft, CreateJourneyTaskDraft } from '@/types/createJourney'
 import { createEmptyTask } from '@/utils/createJourneyPayload'
 
@@ -53,17 +54,15 @@ const FolderForm = ({ folder, folderIndex, onChange, onRemove }: FolderFormProps
       </div>
 
       <div className="mt-4 grid gap-4">
-        <label className="grid gap-2 text-sm font-medium text-text-strong" htmlFor={`folder-name-${folder.clientId}`}>
-          Folder name
-          <input
-            className="h-10 rounded-lg border border-border bg-surface px-3 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10"
-            id={`folder-name-${folder.clientId}`}
-            maxLength={255}
-            onChange={(event) => onChange({ ...folder, name: event.target.value })}
-            placeholder="e.g. HTML and CSS"
-            value={folder.name}
-          />
-        </label>
+        <Input
+          className="h-10"
+          id={`folder-name-${folder.clientId}`}
+          label="Folder name"
+          maxLength={255}
+          onChange={(event) => onChange({ ...folder, name: event.target.value })}
+          placeholder="e.g. HTML and CSS"
+          value={folder.name}
+        />
         <label
           className="grid gap-2 text-sm font-medium text-text-strong"
           htmlFor={`folder-description-${folder.clientId}`}

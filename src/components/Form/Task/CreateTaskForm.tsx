@@ -2,6 +2,8 @@
 
 import { useState, type SubmitEvent } from 'react'
 import Icon from '@/components/Icon/Icon'
+import Input from '@/components/Input/Input'
+import SelectOption from '@/components/SelectOption/SelectOption'
 import type { ApiTaskState } from '@/types/resource-api.type'
 
 export interface TaskFormValues {
@@ -112,14 +114,11 @@ const CreateTaskForm = ({
 
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-semibold text-text-body" htmlFor={nameId}>
-              Task name
-            </label>
-            <input
-              aria-describedby={showNameError ? `${nameId}-error` : undefined}
-              aria-invalid={showNameError}
-              className={`mt-2 h-11 w-full rounded-lg border bg-surface px-3 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:ring-4 focus:ring-focus/10 ${showNameError ? 'border-danger-foreground focus:border-danger-foreground' : 'border-border focus:border-focus'}`}
+            <Input
+              className="mt-2"
+              error={showNameError ? 'Enter a task name to continue.' : undefined}
               id={nameId}
+              label="Task name"
               maxLength={255}
               onChange={(event) => {
                 const nextName = event.target.value
@@ -131,11 +130,6 @@ const CreateTaskForm = ({
               placeholder="e.g. Build the login form"
               value={name}
             />
-            {showNameError && (
-              <p className="mt-1 text-xs text-danger-foreground" id={`${nameId}-error`}>
-                Enter a task name to continue.
-              </p>
-            )}
           </div>
 
           <div>
@@ -162,23 +156,20 @@ const CreateTaskForm = ({
               <label className="text-sm font-semibold text-text-body" htmlFor={stateId}>
                 Initial state
               </label>
-              <select
-                className="mt-2 h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm text-text-strong outline-none focus:border-focus focus:ring-4 focus:ring-focus/10"
+              <SelectOption
+                aria-label="Initial state"
+                className="mt-2"
                 id={stateId}
+                isSearchable={false}
                 onChange={(event) => {
                   const nextState = event.target.value as ApiTaskState
 
                   setState(nextState)
                   onFormChange?.({ description, isVisible, name, state: nextState })
                 }}
+                options={taskStates}
                 value={state}
-              >
-                {taskStates.map((taskState) => (
-                  <option key={taskState.value} value={taskState.value}>
-                    {taskState.label}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
 
             <label className="flex items-end gap-2 pb-2 text-sm text-text-body">

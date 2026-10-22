@@ -2,6 +2,7 @@
 
 import { useState, type SubmitEvent } from 'react'
 import Icon from '@/components/Icon/Icon'
+import Input from '@/components/Input/Input'
 
 export interface FolderFormValues {
   name: string
@@ -96,14 +97,11 @@ const CreateFolderForm = ({
 
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-semibold text-text-body" htmlFor={nameId}>
-              Folder name
-            </label>
-            <input
-              aria-describedby={showNameError ? `${nameId}-error` : undefined}
-              aria-invalid={showNameError}
-              className={`mt-2 h-11 w-full rounded-lg border bg-surface px-3 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:ring-4 focus:ring-focus/10 ${showNameError ? 'border-danger-foreground focus:border-danger-foreground' : 'border-border focus:border-focus'}`}
+            <Input
+              className="mt-2"
+              error={showNameError ? 'Enter a folder name to continue.' : undefined}
               id={nameId}
+              label="Folder name"
               maxLength={255}
               onBlur={() => setHasNameBlurred(true)}
               onChange={(event) => {
@@ -115,11 +113,6 @@ const CreateFolderForm = ({
               placeholder="e.g. HTML and CSS"
               value={name}
             />
-            {showNameError && (
-              <p className="mt-1 text-xs text-danger-foreground" id={`${nameId}-error`}>
-                Enter a folder name to continue.
-              </p>
-            )}
           </div>
 
           <div>

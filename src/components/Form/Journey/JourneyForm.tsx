@@ -8,6 +8,7 @@ import ActionButtons from '@/components/Form/ActionButtons'
 import FolderForm from '@/components/Form/Folder/FolderForm'
 import TaskForm from '@/components/Form/Task/TaskForm'
 import Icon from '@/components/Icon/Icon'
+import Input from '@/components/Input/Input'
 import type { CreateJourneyFormState, CreateJourneyPayload } from '@/types/createJourney'
 import {
   buildCreateJourneyPayload,
@@ -120,24 +121,23 @@ const JourneyForm = ({ cancelHref = '/dashboard/home', onSubmit }: JourneyFormPr
           </div>
         </div>
         <div className="mt-5 grid gap-5">
-          <label className="grid gap-2 text-sm font-medium text-text-strong" htmlFor="journey-name">
-            <span>
-              Name{' '}
-              <span aria-hidden="true" className="text-danger-foreground">
-                *
-              </span>
-            </span>
-            <input
-              aria-required="true"
-              className="h-11 rounded-lg border border-border bg-surface px-3 text-sm text-text-strong outline-none transition-colors placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10"
-              id="journey-name"
-              maxLength={255}
-              onChange={(event) => updateFormState((currentState) => ({ ...currentState, name: event.target.value }))}
-              placeholder="e.g. Learn web development"
-              required
-              value={formState.name}
-            />
-          </label>
+          <Input
+            aria-required="true"
+            id="journey-name"
+            label={
+              <>
+                Name{' '}
+                <span aria-hidden="true" className="text-danger-foreground">
+                  *
+                </span>
+              </>
+            }
+            maxLength={255}
+            onChange={(event) => updateFormState((currentState) => ({ ...currentState, name: event.target.value }))}
+            placeholder="e.g. Learn web development"
+            required
+            value={formState.name}
+          />
           <label className="grid gap-2 text-sm font-medium text-text-strong" htmlFor="journey-description">
             Description
             <textarea

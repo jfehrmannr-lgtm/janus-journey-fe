@@ -25,6 +25,7 @@ export interface InputProps extends ComponentProps<'input'> {
 const Input = ({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
+  autoComplete = 'off',
   className,
   disabled,
   error,
@@ -75,6 +76,7 @@ const Input = ({
           {...nativeProps}
           aria-describedby={describedBy || undefined}
           aria-invalid={error ? true : ariaInvalid}
+          autoComplete={autoComplete}
           className={inputClasses}
           disabled={disabled}
           id={inputId}
