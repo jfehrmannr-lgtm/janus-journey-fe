@@ -8,6 +8,8 @@ import FolderItem from '@/components/Workspace/FolderItem'
 import RootTasks from '@/components/Workspace/RootTasks'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import Button from '@/components/Button/Button'
+import Icon from '@/components/Icon/Icon'
 
 interface JourneyPageContentProps {
   journeyId: string
@@ -28,8 +30,15 @@ const JourneyPageContent = ({ journeyId }: JourneyPageContentProps) => {
 
   return (
     <div>
-      <nav aria-label="Journey sections" className="flex items-center gap-5 border-b border-border px-5 pt-4">
-        <span className="border-b-2 border-primary pb-3 text-sm font-semibold text-text-primary">Tasks</span>
+      <nav
+        aria-label="Journey sections"
+        className="flex sticky top-0 bg-white items-center gap-5 border-b border-border px-5 z-20"
+      >
+        <div className="flex-1 pt-3">
+          <div className="border-b-2 border-primary pb-3 text-sm font-semibold text-text-primary inline-block">
+            Tasks
+          </div>
+        </div>
       </nav>
 
       <section className="space-y-3 px-5 py-4">

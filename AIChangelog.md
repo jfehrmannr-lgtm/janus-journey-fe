@@ -1,5 +1,15 @@
 ## 2026-10-22
 
+### #JANUS-FE-0094: Add Reusable Dropdown Component
+
+**Work**: Build / Shared UI; Added a portal-based configurable Dropdown with viewport-aware placement, keyboard interaction, focus handling, animation, and interactive playground coverage.
+
+- Supported ReactNode triggers and content, configurable placement, width, maximum height, outside/Escape dismissal, and render-content programmatic closing.
+- Reused the existing SSR-safe Portal infrastructure and preserved content-agnostic floating-container responsibilities.
+- Registered a dedicated Dropdown playground with placement, sizing, custom content, programmatic closing, and viewport-boundary examples.
+
+## 2026-10-22
+
 ### #JANUS-FE-0093: Add Task State Select Icons
 
 **Work**: Polish / Task Forms; Added shared state icons to Task state `SelectOption` entries.

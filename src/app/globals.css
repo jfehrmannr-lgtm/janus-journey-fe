@@ -89,6 +89,38 @@ body {
   }
 }
 
+@keyframes dropdown-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dropdown-fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+}
+
+.dropdown-fade-in {
+  animation: dropdown-fade-in 150ms ease-out both;
+}
+
+.dropdown-fade-out {
+  animation: dropdown-fade-out 150ms ease-in both;
+}
+
 .modal-fade-in {
   animation: modal-fade-in 180ms ease-out both;
 }
