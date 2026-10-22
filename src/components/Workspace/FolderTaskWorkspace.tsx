@@ -27,7 +27,7 @@ interface FolderTaskWorkspaceProps {
  * @param actions - Actions to be passed to the FolderTaskWorkspace for task creation.a
  * @returns The Folder task workspace presentation and interactions.
  */
-const FolderTaskWorkspace = ({ folder, returnHref, actions }: FolderTaskWorkspaceProps) => {
+const FolderTaskWorkspace = ({ folder, returnHref }: FolderTaskWorkspaceProps) => {
   const [isTaskFormOpen, setIsTaskFormOpen] = useState(false)
   const [taskStore] = useState(() => useCreateTaskForm.getState())
   const validationTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>())
