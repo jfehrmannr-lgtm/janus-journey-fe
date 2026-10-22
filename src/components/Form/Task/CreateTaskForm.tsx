@@ -3,6 +3,7 @@
 import { useState, type SubmitEvent } from 'react'
 import Icon from '@/components/Icon/Icon'
 import Input from '@/components/Input/Input'
+import InputCheck from '@/components/InputCheck/InputCheck'
 import SelectOption from '@/components/SelectOption/SelectOption'
 import type { ApiTaskState } from '@/types/resource-api.type'
 
@@ -151,14 +152,13 @@ const CreateTaskForm = ({
             />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label className="text-sm font-semibold text-text-body" htmlFor={stateId}>
-                Initial state
-              </label>
+          <div className="">
+            <label className="text-sm font-semibold text-text-body" htmlFor={stateId}>
+              Initial state
+            </label>
+            <div className="mt-2 flex items-center gap-4">
               <SelectOption
                 aria-label="Initial state"
-                className="mt-2"
                 id={stateId}
                 isSearchable={false}
                 onChange={(event) => {
@@ -170,22 +170,17 @@ const CreateTaskForm = ({
                 options={taskStates}
                 value={state}
               />
-            </div>
-
-            <label className="flex items-end gap-2 pb-2 text-sm text-text-body">
-              <input
+              <InputCheck
                 checked={isVisible}
-                className="size-4 rounded border-border-strong text-primary focus:ring-focus"
+                label="Visible"
                 onChange={(event) => {
                   const nextIsVisible = event.target.checked
 
                   setIsVisible(nextIsVisible)
                   onFormChange?.({ description, isVisible: nextIsVisible, name, state })
                 }}
-                type="checkbox"
               />
-              Visible task
-            </label>
+            </div>
           </div>
         </div>
       </section>

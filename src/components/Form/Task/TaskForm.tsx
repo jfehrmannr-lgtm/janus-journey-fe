@@ -4,6 +4,7 @@ import type { ChangeEvent } from 'react'
 
 import Icon from '@/components/Icon/Icon'
 import Input from '@/components/Input/Input'
+import InputCheck from '@/components/InputCheck/InputCheck'
 import SelectOption from '@/components/SelectOption/SelectOption'
 import type { CreateJourneyTaskDraft, CreateJourneyTaskState } from '@/types/createJourney'
 
@@ -77,15 +78,12 @@ const TaskForm = ({ label = 'Task', onChange, onRemove, removeLabel = 'Remove Ta
           options={taskStates.map((state) => ({ label: state, value: state }))}
           value={task.state}
         />
-        <label className="flex h-10 items-center gap-2 text-sm text-text-body">
-          <input
-            checked={task.isVisible}
-            className="size-4 rounded border-border-strong text-primary focus:ring-focus"
-            onChange={(event) => onChange({ ...task, isVisible: event.target.checked })}
-            type="checkbox"
-          />
-          Visible Task
-        </label>
+        <InputCheck
+          checked={task.isVisible}
+          className="h-10"
+          label="Visible Task"
+          onChange={(event) => onChange({ ...task, isVisible: event.target.checked })}
+        />
       </div>
     </div>
   )

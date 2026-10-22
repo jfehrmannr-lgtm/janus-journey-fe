@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 
 import { authClient } from '@/services/authClient'
 import Input from '@/components/Input/Input'
+import InputCheck from '@/components/InputCheck/InputCheck'
 import { BffRequestError } from '@/services/bffClient'
 import { createUser } from '@/services/userService'
 import useJanusAuthStore from '@/stores/janusAuthStore'
@@ -147,19 +148,13 @@ const CreateUserScreen = () => {
           />
         </div>
 
-        <label className="mt-6 flex items-start gap-3 text-sm text-slate-600" htmlFor="janus-account-confirmation">
-          <input
-            checked={isConfirmed}
-            className="mt-1 size-4 accent-slate-900"
-            id="janus-account-confirmation"
-            onChange={(event) => setIsConfirmed(event.target.checked)}
-            type="checkbox"
-          />
-          <span>
-            I confirm that I am creating a Janus account and allow Janus to use this account information according to
-            its policy.
-          </span>
-        </label>
+        <InputCheck
+          checked={isConfirmed}
+          className="mt-6"
+          id="janus-account-confirmation"
+          label="I confirm that I am creating a Janus account and allow Janus to use this account information according to its policy."
+          onChange={(event) => setIsConfirmed(event.target.checked)}
+        />
 
         {(accountError || errorMessage || conflictMessage) && (
           <p className="mt-4 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-600">

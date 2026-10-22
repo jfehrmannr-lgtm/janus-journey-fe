@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 
+import InputCheck from '@/components/InputCheck/InputCheck'
 import Input from '@/components/Input/Input'
 
 /**
@@ -81,10 +82,7 @@ const LoginForm = () => {
       </div>
 
       <div className="mt-5 flex items-center justify-between gap-4 text-sm">
-        <label className="flex items-center gap-2 text-slate-600" htmlFor="remember-me">
-          <input className="size-4 accent-slate-800" id="remember-me" name="remember-me" type="checkbox" />
-          Remember me
-        </label>
+        <InputCheck id="remember-me" label="Remember me" name="remember-me" />
         <button className="font-medium text-blue-600 hover:text-blue-700" type="button">
           Forgot password?
         </button>
