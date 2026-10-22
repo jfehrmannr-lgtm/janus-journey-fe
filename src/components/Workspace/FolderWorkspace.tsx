@@ -17,6 +17,9 @@ interface FolderWorkspaceProps {
     type: 'journey' | 'folder' | 'user'
   }
   returnHref: string
+  actions: {
+    createFolderAction?: () => Promise<ApiFolder>
+  }
 }
 
 /**

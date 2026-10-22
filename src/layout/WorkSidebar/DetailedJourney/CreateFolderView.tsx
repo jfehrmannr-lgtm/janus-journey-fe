@@ -3,11 +3,14 @@
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
 import FolderWorkspace from '@/components/Workspace/FolderWorkspace'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
-import type { ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { ApiFolder, ApiJourneyWithResources } from '@/types/resource-api.type'
 import { useQueryClient } from '@tanstack/react-query'
 
 interface CreateFolderViewProps {
   journeyId: string
+  actions: {
+    createFolderAction: () => Promise<ApiFolder>
+  }
 }
 
 /**
@@ -16,7 +19,7 @@ interface CreateFolderViewProps {
  * @param journeyId - Journey identifier used to build the return destination.
  * @returns A link back to the current Journey.
  */
-const CreateFolderView = ({ journeyId }: CreateFolderViewProps) => {
+const CreateFolderView = ({ journeyId, actions }: CreateFolderViewProps) => {
   const queryClient = useQueryClient()
   const journey = queryClient.getQueryData<ApiJourneyWithResources>(
     navigationQueryKeys.resourceTree('journey', journeyId)
@@ -31,6 +34,7 @@ const CreateFolderView = ({ journeyId }: CreateFolderViewProps) => {
       folders={journey.folders}
       reference={{ name: journey.name, type: 'journey' }}
       returnHref={`/dashboard/home/journey/${encodeURIComponent(journeyId)}`}
+      actions={actions}
     />
   )
 }
