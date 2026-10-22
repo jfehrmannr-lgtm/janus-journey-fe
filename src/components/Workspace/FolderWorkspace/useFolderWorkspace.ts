@@ -1,10 +1,14 @@
 'use client'
 
 import { useCallback, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 import { initFolderForm, useCreateFolderForm, type FolderFormValues } from '@/stores/workspaceFromStore'
 import type { CreateFolderBulkPayload, CreateFolderBulkResponse } from '@/types/folder-api.type'
+import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import { ApiFolderWithTasks, ApiJourneyWithResources } from '@/types/resource-api.type'
 
 interface UseFolderWorkspaceProps {
   createFolderAction: (payload: CreateFolderBulkPayload) => Promise<CreateFolderBulkResponse>
@@ -19,12 +23,47 @@ interface UseFolderWorkspaceProps {
  * @returns Folder workspace state, callbacks, and lifecycle cleanup.
  */
 const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspaceProps) => {
+  const router = useRouter()
+  const queryClient = useQueryClient()
   const [isFolderFormOpen, setIsFolderFormOpen] = useState(false)
   const [folderStore] = useState(() => useCreateFolderForm.getState())
   const validationTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>())
   const validationVersions = useRef(new Map<string, number>())
 
-  const { createFolderForm, formErrors, formValidity, isSubmitting, isValidating, activeFormId } = useCreateFolderForm()
+  const { createFolderForm, formErrors, formValidity, isValidating, activeFormId } = useCreateFolderForm()
+
+  const createFolderMutation = useMutation({
+    mutationFn: (payload: CreateFolderBulkPayload) => createFolderAction(payload),
+    onError: (error: unknown, _payload, context) => {
+      toast.error(error instanceof Error ? error.message : 'Failed to create Folders.', {
+        id: context?.toastId
+      })
+      console.error(error)
+    },
+    onMutate: () => ({ toastId: toast.loading('Creating Folders...') }),
+    onSuccess: (response, _payload, context) => {
+      const createdFolders = response.payload.map((folder) => ({
+        ...folder,
+        tasks: []
+      }))
+
+      queryClient.setQueryData<ApiJourneyWithResources>(
+        navigationQueryKeys.resourceTree('journey', journeyId),
+        (journey) => {
+          if (!journey) return journey
+
+          return {
+            ...journey,
+            folders: journey.folders.concat(createdFolders)
+          }
+        }
+      )
+
+      toast.success('Folders created successfully.', { id: context?.toastId })
+
+      router.push(`/dashboard/home/journey/${encodeURIComponent(journeyId)}`)
+    }
+  })
 
   const validateFolderForm = (formId: string) => {
     const currentStore = useCreateFolderForm.getState()
@@ -69,7 +108,7 @@ const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspac
   }
 
   const canAddFolder = !isValidating && createFolderForm.every((form) => formValidity[form.id] === true)
-  const canSaveChanges = createFolderForm.length > 0 && canAddFolder && !isSubmitting
+  const canSaveChanges = createFolderForm.length > 0 && canAddFolder && !createFolderMutation.isPending
 
   const handleAddFolder = () => {
     if (!canAddFolder) return
@@ -129,7 +168,7 @@ const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspac
     }
   }
 
-  const handleSaveChanges = async () => {
+  const handleSaveChanges = () => {
     if (!canSaveChanges) return
 
     const currentStore = useCreateFolderForm.getState()
@@ -139,16 +178,7 @@ const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspac
       parent: { type: 'journey', uid: journeyId }
     }))
 
-    currentStore.setIsSubmitting(true)
-
-    try {
-      await createFolderAction(payload)
-      toast.success('Folders created successfully.')
-    } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : 'Failed to create Folders.')
-    } finally {
-      useCreateFolderForm.getState().setIsSubmitting(false)
-    }
+    createFolderMutation.mutate(payload)
   }
 
   const cleanup = useCallback(() => {
@@ -173,7 +203,7 @@ const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspac
     handleRemoveFolder,
     handleSaveChanges,
     isFolderFormOpen,
-    isSubmitting
+    isSubmitting: createFolderMutation.isPending
   }
 }
 

@@ -1,5 +1,15 @@
 ## 2026-10-22
 
+### #JANUS-FE-0091: Mutate and Navigate Folder Creation
+
+**Work**: Integrate / Folder Workspace; Replaced manual bulk Folder submission state handling with TanStack Query mutation lifecycle management.
+
+- Added loading, success, and error toast handling with error logging while preserving pending Folder forms on failure.
+- Invalidated the parent Journey resource-tree query after successful persistence and navigated to the encoded Journey detail route.
+- Used mutation pending state to prevent duplicate submissions without changing the Zustand store contract or lifecycle cleanup ownership.
+
+## 2026-10-22
+
 ### #JANUS-FE-0090: Extract Folder Workspace Hook
 
 **Work**: Refactor / Folder Workspace; Moved Folder form interaction, validation, pending resource management, submission, and notifications into the dedicated `useFolderWorkspace` hook.
