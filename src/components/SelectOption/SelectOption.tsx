@@ -161,7 +161,7 @@ const SelectOption = ({
     })
   }
 
-  const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleSearchChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
     if (isOpen && searchable) {
       setSearchText(event.target.value)
     }

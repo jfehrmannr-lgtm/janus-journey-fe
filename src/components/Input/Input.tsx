@@ -1,15 +1,17 @@
 'use client'
 
-import { useId, useState, type ComponentProps, type ReactNode } from 'react'
+import { useId, useState, type ChangeEventHandler, type ComponentProps, type ReactNode } from 'react'
 
 import Icon from '@/components/Icon/Icon'
 
-export interface InputProps extends ComponentProps<'input'> {
+export interface InputProps extends Omit<ComponentProps<'input'>, 'onChange' | 'type'> {
   error?: ReactNode
   helperText?: ReactNode
   icon?: ReactNode
   label?: ReactNode
+  onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   sideIcon?: 'left' | 'right'
+  type?: ComponentProps<'input'>['type'] | 'text-area'
 }
 
 /**
@@ -32,6 +34,7 @@ const Input = ({
   helperText,
   icon,
   id,
+  onChange,
   label,
   ref,
   sideIcon = 'right',
@@ -44,6 +47,7 @@ const Input = ({
   const helperId = inputId ? `${inputId}-helper` : undefined
   const errorId = inputId ? `${inputId}-error` : undefined
   const isPassword = type === 'password'
+  const isTextArea = type === 'text-area'
   const inputType = isPassword && isPasswordVisible ? 'text' : type
   const hasLeftIcon = icon !== undefined && sideIcon === 'left'
   const hasRightIcon = icon !== undefined && sideIcon === 'right'
@@ -53,7 +57,7 @@ const Input = ({
     .join(' ')
 
   const inputClasses = [
-    'h-11 w-full rounded-lg border bg-surface px-3 text-sm text-text-strong outline-none transition-colors',
+    `${isTextArea ? 'min-h-28 resize-y py-2' : 'h-11'} w-full rounded-lg border bg-surface px-3 text-sm text-text-strong outline-none transition-colors`,
     'placeholder:text-text-subtle focus:border-focus focus:ring-4 focus:ring-focus/10',
     'disabled:cursor-not-allowed disabled:bg-surface-subtle disabled:text-text-muted disabled:opacity-70',
     hasLeftIcon ? 'pl-10' : undefined,
@@ -72,17 +76,31 @@ const Input = ({
         </label>
       )}
       <div className="relative">
-        <input
-          {...nativeProps}
-          aria-describedby={describedBy || undefined}
-          aria-invalid={error ? true : ariaInvalid}
-          autoComplete={autoComplete}
-          className={inputClasses}
-          disabled={disabled}
-          id={inputId}
-          ref={ref}
-          type={inputType}
-        />
+        {isTextArea ? (
+          <textarea
+            {...(nativeProps as ComponentProps<'textarea'>)}
+            aria-describedby={describedBy || undefined}
+            aria-invalid={error ? true : ariaInvalid}
+            className={inputClasses}
+            disabled={disabled}
+            id={inputId}
+            onChange={onChange as ComponentProps<'textarea'>['onChange']}
+            ref={ref as ComponentProps<'textarea'>['ref']}
+          />
+        ) : (
+          <input
+            {...nativeProps}
+            aria-describedby={describedBy || undefined}
+            aria-invalid={error ? true : ariaInvalid}
+            autoComplete={autoComplete}
+            className={inputClasses}
+            disabled={disabled}
+            id={inputId}
+            onChange={onChange as ComponentProps<'input'>['onChange']}
+            ref={ref}
+            type={inputType}
+          />
+        )}
         {hasPasswordToggle ? (
           <button
             aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
