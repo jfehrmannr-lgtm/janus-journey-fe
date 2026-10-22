@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, type SubmitEvent } from 'react'
-
-import Button from '@/components/Button/Button'
 import Icon from '@/components/Icon/Icon'
 import type { ApiTaskState } from '@/types/resource-api.type'
 
@@ -50,7 +48,6 @@ const CreateTaskForm = ({
   embedded = false,
   initialValues,
   idPrefix = 'task',
-  onCancel,
   onFormChange,
   onSubmit,
   reference

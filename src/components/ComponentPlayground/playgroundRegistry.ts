@@ -3,6 +3,7 @@ import type { ComponentPlaygroundRegistration } from './ComponentPlayground.type
 import CreateResourceButtonPlayground from './CreateResourceButtonPlayground/CreateResourceButtonPlayground'
 import FormsPlayground from './FormsPlayground/FormsPlayground'
 import IconPlayground from './IconPlayground/IconPlayground'
+import InputPlayground from './InputPlayground/InputPlayground'
 import JourneyCardPlayground from './JourneyCardPlayground/JourneyCardPlayground'
 import ProgressBarPlayground from './ProgressBarPlayground/ProgressBarPlayground'
 import WorkspacePlayground from './WorkspacePlayground/WorkspacePlayground'
@@ -32,6 +33,11 @@ export const PLAYGROUND_REGISTRY: ComponentPlaygroundRegistration[] = [
     id: 'icon',
     name: 'Icon',
     playground: IconPlayground
+  },
+  {
+    id: 'input',
+    name: 'Inputs',
+    playground: InputPlayground
   },
   {
     id: 'progress-bar',
