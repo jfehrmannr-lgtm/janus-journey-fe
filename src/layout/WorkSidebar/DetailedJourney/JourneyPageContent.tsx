@@ -8,8 +8,6 @@ import FolderItem from '@/components/Workspace/FolderItem'
 import RootTasks from '@/components/Workspace/RootTasks'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
-import Button from '@/components/Button/Button'
-import Icon from '@/components/Icon/Icon'
 
 interface JourneyPageContentProps {
   journeyId: string

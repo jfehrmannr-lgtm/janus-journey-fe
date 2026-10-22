@@ -1,39 +1,56 @@
 'use client'
 
-import type { CSSProperties, KeyboardEvent, ReactNode } from 'react'
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
+import { isValidElement, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import Portal from '@/components/Portal/Portal'
 
-export type DropdownPlacement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'
-export type DropdownSize = CSSProperties['width']
-export type DropdownContent = ReactNode | ((close: () => void) => ReactNode)
+import type { DropdownPosition, DropdownPositioningInput, DropdownProps } from './Dropdown.type'
 
-interface DropdownProps {
-  content: DropdownContent
-  maxHeight?: CSSProperties['maxHeight']
-  placement?: DropdownPlacement
-  trigger: ReactNode
-  width?: DropdownSize
-}
-
-interface DropdownPosition {
-  left: number
-  top: number
-  width: number
-}
+export type { DropdownContent, DropdownPlacement, DropdownProps, DropdownSize } from './Dropdown.type'
 
 const viewportPadding = 8
 const placementGap = 8
 const closeAnimationDuration = 150
+const focusableSelector =
+  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 const toPixels = (value: CSSProperties['width'] | CSSProperties['maxHeight'] | undefined, fallback: number) => {
   if (typeof value === 'number') return `${value}px`
   return value ?? `${fallback}px`
 }
 
-const focusableSelector =
-  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+const clamp = (value: number, minimum: number, maximum: number) => Math.min(Math.max(value, minimum), maximum)
+
+const getDropdownPosition = ({
+  dropdownHeight,
+  dropdownWidth,
+  placement,
+  triggerRect,
+  viewportHeight,
+  viewportWidth
+}: DropdownPositioningInput): DropdownPosition => {
+  const opensBelow = placement.startsWith('bottom')
+  const alignsEnd = placement.endsWith('end')
+  const fitsBelow = triggerRect.bottom + placementGap + dropdownHeight <= viewportHeight - viewportPadding
+  const fitsAbove = triggerRect.top - placementGap - dropdownHeight >= viewportPadding
+  const opensDown = opensBelow ? fitsBelow || !fitsAbove : !fitsAbove && fitsBelow
+  const preferredTop = opensDown ? triggerRect.bottom + placementGap : triggerRect.top - dropdownHeight - placementGap
+  const preferredLeft = alignsEnd ? triggerRect.right - dropdownWidth : triggerRect.left
+
+  return {
+    left: clamp(
+      preferredLeft,
+      viewportPadding,
+      Math.max(viewportPadding, viewportWidth - dropdownWidth - viewportPadding)
+    ),
+    top: clamp(
+      preferredTop,
+      viewportPadding,
+      Math.max(viewportPadding, viewportHeight - dropdownHeight - viewportPadding)
+    )
+  }
+}
 
 /**
  * Renders a content-agnostic, portal-based floating dropdown.
@@ -47,42 +64,27 @@ const focusableSelector =
  */
 const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigger, width = 240 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [isRendered, setIsRendered] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
   const [position, setPosition] = useState<DropdownPosition | null>(null)
-  const triggerRef = useRef<HTMLDivElement>(null)
+  const triggerContainerRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const previousActiveElement = useRef<HTMLElement | null>(null)
+  const hasFocusedDropdown = useRef(false)
+  const isVisible = isOpen || isClosing
 
   const close = useCallback(() => {
     if (!isOpen) return
-
     setIsOpen(false)
     setIsClosing(true)
   }, [isOpen])
 
-  useEffect(() => {
-    if (!isClosing) return
-
-    previousActiveElement.current?.focus()
-    closeTimer.current = setTimeout(() => {
-      setIsRendered(false)
-      setIsClosing(false)
-      setPosition(null)
-    }, closeAnimationDuration)
-
-    return () => {
-      if (closeTimer.current) clearTimeout(closeTimer.current)
-    }
-  }, [isClosing])
-
   const open = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
     previousActiveElement.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    hasFocusedDropdown.current = false
     setIsClosing(false)
     setPosition(null)
-    setIsRendered(true)
     setIsOpen(true)
   }
 
@@ -96,18 +98,32 @@ const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigge
   }
 
   useEffect(() => {
-    if (!isRendered) return
+    if (!isClosing) return
+
+    previousActiveElement.current?.focus()
+    closeTimer.current = setTimeout(() => {
+      setIsClosing(false)
+      setPosition(null)
+    }, closeAnimationDuration)
+
+    return () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current)
+    }
+  }, [isClosing])
+
+  useEffect(() => {
+    if (!isVisible) return
 
     const handlePointerDown = (event: PointerEvent) => {
       const target = event.target as Node
-      if (!triggerRef.current?.contains(target) && !dropdownRef.current?.contains(target)) close()
+      if (!triggerContainerRef.current?.contains(target) && !dropdownRef.current?.contains(target)) close()
     }
 
     const handleKeyDown = (event: globalThis.KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        close()
-      }
+      if (event.key !== 'Escape') return
+
+      event.preventDefault()
+      close()
     }
 
     document.addEventListener('pointerdown', handlePointerDown)
@@ -117,42 +133,32 @@ const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigge
       document.removeEventListener('pointerdown', handlePointerDown)
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [close, isRendered])
+  }, [close, isVisible])
 
   useLayoutEffect(() => {
-    if (!isRendered) return
+    if (!isVisible) return
 
     let animationFrame = 0
 
     const updatePosition = () => {
-      const triggerElement = triggerRef.current
+      const triggerElement = triggerContainerRef.current
       const dropdownElement = dropdownRef.current
 
       if (!triggerElement || !dropdownElement) return
 
-      const triggerRect = triggerElement.getBoundingClientRect()
-      const dropdownRect = dropdownElement.getBoundingClientRect()
-      const opensBelow = placement.startsWith('bottom')
-      const alignsEnd = placement.endsWith('end')
-      const preferredLeft = alignsEnd ? triggerRect.right - dropdownRect.width : triggerRect.left
-      const fitsBelow = triggerRect.bottom + placementGap + dropdownRect.height <= window.innerHeight - viewportPadding
-      const fitsAbove = triggerRect.top - placementGap - dropdownRect.height >= viewportPadding
-      const shouldOpenBelow = opensBelow ? fitsBelow || !fitsAbove : !fitsAbove && fitsBelow
-      const top = shouldOpenBelow
-        ? triggerRect.bottom + placementGap
-        : triggerRect.top - dropdownRect.height - placementGap
-      const maxLeft = Math.max(viewportPadding, window.innerWidth - dropdownRect.width - viewportPadding)
+      setPosition(
+        getDropdownPosition({
+          dropdownHeight: dropdownElement.getBoundingClientRect().height,
+          dropdownWidth: dropdownElement.getBoundingClientRect().width,
+          placement,
+          triggerRect: triggerElement.getBoundingClientRect(),
+          viewportHeight: window.innerHeight,
+          viewportWidth: window.innerWidth
+        })
+      )
 
-      setPosition({
-        left: Math.min(Math.max(viewportPadding, preferredLeft), maxLeft),
-        top: Math.min(
-          Math.max(viewportPadding, top),
-          Math.max(viewportPadding, window.innerHeight - dropdownRect.height - viewportPadding)
-        ),
-        width: dropdownRect.width
-      })
-
-      if (isOpen && !isClosing) {
+      if (isOpen && !hasFocusedDropdown.current) {
+        hasFocusedDropdown.current = true
         animationFrame = window.requestAnimationFrame(() => {
           dropdownElement.querySelector<HTMLElement>(focusableSelector)?.focus()
         })
@@ -168,16 +174,16 @@ const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigge
       window.removeEventListener('resize', updatePosition)
       window.removeEventListener('scroll', updatePosition, true)
     }
-  }, [isClosing, isOpen, isRendered, maxHeight, placement, width])
+  }, [isOpen, isVisible, maxHeight, placement, width])
 
-  const handleTriggerKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.target !== event.currentTarget) return
-    if (event.key !== 'Enter' && event.key !== ' ') return
-
-    event.preventDefault()
-    toggle()
-  }
-
+  const hasInteractiveTrigger = isValidElement(trigger)
+  const triggerNode = hasInteractiveTrigger ? (
+    trigger
+  ) : (
+    <button aria-expanded={isOpen} aria-haspopup="true" onClick={toggle} type="button">
+      {trigger}
+    </button>
+  )
   const contentNode = typeof content === 'function' ? content(close) : content
 
   return (
@@ -186,19 +192,16 @@ const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigge
         aria-expanded={isOpen}
         aria-haspopup="true"
         className="inline-flex"
-        onClick={toggle}
-        onKeyDown={handleTriggerKeyDown}
-        ref={triggerRef}
-        role="button"
-        tabIndex={0}
+        onClick={hasInteractiveTrigger ? toggle : undefined}
+        ref={triggerContainerRef}
       >
-        {trigger}
+        {triggerNode}
       </div>
-      {isRendered && (
+      {isVisible && (
         <Portal>
           <div
             aria-hidden={!isOpen}
-            className={`fixed z-50 overflow-y-auto rounded-xl border border-border bg-surface p-2 shadow-xs ${isClosing ? 'dropdown-fade-out' : 'dropdown-fade-in'} ${position ? 'opacity-100' : 'opacity-0'}`}
+            className={`fixed z-50 overflow-y-auto rounded-xl border border-border bg-surface p-2 shadow-xl ${isClosing ? 'dropdown-fade-out' : 'dropdown-fade-in'} ${position ? 'opacity-100' : 'opacity-0'}`}
             ref={dropdownRef}
             role="region"
             style={{

@@ -1,5 +1,25 @@
 ## 2026-10-22
 
+### #JANUS-FE-0096: Extract Dropdown Types
+
+**Work**: Refactor / Shared UI; Moved Dropdown public and positioning types into the dedicated `Dropdown.type.ts` module.
+
+- Preserved the existing Dropdown runtime behavior and public type exports.
+- Kept component rendering and interaction logic focused on composition while centralizing its TypeScript contracts.
+
+## 2026-10-22
+
+### #JANUS-FE-0095: Refine Dropdown Behavior
+
+**Work**: Refactor / Shared UI; Simplified Dropdown visibility and positioning state while improving trigger semantics and focus behavior.
+
+- Removed redundant rendered-state tracking and unused position data.
+- Isolated viewport collision calculations, preserved portal positioning, and prevented focus from changing during scroll or resize.
+- Avoided nested interactive triggers by preserving custom Button elements as the interactive control and using a native fallback for non-element content.
+- Kept animation classes in the global styling layer and preserved outside-click, Escape, placement, sizing, and programmatic close behavior.
+
+## 2026-10-22
+
 ### #JANUS-FE-0094: Add Reusable Dropdown Component
 
 **Work**: Build / Shared UI; Added a portal-based configurable Dropdown with viewport-aware placement, keyboard interaction, focus handling, animation, and interactive playground coverage.
