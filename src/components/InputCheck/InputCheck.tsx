@@ -2,9 +2,12 @@
 
 import { useEffect, useId, useRef, type ComponentProps, type ReactNode } from 'react'
 
-export interface InputCheckProps extends Omit<ComponentProps<'input'>, 'className' | 'size' | 'type'> {
+export type InputCheckColor = 'primary' | 'danger'
+
+export interface InputCheckProps extends Omit<ComponentProps<'input'>, 'className' | 'color' | 'size' | 'type'> {
   className?: string
   children?: ReactNode
+  color?: InputCheckColor
   description?: ReactNode
   error?: ReactNode
   fullWidth?: boolean
@@ -37,6 +40,17 @@ const sizeClasses = {
   }
 } as const
 
+const colorClasses = {
+  danger: {
+    card: 'hover:border-danger-foreground/50 hover:bg-danger-surface has-[:checked]:border-danger-foreground has-[:checked]:bg-danger-surface',
+    indicator: 'peer-checked:border-danger-foreground peer-checked:bg-danger-foreground'
+  },
+  primary: {
+    card: 'hover:border-primary/50 hover:bg-surface-subtle has-[:checked]:border-primary has-[:checked]:bg-primary-soft',
+    indicator: 'peer-checked:border-primary peer-checked:bg-primary'
+  }
+} as const
+
 /**
  * Renders a styled native checkbox or radio input with default and card variants.
  *
@@ -44,6 +58,7 @@ const sizeClasses = {
  * @param ariaInvalid - Existing native invalid state.
  * @param children - Optional custom content rendered with the label content.
  * @param className - Additional classes applied to the control container.
+ * @param color - Theme color used for the checked control state.
  * @param description - Supporting text associated with the control.
  * @param disabled - Whether the native control is disabled.
  * @param error - Optional validation message and error styling.
@@ -63,6 +78,7 @@ const InputCheck = ({
   'aria-invalid': ariaInvalid,
   children,
   className,
+  color = 'primary',
   description,
   disabled,
   error,
@@ -84,6 +100,7 @@ const InputCheck = ({
   const describedBy = [ariaDescribedBy, descriptionId, errorId].filter(Boolean).join(' ')
   const inputRef = useRef<HTMLInputElement>(null)
   const currentSize = sizeClasses[size]
+  const currentColor = colorClasses[color]
   const hasError = error !== undefined && error !== null
   const isCard = variant === 'card'
 
@@ -114,9 +131,8 @@ const InputCheck = ({
     isCard
       ? [
           'rounded-xl border bg-surface p-4',
-          'hover:border-primary/50 hover:bg-surface-subtle',
-          'focus-within:border-focus focus-within:ring-4 focus-within:ring-focus/20',
-          'has-[:checked]:border-primary has-[:checked]:bg-primary-soft'
+          currentColor.card,
+          'focus-within:border-focus focus-within:ring-4 focus-within:ring-focus/20'
         ].join(' ')
       : undefined,
     isCard && hasError ? 'border-danger-border' : undefined,
@@ -127,7 +143,7 @@ const InputCheck = ({
     .join(' ')
 
   const indicatorClasses = [
-    'peer-checked:border-primary peer-checked:bg-primary',
+    currentColor.indicator,
     'peer-focus-visible:ring-4 peer-focus-visible:ring-focus/20',
     'peer-disabled:cursor-not-allowed peer-disabled:opacity-60',
     currentSize.indicator,

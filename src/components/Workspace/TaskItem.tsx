@@ -1,6 +1,7 @@
 import type { KeyboardEvent, ReactNode } from 'react'
 
 import Icon, { type IconName } from '@/components/Icon/Icon'
+import InputCheck from '@/components/InputCheck/InputCheck'
 import type { ApiTask, ApiTaskState } from '@/types/resource-api.type'
 import type { TaskFormValues } from '@/stores/workspaceFromStore'
 import Button from '../Button/Button'
@@ -74,16 +75,21 @@ const TaskItem = (props: TaskItemProps) => {
     pendingProps?.onSelect()
   }
 
-  const handleSelectionKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (!isSelectingResources || isImplicitlySelected) return
-    if (event.key !== 'Enter' && event.key !== ' ') return
-
-    event.preventDefault()
-    persistedProps?.onToggleSelection?.()
-  }
-
   const content = (
     <>
+      {isSelectingResources && (
+        <span onClick={(event) => event.stopPropagation()}>
+          <InputCheck
+            aria-label={`Select ${taskName}`}
+            checked={isSelected || isImplicitlySelected}
+            className="mx-1 shrink-0"
+            color="danger"
+            disabled={isImplicitlySelected}
+            onChange={persistedProps?.onToggleSelection}
+            size="sm"
+          />
+        </span>
+      )}
       <Icon className={`shrink-0 ${stateStyle.className}`} icon={stateStyle.icon} />
       <span className="min-w-0 flex-1 text-text-body">{taskName}</span>
     </>
@@ -119,16 +125,9 @@ const TaskItem = (props: TaskItemProps) => {
 
   return (
     <div
-      aria-pressed={isSelectingResources ? isSelected || isImplicitlySelected : undefined}
       className={`flex min-h-10 items-center gap-3 border-t border-border-subtle px-3 py-2 ${
         isSelectingResources && (isSelected || isImplicitlySelected) ? 'bg-primary-soft/60' : ''
-      } ${isSelectingResources && !isImplicitlySelected ? 'cursor-pointer' : ''}`}
-      onClick={() => {
-        if (isSelectingResources && !isImplicitlySelected) persistedProps?.onToggleSelection?.()
-      }}
-      onKeyDown={handleSelectionKeyDown}
-      role={isSelectingResources ? 'button' : undefined}
-      tabIndex={isSelectingResources && !isImplicitlySelected ? 0 : undefined}
+      }`}
     >
       {content}
       {!isSelectingResources && (

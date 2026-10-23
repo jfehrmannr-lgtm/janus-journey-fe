@@ -5,6 +5,7 @@ import { useState, type KeyboardEvent, type ReactNode } from 'react'
 
 import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import Icon from '@/components/Icon/Icon'
+import InputCheck from '@/components/InputCheck/InputCheck'
 import type { ApiFolderWithTasks } from '@/types/resource-api.type'
 import type { FolderFormValues } from '@/stores/workspaceFromStore'
 
@@ -91,11 +92,6 @@ const FolderItem = (props: FolderItemProps) => {
       return
     }
 
-    if (isSelectingResources) {
-      onToggleSelection?.()
-      return
-    }
-
     if (!disableCollapse) setIsExpanded((current) => !current)
   }
 
@@ -118,6 +114,18 @@ const FolderItem = (props: FolderItemProps) => {
 
   const headerContent = (
     <>
+      {isSelectingResources && (
+        <span onClick={(event) => event.stopPropagation()}>
+          <InputCheck
+            aria-label={`Select ${folderName}`}
+            checked={isSelected}
+            className="mx-1 shrink-0"
+            color="danger"
+            onChange={onToggleSelection}
+            size="sm"
+          />
+        </span>
+      )}
       <Icon className="text-blue-700" icon="FolderOutlined" />
       <span className="min-w-0 flex-1 truncate text-sm font-semibold text-text-strong">{folderName}</span>
       <span className="text-xs text-text-muted">
@@ -152,13 +160,12 @@ const FolderItem = (props: FolderItemProps) => {
       ) : (
         <button
           aria-expanded={!disableCollapse && isExpanded}
-          aria-pressed={isSelectingResources ? isSelected : undefined}
           className={`flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-slate-200 ${headerClassName}`}
           onClick={handleHeaderClick}
           type="button"
         >
           {headerContent}
-          {!isSelectingResources && !disableCollapse && (
+          {!disableCollapse && (
             <Icon className="text-xs text-text-muted" icon={isExpanded ? 'DownOutlined' : 'RightOutlined'} />
           )}
         </button>

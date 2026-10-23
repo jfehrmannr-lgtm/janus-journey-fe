@@ -1,5 +1,41 @@
 ## 2026-10-23
 
+### #JANUS-FE-0106: Add InputCheck Color Support
+
+**Work**: Build / Validate / UI; Added typed primary and danger color support to InputCheck using the existing Tailwind theme tokens.
+
+- InputCheck defaults to the primary color for existing callers.
+- Resource-selection checkboxes now use the danger color without changing selection behavior.
+
+## 2026-10-23
+
+### #JANUS-FE-0105: Restrict Selection to Checkbox Controls
+
+**Work**: Fix / Resource Selection UI; Restricted Folder and Task selection changes to the shared InputCheck controls and restored normal Folder collapse interaction.
+
+- Clicking resource content no longer changes `selectedResource` or produces stale checkbox feedback.
+- Added spacing around selection controls while preserving explicit and inherited checked states.
+
+## 2026-10-23
+
+### #JANUS-FE-0104: Reuse InputCheck for Resource Selection
+
+**Work**: Refactor / Resource Selection UI; Replaced custom selection indicators with the existing InputCheck component while preserving selection state, handlers, and inherited descendant behavior.
+
+- Folder and Task selection controls now use the shared accessible checkbox styling.
+- Implicitly selected Tasks remain checked and disabled; normal mode and selection logic remain unchanged.
+
+## 2026-10-23
+
+### #JANUS-FE-0103: Add Resource Selection Checkboxes
+
+**Work**: Build / Validate / UI; Added selection-mode checkbox feedback to existing Folder and Task resource rows without changing Zustand state or selection handlers.
+
+- Explicitly selected Folders and Tasks render checked indicators.
+- Tasks inherited from a selected Folder render checked and disabled indicators while normal mode remains unchanged.
+
+## 2026-10-23
+
 ### #JANUS-FE-0102: Move Journey Actions into JourneyOptions
 
 **Work**: Refactor / Journey Workspace; Moved Select Resources behavior and Zustand integration into the JourneyOptions action component while keeping the header responsible only for dropdown composition.
