@@ -86,6 +86,7 @@ const JourneyPageContent = ({ journeyId }: JourneyPageContentProps) => {
                 folder={folder}
                 isSelectingResources={isSelectingResources}
                 isSelected={selectedResource.includes(folder.uid)}
+                selectedResource={selectedResource}
                 key={folder.uid}
                 onToggleSelection={() =>
                   toggleSelectedResource(

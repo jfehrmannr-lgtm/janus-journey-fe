@@ -185,16 +185,18 @@ const FolderItem = (props: FolderItemProps) => {
           )}
           {children}
           {tasks.length > 0 ? (
-            tasks.map((task) => (
-              <TaskItem
-                isImplicitlySelected={isSelected}
-                isSelectingResources={isSelectingResources}
-                isSelected={selectedResource.includes(task.uid)}
-                key={task.uid}
-                onToggleSelection={() => onToggleTaskSelection?.(task.uid)}
-                task={task}
-              />
-            ))
+            tasks.map((task) => {
+              return (
+                <TaskItem
+                  isImplicitlySelected={isSelected}
+                  isSelectingResources={isSelectingResources}
+                  isSelected={selectedResource.includes(task.uid)}
+                  key={task.uid}
+                  onToggleSelection={() => onToggleTaskSelection?.(task.uid)}
+                  task={task}
+                />
+              )
+            })
           ) : (
             <p className="border-t border-border-subtle px-3 py-4 text-sm text-text-muted">No tasks in this folder.</p>
           )}
