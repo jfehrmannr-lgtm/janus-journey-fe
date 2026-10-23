@@ -16,17 +16,17 @@ const JourneyOptions = ({ journeyName }: JourneyOptionsProps) => {
     <section className="w-100" aria-labelledby="journey-options-title">
       <header className="flex items-start justify-between gap-4 border-b border-border-subtle">
         <div className="py-2 px-2">
-          <h1 className="text-lg font-semibold tracking-tight text-text-primary" id="journey-options-title">
+          <h1 className=" font-semibold tracking-tight text-text-primary" id="journey-options-title">
             Journey options
           </h1>
-          <p className="mt-1 truncate text-md text-text-muted">{journeyName}</p>
+          <p className="mt-1 truncate text-sm text-text-muted">{journeyName}</p>
         </div>
       </header>
 
       <div className="">
         <div className="space-y-1">
           <Button
-            buttonSize="large"
+            buttonSize="normal"
             className="justify-start border-transparent text-text-body hover:bg-surface-subtle"
             color="neutral"
             icon={<Icon className="text-text-muted" icon="EditOutlined" />}
@@ -36,7 +36,7 @@ const JourneyOptions = ({ journeyName }: JourneyOptionsProps) => {
             variant="outlined"
           />
           <Button
-            buttonSize="large"
+            buttonSize="normal"
             className="justify-start border-transparent text-text-body hover:bg-surface-subtle"
             color="neutral"
             icon={<Icon className="text-text-muted" icon="UnorderedListOutlined" />}
@@ -46,7 +46,7 @@ const JourneyOptions = ({ journeyName }: JourneyOptionsProps) => {
             variant="outlined"
           />
           <Button
-            buttonSize="large"
+            buttonSize="normal"
             className="justify-start border-transparent text-text-body hover:bg-surface-subtle"
             color="neutral"
             icon={<Icon className="text-text-muted" icon="ShareAltOutlined" />}
@@ -59,7 +59,7 @@ const JourneyOptions = ({ journeyName }: JourneyOptionsProps) => {
 
         <div className="py-1 border-t border-border-subtle ">
           <Button
-            buttonSize="large"
+            buttonSize="normal"
             className="justify-start border-transparent text-danger-foreground hover:bg-danger-surface"
             color="danger"
             icon={<Icon icon="DeleteOutlined" />}

@@ -1,5 +1,14 @@
 ## 2026-10-22
 
+### #JANUS-FE-0100: Extract Detailed Workspace Header
+
+**Work**: Refactor / Journey Workspace; Extracted the detailed resource header and Journey options trigger into `DetailedHeaderWorkspace`.
+
+- Kept resource-specific header content, background styling, and Journey Options integration unchanged.
+- Reduced `DetailedWorkspace` to progress rendering and workspace content composition without altering folder or task behavior.
+
+## 2026-10-22
+
 ### #JANUS-FE-0099: Use Shared Buttons in Journey Options
 
 **Work**: Refactor / Journey UI; Replaced Journey Options action markup with the shared Button component.
