@@ -1,8 +1,9 @@
 'use client'
 
-import { isValidElement, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { isValidElement, useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 
 import Portal from '@/components/Portal/Portal'
+import useAppUiStore from '@/stores/appUiStore'
 
 import type { DropdownPosition, DropdownPositioningInput, DropdownProps } from './Dropdown.type'
 
@@ -49,15 +50,27 @@ const getDropdownPosition = ({
 /**
  * Renders a content-agnostic, portal-based floating dropdown.
  *
- * @param content - React content rendered in the floating panel, or a render function receiving the close callback.
+ * @param content - React content rendered in the floating panel, or a render function receiving the close callback and Dropdown ID.
+ * @param id - Optional stable ID used to identify this Dropdown.
  * @param maxHeight - Maximum height applied to the floating panel.
  * @param placement - Preferred placement relative to the trigger.
  * @param trigger - React content used to open and close the dropdown.
  * @param width - Width applied to the floating panel.
  * @returns A trigger and floating dropdown panel.
  */
-const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigger, width = 240 }: DropdownProps) => {
-  const [isOpen, setIsOpen] = useState(false)
+const Dropdown = ({
+  content,
+  id,
+  maxHeight = 320,
+  placement = 'bottom-start',
+  trigger,
+  width = 240
+}: DropdownProps) => {
+  const generatedId = useId()
+  const dropdownId = id ?? generatedId
+  const activeDropdownId = useAppUiStore((state) => state.activeDropdownId)
+  const closeDropdown = useAppUiStore((state) => state.closeDropdown)
+  const openDropdown = useAppUiStore((state) => state.openDropdown)
   const [isClosing, setIsClosing] = useState(false)
   const [position, setPosition] = useState<DropdownPosition | null>(null)
   const triggerContainerRef = useRef<HTMLDivElement>(null)
@@ -65,13 +78,14 @@ const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigge
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const previousActiveElement = useRef<HTMLElement | null>(null)
   const hasFocusedDropdown = useRef(false)
+  const isOpen = activeDropdownId === dropdownId
   const isVisible = isOpen || isClosing
 
   const close = useCallback(() => {
     if (!isOpen) return
-    setIsOpen(false)
     setIsClosing(true)
-  }, [isOpen])
+    closeDropdown(dropdownId)
+  }, [closeDropdown, dropdownId, isOpen])
 
   const open = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
@@ -79,7 +93,7 @@ const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigge
     hasFocusedDropdown.current = false
     setIsClosing(false)
     setPosition(null)
-    setIsOpen(true)
+    openDropdown(dropdownId)
   }
 
   const toggle = () => {
@@ -178,7 +192,7 @@ const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigge
       {trigger}
     </button>
   )
-  const contentNode = typeof content === 'function' ? content(close) : content
+  const contentNode = typeof content === 'function' ? content(close, dropdownId) : content
 
   return (
     <>
@@ -196,6 +210,7 @@ const Dropdown = ({ content, maxHeight = 320, placement = 'bottom-start', trigge
           <div
             aria-hidden={!isOpen}
             className={`fixed z-60 overflow-y-auto rounded-xl border border-border bg-surface p-2 shadow-xs ${isClosing ? 'dropdown-fade-out' : 'dropdown-fade-in'} ${position ? 'opacity-100' : 'opacity-0'}`}
+            id={dropdownId}
             ref={dropdownRef}
             role="region"
             style={{

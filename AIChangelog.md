@@ -1,5 +1,14 @@
 ## 2026-10-23
 
+### #JANUS-FE-0107: Track Active Dropdown by ID
+
+**Work**: Refactor / UI State; Added shared active Dropdown ID tracking through Zustand while preserving the existing local animation, focus, content composition, and styling behavior.
+
+- Dropdowns now open and close through `activeDropdownId` and expose their stable ID to render-function content.
+- Nested Client Components can close their associated Dropdown by ID without introducing a content registry or changing Server Component-compatible JSX composition.
+
+## 2026-10-23
+
 ### #JANUS-FE-0106: Add InputCheck Color Support
 
 **Work**: Build / Validate / UI; Added typed primary and danger color support to InputCheck using the existing Tailwind theme tokens.
