@@ -1,3 +1,22 @@
+## 2026-10-23
+
+### #JANUS-FE-0102: Move Journey Actions into JourneyOptions
+
+**Work**: Refactor / Journey Workspace; Moved Select Resources behavior and Zustand integration into the JourneyOptions action component while keeping the header responsible only for dropdown composition.
+
+- Replaced the selection callback prop with the dropdown-only `onClose` callback.
+- Preserved the existing Select Resources behavior and UI without changing unrelated workspace interactions.
+
+## 2026-10-23
+
+### #JANUS-FE-0101: Add Journey Resource Selection Mode
+
+**Work**: Plan / Build / Validate; Added temporary Zustand-backed resource selection for Journey Folders and Tasks with inherited visual selection and MiniNav cancellation/debug actions.
+
+- Connected the Journey header menu's Select Resources action to selection mode and preserved normal navigation, collapse, creation, and action behavior outside that mode.
+- Stored only explicitly selected IDs, removed descendant Task IDs when selecting a Folder, and prevented implicit descendant deselection while an ancestor Folder remains selected.
+- Added Delete All debug logging and Cancel reset behavior without integrating deletion requests or bulk-delete functionality.
+
 ## 2026-10-22
 
 ### #JANUS-FE-0100: Extract Detailed Workspace Header

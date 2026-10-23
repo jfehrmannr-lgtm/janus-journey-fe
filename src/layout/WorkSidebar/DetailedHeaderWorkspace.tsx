@@ -1,3 +1,5 @@
+'use client'
+
 import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/types/resource-api.type'
 import backgroundImage from '@/assets/janus-journey-background.png'
 import Dropdown from '@/components/Dropdown/Dropdown'
@@ -27,7 +29,7 @@ const DetailedHeaderWorkspace = ({ resource }: DetailedHeaderWorkspaceProps) => 
       {isJourney ? (
         <div className="absolute right-4 top-4">
           <Dropdown
-            content={<JourneyOptions journeyName={resource.name} />}
+            content={(close) => <JourneyOptions journeyName={resource.name} onClose={close} />}
             placement="bottom-end"
             trigger={
               <div

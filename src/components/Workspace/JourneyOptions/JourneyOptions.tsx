@@ -1,17 +1,29 @@
+'use client'
+
 import Button from '@/components/Button/Button'
 import Icon from '@/components/Icon/Icon'
+import useAppUiStore from '@/stores/appUiStore'
 
 interface JourneyOptionsProps {
   journeyName: string
+  onClose: () => void
 }
 
 /**
  * Renders the presentational options panel for an existing Journey.
  *
  * @param journeyName - Name of the selected Journey.
+ * @param onClose - Callback that closes the Journey options dropdown.
  * @returns The Journey options interface.
  */
-const JourneyOptions = ({ journeyName }: JourneyOptionsProps) => {
+const JourneyOptions = ({ journeyName, onClose }: JourneyOptionsProps) => {
+  const startResourceSelection = useAppUiStore((state) => state.startResourceSelection)
+
+  const handleSelectResources = () => {
+    onClose()
+    startResourceSelection()
+  }
+
   return (
     <section className="w-100" aria-labelledby="journey-options-title">
       <header className="flex items-start justify-between gap-4 border-b border-border-subtle">
@@ -41,6 +53,7 @@ const JourneyOptions = ({ journeyName }: JourneyOptionsProps) => {
             color="neutral"
             icon={<Icon className="text-text-muted" icon="UnorderedListOutlined" />}
             label="Select Resources"
+            onClick={handleSelectResources}
             size="full"
             type="button"
             variant="outlined"

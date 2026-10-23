@@ -10,6 +10,10 @@ interface TaskItemBaseProps {
 }
 
 interface PersistedTaskItemProps extends TaskItemBaseProps {
+  isImplicitlySelected?: boolean
+  isSelectingResources?: boolean
+  isSelected?: boolean
+  onToggleSelection?: () => void
   task: ApiTask
   pendingTask?: never
 }
@@ -49,6 +53,9 @@ const TaskItem = (props: TaskItemProps) => {
   const persistedProps = 'task' in props ? (props as PersistedTaskItemProps) : undefined
   const isPendingTask = pendingProps !== undefined
   const task = persistedProps?.task
+  const isSelectingResources = persistedProps?.isSelectingResources ?? false
+  const isSelected = persistedProps?.isSelected ?? false
+  const isImplicitlySelected = persistedProps?.isImplicitlySelected ?? false
   const pendingTask = pendingProps?.pendingTask
   const taskName = pendingTask?.name || task?.name || 'New Task'
   const stateStyle = taskStateStyles[task?.state ?? pendingTask?.state ?? 'pending']
@@ -65,6 +72,14 @@ const TaskItem = (props: TaskItemProps) => {
 
     event.preventDefault()
     pendingProps?.onSelect()
+  }
+
+  const handleSelectionKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!isSelectingResources || isImplicitlySelected) return
+    if (event.key !== 'Enter' && event.key !== ' ') return
+
+    event.preventDefault()
+    persistedProps?.onToggleSelection?.()
   }
 
   const content = (
@@ -103,15 +118,28 @@ const TaskItem = (props: TaskItemProps) => {
   }
 
   return (
-    <div className="flex min-h-10 items-center gap-3 border-t border-border-subtle px-3 py-2">
+    <div
+      aria-pressed={isSelectingResources ? isSelected || isImplicitlySelected : undefined}
+      className={`flex min-h-10 items-center gap-3 border-t border-border-subtle px-3 py-2 ${
+        isSelectingResources && (isSelected || isImplicitlySelected) ? 'bg-primary-soft/60' : ''
+      } ${isSelectingResources && !isImplicitlySelected ? 'cursor-pointer' : ''}`}
+      onClick={() => {
+        if (isSelectingResources && !isImplicitlySelected) persistedProps?.onToggleSelection?.()
+      }}
+      onKeyDown={handleSelectionKeyDown}
+      role={isSelectingResources ? 'button' : undefined}
+      tabIndex={isSelectingResources && !isImplicitlySelected ? 0 : undefined}
+    >
       {content}
-      <button
-        aria-label={`Actions for ${taskName}`}
-        className="shrink-0 text-text-subtle transition-colors hover:text-text-body"
-        type="button"
-      >
-        <Icon icon="EllipsisOutlined" />
-      </button>
+      {!isSelectingResources && (
+        <button
+          aria-label={`Actions for ${taskName}`}
+          className="shrink-0 text-text-subtle transition-colors hover:text-text-body"
+          type="button"
+        >
+          <Icon icon="EllipsisOutlined" />
+        </button>
+      )}
     </div>
   )
 }

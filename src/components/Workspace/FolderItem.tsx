@@ -15,7 +15,12 @@ interface FolderItemBaseProps {
   children?: ReactNode
   createTaskHref?: string
   disableCollapse?: boolean
+  isSelectingResources?: boolean
   initiallyExpanded?: boolean
+  isSelected?: boolean
+  onToggleSelection?: () => void
+  onToggleTaskSelection?: (resourceId: string) => void
+  selectedResource?: string[]
   showCompletionProgress?: boolean
   showCreateTaskAction?: boolean
 }
@@ -60,7 +65,12 @@ const FolderItem = (props: FolderItemProps) => {
     disableCollapse = false,
     initiallyExpanded = true,
     showCompletionProgress = true,
-    showCreateTaskAction = true
+    showCreateTaskAction = true,
+    isSelectingResources = false,
+    isSelected = false,
+    onToggleSelection,
+    onToggleTaskSelection,
+    selectedResource = []
   } = props
   const pendingProps = 'pendingFolder' in props ? (props as PendingFolderItemProps) : undefined
   const persistedProps = 'folder' in props ? (props as PersistedFolderItemProps) : undefined
@@ -81,6 +91,11 @@ const FolderItem = (props: FolderItemProps) => {
       return
     }
 
+    if (isSelectingResources) {
+      onToggleSelection?.()
+      return
+    }
+
     if (!disableCollapse) setIsExpanded((current) => !current)
   }
 
@@ -97,7 +112,9 @@ const FolderItem = (props: FolderItemProps) => {
       : pendingProps?.isValid
         ? 'bg-task-completed'
         : 'bg-surface-subtle'
-    : 'bg-surface-subtle'
+    : isSelected
+      ? 'bg-primary-soft/60'
+      : 'bg-surface-subtle'
 
   const headerContent = (
     <>
@@ -135,12 +152,13 @@ const FolderItem = (props: FolderItemProps) => {
       ) : (
         <button
           aria-expanded={!disableCollapse && isExpanded}
+          aria-pressed={isSelectingResources ? isSelected : undefined}
           className={`flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-slate-200 ${headerClassName}`}
           onClick={handleHeaderClick}
           type="button"
         >
           {headerContent}
-          {!disableCollapse && (
+          {!isSelectingResources && !disableCollapse && (
             <Icon className="text-xs text-text-muted" icon={isExpanded ? 'DownOutlined' : 'RightOutlined'} />
           )}
         </button>
@@ -148,7 +166,7 @@ const FolderItem = (props: FolderItemProps) => {
 
       {!isPendingFolder && !disableCollapse && isExpanded && (
         <div>
-          {showCreateTaskAction && (
+          {showCreateTaskAction && !isSelectingResources && (
             <div className="border-t border-border-subtle px-3 py-2">
               <CreateResourceButton
                 onClick={createTaskHref ? () => router.push(createTaskHref, { scroll: false }) : undefined}
@@ -160,7 +178,16 @@ const FolderItem = (props: FolderItemProps) => {
           )}
           {children}
           {tasks.length > 0 ? (
-            tasks.map((task) => <TaskItem key={task.uid} task={task} />)
+            tasks.map((task) => (
+              <TaskItem
+                isImplicitlySelected={isSelected}
+                isSelectingResources={isSelectingResources}
+                isSelected={selectedResource.includes(task.uid)}
+                key={task.uid}
+                onToggleSelection={() => onToggleTaskSelection?.(task.uid)}
+                task={task}
+              />
+            ))
           ) : (
             <p className="border-t border-border-subtle px-3 py-4 text-sm text-text-muted">No tasks in this folder.</p>
           )}
