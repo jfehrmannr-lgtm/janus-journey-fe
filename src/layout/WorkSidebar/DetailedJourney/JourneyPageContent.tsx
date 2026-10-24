@@ -1,7 +1,8 @@
 'use client'
 
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 import Button from '@/components/Button/Button'
 import CreateResourceButton from '@/components/Button/CreateResourceButton'
@@ -14,21 +15,103 @@ import useAppUiStore from '@/stores/appUiStore'
 interface JourneyPageContentProps {
   journeyId: string
   actions: {
-    bulkDeleteResourcesAction: (journeyId: string, resourceIds: string[]) => Promise<void>
+    bulkDeleteResourcesAction: (journeyId: string, folderIds: string[], taskIds: string[]) => Promise<void>
   }
 }
 
+interface BulkDeleteSelection {
+  folderIds: string[]
+  taskIds: string[]
+}
+
+/**
+ * Renders Journey resources and coordinates bulk resource deletion.
+ *
+ * @param journeyId - Journey identifier whose cached resource tree is displayed.
+ * @param actions - Server Actions used by Journey resource operations.
+ * @returns The Journey resource content and selection controls.
+ */
 const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => {
   const queryClient = useQueryClient()
   const router = useRouter()
+  const journeyQueryKey = navigationQueryKeys.resourceTree('journey', journeyId)
   const isSelectingResources = useAppUiStore((state) => state.isSelectingResources)
   const selectedResource = useAppUiStore((state) => state.selectedResource)
   const cancelResourceSelection = useAppUiStore((state) => state.cancelResourceSelection)
   const toggleSelectedResource = useAppUiStore((state) => state.toggleSelectedResource)
 
-  const journey = queryClient.getQueryData<ApiJourneyWithResources>(
-    navigationQueryKeys.resourceTree('journey', journeyId)
-  )
+  const { data: journey } = useQuery<ApiJourneyWithResources>({
+    enabled: false,
+    queryFn: () => {
+      const cachedJourney = queryClient.getQueryData<ApiJourneyWithResources>(journeyQueryKey)
+
+      if (!cachedJourney) {
+        throw new Error('The Journey resource is not available in the query cache.')
+      }
+
+      return cachedJourney
+    },
+    queryKey: journeyQueryKey
+  })
+
+  const deleteResourcesMutation = useMutation({
+    mutationFn: ({ folderIds, taskIds }: BulkDeleteSelection) =>
+      actions.bulkDeleteResourcesAction(journeyId, folderIds, taskIds),
+    onError: (error: unknown, _selection, context) => {
+      toast.error(error instanceof Error ? error.message : 'Failed to delete resources.', { id: context?.toastId })
+      console.error(error)
+    },
+    onMutate: () => ({ toastId: toast.loading('Deleting resources...') }),
+    onSuccess: (_response, selection, context) => {
+      const folderIds = new Set(selection.folderIds)
+      const taskIds = new Set(selection.taskIds)
+
+      queryClient.setQueryData<ApiJourneyWithResources>(journeyQueryKey, (cachedJourney) => {
+        if (!cachedJourney) {
+          return cachedJourney
+        }
+
+        return {
+          ...cachedJourney,
+          folders: cachedJourney.folders
+            .filter((folder) => !folderIds.has(folder.uid))
+            .map((folder) => ({
+              ...folder,
+              tasks: folder.tasks.filter((task) => !taskIds.has(task.uid))
+            })),
+          tasks: cachedJourney.tasks.filter((task) => !taskIds.has(task.uid))
+        }
+      })
+
+      toast.success('Resources deleted successfully.', { id: context?.toastId })
+      cancelResourceSelection()
+    }
+  })
+
+  const handleBulkDelete = () => {
+    if (deleteResourcesMutation.isPending || selectedResource.length === 0) {
+      return
+    }
+
+    const selectedResourceIds = new Set(selectedResource)
+    const folderIds =
+      journey?.folders.filter((folder) => selectedResourceIds.has(folder.uid)).map((folder) => folder.uid) ?? []
+    const selectedFolderIds = new Set(folderIds)
+    const taskIds = journey
+      ? [
+          ...journey.tasks,
+          ...journey.folders.flatMap((folder) => (selectedFolderIds.has(folder.uid) ? [] : folder.tasks))
+        ]
+          .filter((task) => selectedResourceIds.has(task.uid))
+          .map((task) => task.uid)
+      : []
+
+    if (folderIds.length === 0 && taskIds.length === 0) {
+      return
+    }
+
+    deleteResourcesMutation.mutate({ folderIds, taskIds })
+  }
 
   // El hook debe devolver ApiJourneyWithResources para acceder a folders.
   if (!journey || !('folders' in journey)) {
@@ -52,8 +135,9 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
               buttonSize="normal"
               className="border-transparent text-danger-foreground hover:bg-danger-surface"
               color="danger"
+              disabled={deleteResourcesMutation.isPending}
               label="Delete All"
-              onClick={() => console.debug(selectedResource)}
+              onClick={handleBulkDelete}
               size="nm"
               type="button"
               variant="outlined"

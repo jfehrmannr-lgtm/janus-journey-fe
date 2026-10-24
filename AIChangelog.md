@@ -1,3 +1,13 @@
+## 2026-10-24
+
+### #JANUS-FE-0113: Implement Journey Bulk Delete
+
+**Work**: Plan / Build / Validate; Connected Journey resource selection to the existing Folder and Task bulk-delete BFF routes through a React Query mutation and cache-only success update.
+
+- Split selected IDs by resource type from the cached Journey tree before invoking the Server Action.
+- Removed deleted Folders and Tasks from the Journey cache with `setQueryData`, without invalidation, refetching, optimistic updates, or rollback.
+- Preserved selection and cached data when deletion fails, clearing selection only after successful deletion.
+
 ## 2026-10-23
 
 ### #JANUS-FE-0109: Implement Portal Dropdown Component
