@@ -6,7 +6,7 @@ import useAppUiStore from '@/stores/appUiStore'
 
 interface JourneyOptionsProps {
   journeyName: string
-  onClose: () => void
+  onClose?: () => void
 }
 
 /**
@@ -20,12 +20,12 @@ const JourneyOptions = ({ journeyName, onClose }: JourneyOptionsProps) => {
   const startResourceSelection = useAppUiStore((state) => state.startResourceSelection)
 
   const handleSelectResources = () => {
-    onClose()
+    if (onClose) onClose()
     startResourceSelection()
   }
 
   return (
-    <section className="w-100" aria-labelledby="journey-options-title">
+    <section aria-labelledby="journey-options-title">
       <header className="flex items-start justify-between gap-4 border-b border-border-subtle">
         <div className="py-2 px-2">
           <h1 className=" font-semibold tracking-tight text-text-primary" id="journey-options-title">

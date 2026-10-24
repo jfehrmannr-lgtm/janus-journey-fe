@@ -1,5 +1,24 @@
 ## 2026-10-23
 
+### #JANUS-FE-0109: Implement Portal Dropdown Component
+
+**Work**: Plan / Build / Validate; Implemented a reusable Zustand-coordinated Dropdown with Portal rendering, viewport-aware positioning, independent transition lifecycle, dismissal behavior, and Playground coverage.
+
+- Added `Dropdown` and `DropdownEffect` components with Server Component-compatible JSX children.
+- Added outside-click and Escape dismissal, one-active-dropdown coordination, optional close callbacks, placement, width, and max-height support.
+- Registered a practical Dropdown Playground using existing Button and Icon components.
+
+## 2026-10-23
+
+### #JANUS-FE-0108: Use Shared Buttons in Journey Content
+
+**Work**: Refactor / Journey UI; Replaced the Journey resource-selection native buttons with the existing shared Button component while preserving their actions and styling.
+
+- Delete All and Cancel now use the reusable Button API.
+- Resource selection behavior and layout remain unchanged.
+
+## 2026-10-23
+
 ### #JANUS-FE-0107: Track Active Dropdown by ID
 
 **Work**: Refactor / UI State; Added shared active Dropdown ID tracking through Zustand while preserving the existing local animation, focus, content composition, and styling behavior.
@@ -1081,3 +1100,29 @@
 - Added explicit supported icon-name and icon-variant types.
 - Kept all Ant Design icon imports and name-to-component mapping inside `Icon.tsx`.
 - Refactored Dashboard, SideNav, Journey tree, Login, and marketing components to use `<Icon />`.
+
+## 2026-10-23
+
+### #JANUS-FE-0110: Fix Dropdown Floating Position
+
+**Work**: Fix / Validate / Dropdown UI; Applied fixed positioning to the portal-mounted dropdown surface so calculated trigger-relative coordinates are respected.
+
+- Dropdown menus now render beside their triggers instead of falling into normal document flow at the bottom-left of the viewport.
+
+## 2026-10-23
+
+### #JANUS-FE-0111: Correct Dropdown Placement Fallbacks
+
+**Work**: Fix / Positioning / Validate; Unified Dropdown viewport calculations so preferred placements, fallbacks, alignment, scrolling, and boundary clamping use the Portal’s fixed viewport coordinate system consistently.
+
+- Top placements now fall back below when needed, and bottom placements fall back above when appropriate.
+- Added robust horizontal clamping, viewport-constrained widths, resize observation, and fixed positioning for scroll and resize updates.
+
+## 2026-10-24
+
+### #JANUS-FE-0112: Anchor Dropdowns to Rendered Triggers
+
+**Work**: Fix / Positioning / Validate; Updated Dropdown measurements to use the visible rendered trigger element instead of relying on the layout wrapper’s coordinates.
+
+- Absolutely positioned and relatively positioned triggers now anchor menus from their actual viewport bounds.
+- Preserved wrapper-based outside-click handling, Portal rendering, placement fallback, and viewport clamping.

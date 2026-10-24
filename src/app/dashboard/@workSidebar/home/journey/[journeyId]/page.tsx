@@ -1,4 +1,5 @@
 import JourneyPageContent from '@/layout/WorkSidebar/DetailedJourney/JourneyPageContent'
+import { bulkDeleteResourcesAction } from './actions'
 
 interface JourneyPageProps {
   params: Promise<{ journeyId: string }>
@@ -7,7 +8,7 @@ interface JourneyPageProps {
 const JourneyPage = async ({ params }: JourneyPageProps) => {
   const { journeyId } = await params
 
-  return <JourneyPageContent journeyId={journeyId} />
+  return <JourneyPageContent actions={{ bulkDeleteResourcesAction: bulkDeleteResourcesAction }} journeyId={journeyId} />
 }
 
 export default JourneyPage

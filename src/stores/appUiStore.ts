@@ -3,13 +3,13 @@
 import { create } from 'zustand'
 
 interface AppUiState {
-  activeDropdownId: string | null
   isSelectingResources: boolean
   isSideNavCollapsed: boolean
   selectedResource: string[]
+  activeDropdownId: string | null
+  openDropdown: (id: string) => void
+  closeDropdown: () => void
   cancelResourceSelection: () => void
-  closeDropdown: (dropdownId: string) => void
-  openDropdown: (dropdownId: string) => void
   startResourceSelection: () => void
   toggleSelectedResource: (resourceId: string, descendantIds?: string[]) => void
   toggleSideNav: () => void
@@ -19,14 +19,13 @@ interface AppUiState {
  * Stores shared application navigation UI state without storing domain data.
  */
 const useAppUiStore = create<AppUiState>((set) => ({
-  activeDropdownId: null,
   isSelectingResources: false,
   isSideNavCollapsed: false,
   selectedResource: [],
+  activeDropdownId: null,
+  openDropdown: (id) => set({ activeDropdownId: id }),
+  closeDropdown: () => set({ activeDropdownId: null }),
   cancelResourceSelection: () => set({ isSelectingResources: false, selectedResource: [] }),
-  closeDropdown: (dropdownId) =>
-    set((state) => (state.activeDropdownId === dropdownId ? { activeDropdownId: null } : state)),
-  openDropdown: (dropdownId) => set({ activeDropdownId: dropdownId }),
   startResourceSelection: () => set({ isSelectingResources: true, selectedResource: [] }),
   toggleSelectedResource: (resourceId, descendantIds = []) =>
     set((state) => {

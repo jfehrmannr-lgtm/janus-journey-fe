@@ -121,6 +121,13 @@ body {
   animation: dropdown-fade-out 150ms ease-in both;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .dropdown-fade-in,
+  .dropdown-fade-out {
+    animation-duration: 1ms;
+  }
+}
+
 .modal-fade-in {
   animation: modal-fade-in 180ms ease-out both;
 }

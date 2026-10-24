@@ -62,6 +62,12 @@ without enforcing a mandatory execution order.
 - `ComponentContainer` handles lifecycle, side effects, and orchestration.
 - `Component` handles rendering and user interaction.
 - Do not use custom hooks just to hide excessive `useEffect` complexity.
+- MUST reuse existing components whenever they fulfill the requirement.
+- MUST follow their established props, variants, styling, and composition patterns.
+- MUST NOT recreate existing functionality using native HTML elements, custom JSX, or Tailwind utilities.
+- MUST NOT introduce duplicate components, styling patterns, or abstractions without a clear technical necessity.
+- MUST prefer minimal extensions to existing components when additional functionality is required.
+- MUST preserve architectural and visual consistency across the application.
 
 ## Tailwind CSS Conventions
 - Prefer Tailwind CSS built-in utilities, naming conventions, and design patterns instead of creating custom alternatives.

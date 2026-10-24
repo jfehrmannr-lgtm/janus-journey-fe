@@ -1,137 +1,139 @@
 'use client'
 
-import { isValidElement, useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import type { CSSProperties, KeyboardEvent, MouseEvent, ReactElement } from 'react'
+import { cloneElement, isValidElement, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 
 import Portal from '@/components/Portal/Portal'
 import useAppUiStore from '@/stores/appUiStore'
 
-import type { DropdownPosition, DropdownPositioningInput, DropdownProps } from './Dropdown.type'
+import DropdownEffect from './DropdownEffect'
+import type { DropdownProps } from './dropdown.types'
 
-export type { DropdownContent, DropdownPlacement, DropdownProps, DropdownSize } from './Dropdown.type'
-
+const dropdownSpacing = 8
 const viewportPadding = 8
-const placementGap = 8
-const closeAnimationDuration = 150
-const focusableSelector =
-  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+const defaultWidth = 240
+const defaultMaxHeight = 360
 
-const clamp = (value: number, minimum: number, maximum: number) => Math.min(Math.max(value, minimum), maximum)
+interface DropdownPosition {
+  height: number
+  left: number
+  top: number
+  width: number
+}
 
+interface DropdownPositioningInput {
+  menuHeight: number
+  placement: NonNullable<DropdownProps['placement']>
+  triggerRect: DOMRect
+  viewportHeight: number
+  viewportWidth: number
+  width: number
+}
+
+/**
+ * Calculates fixed viewport coordinates for a dropdown while preserving its preferred placement when possible.
+ *
+ * @param menuHeight - Measured menu height after applying the configured maximum height.
+ * @param placement - Preferred vertical direction and horizontal alignment.
+ * @param triggerRect - Trigger bounds in viewport coordinates.
+ * @param viewportHeight - Current viewport height.
+ * @param viewportWidth - Current viewport width.
+ * @param width - Requested menu width in pixels.
+ * @returns Clamped coordinates and available menu height.
+ */
 const getDropdownPosition = ({
-  dropdownHeight,
-  dropdownWidth,
+  menuHeight,
   placement,
   triggerRect,
   viewportHeight,
-  viewportWidth
+  viewportWidth,
+  width
 }: DropdownPositioningInput): DropdownPosition => {
-  const opensBelow = placement.startsWith('bottom')
-  const alignsEnd = placement.endsWith('end')
-  const fitsBelow = triggerRect.bottom + placementGap + dropdownHeight <= viewportHeight - viewportPadding
-  const fitsAbove = triggerRect.top - placementGap - dropdownHeight >= viewportPadding
-  const opensDown = opensBelow ? fitsBelow || !fitsAbove : !fitsAbove && fitsBelow
-  const preferredTop = opensDown ? triggerRect.bottom + placementGap : triggerRect.top - dropdownHeight - placementGap
-  const preferredLeft = alignsEnd ? triggerRect.right - dropdownWidth : triggerRect.left
+  const menuWidth = Math.min(Math.max(1, width), Math.max(1, viewportWidth - viewportPadding * 2))
+  const spaceAbove = Math.max(0, triggerRect.top - dropdownSpacing - viewportPadding)
+  const spaceBelow = Math.max(0, viewportHeight - triggerRect.bottom - dropdownSpacing - viewportPadding)
+  const prefersAbove = placement.startsWith('top')
+  const preferredSpace = prefersAbove ? spaceAbove : spaceBelow
+  const oppositeSpace = prefersAbove ? spaceBelow : spaceAbove
+  const opensAbove =
+    preferredSpace >= menuHeight ? prefersAbove : oppositeSpace >= menuHeight ? !prefersAbove : spaceAbove > spaceBelow
+  const availableHeight = Math.max(1, opensAbove ? spaceAbove : spaceBelow)
+  const renderedHeight = Math.min(menuHeight, availableHeight)
+  const preferredTop = opensAbove
+    ? triggerRect.top - renderedHeight - dropdownSpacing
+    : triggerRect.bottom + dropdownSpacing
+  const maxTop = Math.max(viewportPadding, viewportHeight - renderedHeight - viewportPadding)
+  const preferredLeft = placement.endsWith('end') ? triggerRect.right - menuWidth : triggerRect.left
+  const maxLeft = Math.max(viewportPadding, viewportWidth - menuWidth - viewportPadding)
 
   return {
-    left: clamp(
-      preferredLeft,
-      viewportPadding,
-      Math.max(viewportPadding, viewportWidth - dropdownWidth - viewportPadding)
-    ),
-    top: clamp(
-      preferredTop,
-      viewportPadding,
-      Math.max(viewportPadding, viewportHeight - dropdownHeight - viewportPadding)
-    )
+    height: availableHeight,
+    left: Math.min(Math.max(viewportPadding, preferredLeft), maxLeft),
+    top: Math.min(Math.max(viewportPadding, preferredTop), maxTop),
+    width: menuWidth
   }
 }
 
 /**
- * Renders a content-agnostic, portal-based floating dropdown.
+ * Renders reusable, portal-based floating content controlled by shared UI state.
  *
- * @param content - React content rendered in the floating panel, or a render function receiving the close callback and Dropdown ID.
- * @param id - Optional stable ID used to identify this Dropdown.
- * @param maxHeight - Maximum height applied to the floating panel.
+ * @param id - Stable identifier used to coordinate this dropdown through Zustand.
+ * @param trigger - Content that toggles the dropdown when activated.
+ * @param children - Floating content rendered through the shared Portal component.
+ * @param onClose - Optional callback invoked once when an open dropdown closes.
  * @param placement - Preferred placement relative to the trigger.
- * @param trigger - React content used to open and close the dropdown.
- * @param width - Width applied to the floating panel.
- * @returns A trigger and floating dropdown panel.
+ * @param width - Floating width in pixels, or the trigger width when set to `trigger`.
+ * @param maxHeight - Maximum floating content height in pixels.
+ * @returns The dropdown trigger and its portal content.
  */
 const Dropdown = ({
-  content,
   id,
-  maxHeight = 320,
-  placement = 'bottom-start',
   trigger,
-  width = 240
+  children,
+  onClose,
+  placement = 'bottom-start',
+  width = defaultWidth,
+  maxHeight = defaultMaxHeight
 }: DropdownProps) => {
-  const generatedId = useId()
-  const dropdownId = id ?? generatedId
   const activeDropdownId = useAppUiStore((state) => state.activeDropdownId)
-  const closeDropdown = useAppUiStore((state) => state.closeDropdown)
   const openDropdown = useAppUiStore((state) => state.openDropdown)
-  const [isClosing, setIsClosing] = useState(false)
-  const [position, setPosition] = useState<DropdownPosition | null>(null)
-  const triggerContainerRef = useRef<HTMLDivElement>(null)
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const previousActiveElement = useRef<HTMLElement | null>(null)
-  const hasFocusedDropdown = useRef(false)
-  const isOpen = activeDropdownId === dropdownId
-  const isVisible = isOpen || isClosing
+  const closeDropdown = useAppUiStore((state) => state.closeDropdown)
+  const triggerRef = useRef<HTMLSpanElement | null>(null)
+  const menuRef = useRef<HTMLDivElement | null>(null)
+  const dropdownId = useId()
+  const isOpen = activeDropdownId === id
+  const [position, setPosition] = useState<DropdownPosition>({ height: 0, left: 0, top: 0, width: defaultWidth })
+  const [isPositioned, setIsPositioned] = useState(false)
+  const previousIsOpen = useRef(false)
 
-  const close = useCallback(() => {
-    if (!isOpen) return
-    setIsClosing(true)
-    closeDropdown(dropdownId)
-  }, [closeDropdown, dropdownId, isOpen])
+  useEffect(() => {
+    if (previousIsOpen.current && !isOpen) {
+      onClose?.()
+    }
 
-  const open = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current)
-    previousActiveElement.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    hasFocusedDropdown.current = false
-    setIsClosing(false)
-    setPosition(null)
-    openDropdown(dropdownId)
-  }
+    previousIsOpen.current = isOpen
+  }, [isOpen, onClose])
 
-  const toggle = () => {
-    if (isOpen) {
-      close()
+  useEffect(() => {
+    if (!isOpen) {
       return
     }
 
-    open()
-  }
-
-  useEffect(() => {
-    if (!isClosing) return
-
-    previousActiveElement.current?.focus()
-    closeTimer.current = setTimeout(() => {
-      setIsClosing(false)
-      setPosition(null)
-    }, closeAnimationDuration)
-
-    return () => {
-      if (closeTimer.current) clearTimeout(closeTimer.current)
-    }
-  }, [isClosing])
-
-  useEffect(() => {
-    if (!isVisible) return
-
     const handlePointerDown = (event: PointerEvent) => {
       const target = event.target as Node
-      if (!triggerContainerRef.current?.contains(target) && !dropdownRef.current?.contains(target)) close()
+
+      if (!triggerRef.current?.contains(target) && !menuRef.current?.contains(target)) {
+        closeDropdown()
+      }
     }
 
     const handleKeyDown = (event: globalThis.KeyboardEvent) => {
-      if (event.key !== 'Escape') return
+      if (event.key !== 'Escape') {
+        return
+      }
 
       event.preventDefault()
-      close()
+      closeDropdown()
     }
 
     document.addEventListener('pointerdown', handlePointerDown)
@@ -141,89 +143,145 @@ const Dropdown = ({
       document.removeEventListener('pointerdown', handlePointerDown)
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [close, isVisible])
+  }, [closeDropdown, isOpen])
 
   useLayoutEffect(() => {
-    if (!isVisible) return
+    if (!isOpen) {
+      return
+    }
 
-    let animationFrame = 0
+    const menuElement = menuRef.current
+
+    if (!menuElement) {
+      return
+    }
 
     const updatePosition = () => {
-      const triggerElement = triggerContainerRef.current
-      const dropdownElement = dropdownRef.current
+      const triggerElement =
+        triggerRef.current?.querySelector<HTMLElement>('[data-dropdown-trigger]') ??
+        triggerRef.current?.firstElementChild ??
+        triggerRef.current
 
-      if (!triggerElement || !dropdownElement) return
-
-      setPosition(
-        getDropdownPosition({
-          dropdownHeight: dropdownElement.getBoundingClientRect().height,
-          dropdownWidth: dropdownElement.getBoundingClientRect().width,
-          placement,
-          triggerRect: triggerElement.getBoundingClientRect(),
-          viewportHeight: window.innerHeight,
-          viewportWidth: window.innerWidth
-        })
-      )
-
-      if (isOpen && !hasFocusedDropdown.current) {
-        hasFocusedDropdown.current = true
-        animationFrame = window.requestAnimationFrame(() => {
-          dropdownElement.querySelector<HTMLElement>(focusableSelector)?.focus()
-        })
+      if (!triggerElement || !menuElement) {
+        return
       }
+
+      const triggerRect = triggerElement.getBoundingClientRect()
+      const requestedWidth = width === 'trigger' ? triggerRect.width : width
+      const nextPosition = getDropdownPosition({
+        menuHeight: Math.min(maxHeight, menuElement.scrollHeight),
+        placement,
+        triggerRect,
+        viewportHeight: window.innerHeight,
+        viewportWidth: window.innerWidth,
+        width: requestedWidth
+      })
+
+      setPosition((currentPosition) => {
+        if (
+          currentPosition.height === nextPosition.height &&
+          currentPosition.left === nextPosition.left &&
+          currentPosition.top === nextPosition.top &&
+          currentPosition.width === nextPosition.width
+        ) {
+          return currentPosition
+        }
+
+        return nextPosition
+      })
+      setIsPositioned(true)
     }
 
     updatePosition()
     window.addEventListener('resize', updatePosition)
     window.addEventListener('scroll', updatePosition, true)
 
+    const resizeObserver = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(updatePosition)
+    resizeObserver?.observe(menuElement)
+
     return () => {
-      window.cancelAnimationFrame(animationFrame)
       window.removeEventListener('resize', updatePosition)
       window.removeEventListener('scroll', updatePosition, true)
+      resizeObserver?.disconnect()
     }
-  }, [isOpen, isVisible, maxHeight, placement, width])
+  }, [isOpen, maxHeight, placement, width])
 
-  const hasInteractiveTrigger = isValidElement(trigger)
-  const triggerNode = hasInteractiveTrigger ? (
-    trigger
-  ) : (
-    <button aria-expanded={isOpen} aria-haspopup="true" onClick={toggle} type="button">
-      {trigger}
-    </button>
-  )
-  const contentNode = typeof content === 'function' ? content(close, dropdownId) : content
+  const handleToggle = () => {
+    if (isOpen) {
+      closeDropdown()
+      return
+    }
+
+    setIsPositioned(false)
+    openDropdown(id)
+  }
+
+  const handleTriggerKeyDown = (event: KeyboardEvent<HTMLSpanElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      handleToggle()
+    }
+  }
+
+  const triggerProps = {
+    'aria-controls': dropdownId,
+    'aria-expanded': isOpen,
+    'aria-haspopup': 'menu' as const,
+    'data-dropdown-trigger': true,
+    onClick: (event: MouseEvent<HTMLElement>) => {
+      const originalOnClick = (trigger as ReactElement<{ onClick?: (clickEvent: MouseEvent<HTMLElement>) => void }>)
+        .props.onClick
+      originalOnClick?.(event)
+      handleToggle()
+    }
+  }
+
+  const renderedTrigger = isValidElement(trigger) ? cloneElement(trigger, triggerProps) : trigger
+
+  const fallbackTriggerProps = isValidElement(trigger)
+    ? undefined
+    : {
+        'aria-controls': dropdownId,
+        'aria-expanded': isOpen,
+        'aria-haspopup': 'menu' as const,
+        'data-dropdown-trigger': true,
+        onClick: handleToggle,
+        onKeyDown: handleTriggerKeyDown,
+        role: 'button' as const,
+        tabIndex: 0
+      }
+
+  const menuStyle: CSSProperties = {
+    left: position.left,
+    maxHeight: position.height > 0 ? Math.min(maxHeight, position.height) : maxHeight,
+    overflowY: 'auto',
+    position: 'fixed',
+    top: position.top,
+    visibility: isPositioned ? 'visible' : 'hidden',
+    width: position.width,
+    zIndex: 60
+  }
 
   return (
     <>
-      <div
-        aria-expanded={isOpen}
-        aria-haspopup="true"
-        className="inline-flex"
-        onClick={hasInteractiveTrigger ? toggle : undefined}
-        ref={triggerContainerRef}
-      >
-        {triggerNode}
-      </div>
-      {isVisible && (
-        <Portal>
+      <span className="inline-flex" ref={triggerRef} {...fallbackTriggerProps}>
+        {renderedTrigger}
+      </span>
+      <Portal>
+        <DropdownEffect containerRef={menuRef} isOpen={isOpen} style={menuStyle}>
           <div
-            aria-hidden={!isOpen}
-            className={`fixed z-60 overflow-y-auto rounded-xl border border-border bg-surface p-2 shadow-xs ${isClosing ? 'dropdown-fade-out' : 'dropdown-fade-in'} ${position ? 'opacity-100' : 'opacity-0'}`}
+            aria-label="Dropdown menu"
+            className="rounded-xl border border-border bg-surface p-1.5 text-text-body shadow-xl z-60"
             id={dropdownId}
-            ref={dropdownRef}
-            role="region"
-            style={{
-              left: position?.left ?? 0,
-              top: position?.top ?? 0
-            }}
+            role="menu"
           >
-            {contentNode}
+            {children}
           </div>
-        </Portal>
-      )}
+        </DropdownEffect>
+      </Portal>
     </>
   )
 }
 
+export type { DropdownPlacement, DropdownProps } from './dropdown.types'
 export default Dropdown

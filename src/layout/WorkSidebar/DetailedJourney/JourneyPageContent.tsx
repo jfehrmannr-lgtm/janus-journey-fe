@@ -3,6 +3,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 
+import Button from '@/components/Button/Button'
 import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import FolderItem from '@/components/Workspace/FolderItem'
 import RootTasks from '@/components/Workspace/RootTasks'
@@ -12,9 +13,12 @@ import useAppUiStore from '@/stores/appUiStore'
 
 interface JourneyPageContentProps {
   journeyId: string
+  actions: {
+    bulkDeleteResourcesAction: (journeyId: string, resourceIds: string[]) => Promise<void>
+  }
 }
 
-const JourneyPageContent = ({ journeyId }: JourneyPageContentProps) => {
+const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => {
   const queryClient = useQueryClient()
   const router = useRouter()
   const isSelectingResources = useAppUiStore((state) => state.isSelectingResources)
@@ -44,20 +48,26 @@ const JourneyPageContent = ({ journeyId }: JourneyPageContentProps) => {
         </div>
         {isSelectingResources && (
           <div className="flex items-center gap-2 py-2">
-            <button
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-danger-foreground transition-colors hover:bg-danger-surface"
+            <Button
+              buttonSize="normal"
+              className="border-transparent text-danger-foreground hover:bg-danger-surface"
+              color="danger"
+              label="Delete All"
               onClick={() => console.debug(selectedResource)}
+              size="nm"
               type="button"
-            >
-              Delete All
-            </button>
-            <button
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-text-body transition-colors hover:bg-surface-subtle"
+              variant="outlined"
+            />
+            <Button
+              buttonSize="normal"
+              className="border-transparent text-text-body hover:bg-surface-subtle"
+              color="neutral"
+              label="Cancel"
               onClick={cancelResourceSelection}
+              size="nm"
               type="button"
-            >
-              Cancel
-            </button>
+              variant="outlined"
+            />
           </div>
         )}
       </nav>
