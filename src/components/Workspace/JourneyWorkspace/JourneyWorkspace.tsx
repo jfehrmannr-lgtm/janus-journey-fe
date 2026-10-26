@@ -1,8 +1,8 @@
 import React from 'react'
-import CreateJourneyWorkspaceForm from '@/components/Form/Journey/CreateJourneyWorkspaceForm'
+import CreateJourneyForm from '@/components/Form/Journey/CreateJourneyForm'
 
 const JourneyWorkspace = () => {
-  return <CreateJourneyWorkspaceForm />
+  return <CreateJourneyForm />
 }
 
 export default JourneyWorkspace

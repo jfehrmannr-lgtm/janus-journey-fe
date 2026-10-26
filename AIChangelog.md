@@ -1,5 +1,15 @@
 ## 2026-10-26
 
+### #JANUS-FE-0118: Simplify Create Journey Draft Workflow
+
+**Work**: Plan / Build / Validate; Reduced the Create Journey form and Zustand draft to Journey name and description, leaving Folder and Task creation for post-creation workflows.
+
+- Removed Folder and Task creation sections and controls from the Create Journey form.
+- Removed Folder and Task collections and actions from the Journey workspace draft store.
+- Preserved controlled input synchronization, header name synchronization, and lifecycle reset behavior.
+
+## 2026-10-26
+
 ### #JANUS-FE-0117: Consolidate Journey Workspace Form State
 
 **Work**: Refactor / Rename / Validate; Moved Create Journey draft state into the shared workspace form store and renamed its state and actions to match the existing Folder and Task store conventions.
