@@ -1,17 +1,46 @@
-import { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/types/resource-api.type'
+import type { ReactNode } from 'react'
+
+import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/types/resource-api.type'
+import CreateJourneyWorkspaceLifecycle from '@/components/Workspace/CreateJourneyWorkspaceLifecycle'
 import DetailedHeaderWorkspace from './DetailedHeaderWorkspace'
 import DetailedWorksapceActions from './DetailedWorksapceActions'
 
-interface DetailedWorkspaceProps {
-  resource: ApiJourneyWithResources | ApiFolderWithTasks | ApiTask
-  children: React.ReactNode
+type WorkspaceResource = ApiJourneyWithResources | ApiFolderWithTasks | ApiTask
+
+interface DetailedWorkspaceViewProps {
+  mode?: 'view'
+  resource: WorkspaceResource
+  children: ReactNode
 }
 
+interface DetailedWorkspaceCreateProps {
+  mode: 'create'
+  children: ReactNode
+}
+
+type DetailedWorkspaceProps = DetailedWorkspaceViewProps | DetailedWorkspaceCreateProps
+
 /**
- * Prefetches one selected resource tree for the contextual WorkSidebar.
- * @returns The hydrated selected-resource content.
+ * Renders the shared workspace shell in view or resource-creation mode.
+ *
+ * @param props - Workspace mode, resource when viewing, and composed content.
+ * @returns The workspace shell with its header and content/actions area.
  */
-const DetailedWorkspace = ({ resource, children }: DetailedWorkspaceProps) => {
+const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
+  const { children } = props
+
+  if (props.mode === 'create') {
+    return (
+      <CreateJourneyWorkspaceLifecycle>
+        <div className="min-h-full bg-white">
+          <DetailedHeaderWorkspace mode="create" />
+          <DetailedWorksapceActions mode="create">{children}</DetailedWorksapceActions>
+        </div>
+      </CreateJourneyWorkspaceLifecycle>
+    )
+  }
+
+  const { resource } = props
   const isJourney = resource.type === 'journey'
   const progress = isJourney ? resource.progress : undefined
 
@@ -19,7 +48,7 @@ const DetailedWorkspace = ({ resource, children }: DetailedWorkspaceProps) => {
 
   return (
     <div className="min-h-full bg-white">
-      <DetailedHeaderWorkspace resource={resource} />
+      <DetailedHeaderWorkspace mode="view" resource={resource} />
 
       {isJourney && progress && (
         <section aria-label="Journey progress" className="border-b border-border-subtle px-5 py-5">
@@ -39,7 +68,9 @@ const DetailedWorkspace = ({ resource, children }: DetailedWorkspaceProps) => {
         </section>
       )}
 
-      <DetailedWorksapceActions resource={resource}>{children}</DetailedWorksapceActions>
+      <DetailedWorksapceActions mode="view" resource={resource}>
+        {children}
+      </DetailedWorksapceActions>
     </div>
   )
 }

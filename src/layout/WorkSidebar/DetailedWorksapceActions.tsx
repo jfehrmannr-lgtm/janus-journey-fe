@@ -6,12 +6,32 @@ import JourneyWorkspaceQuery from './DetailedJourney/JourneyWorkspaceQuery'
 
 type WorkspaceResource = ApiJourneyWithResources | ApiFolderWithTasks | ApiTask
 
-interface DetailedWorkspaceProps {
+interface DetailedWorkspaceViewProps {
+  mode?: 'view'
   resource: WorkspaceResource
   children: ReactNode
 }
 
-const DetailedWorkspaceActions = ({ resource, children }: DetailedWorkspaceProps) => {
+interface DetailedWorkspaceCreateProps {
+  mode: 'create'
+  children: ReactNode
+}
+
+type DetailedWorkspaceActionsProps = DetailedWorkspaceViewProps | DetailedWorkspaceCreateProps
+
+/**
+ * Renders the content/actions area for the selected workspace mode.
+ *
+ * @param props - Workspace mode, resource when viewing, and composed content.
+ * @returns The mode-specific workspace content area.
+ */
+const DetailedWorkspaceActions = (props: DetailedWorkspaceActionsProps) => {
+  if (props.mode === 'create') {
+    return <>{props.children}</>
+  }
+
+  const { resource, children } = props
+
   switch (resource.type) {
     case 'journey':
       return <JourneyWorkspaceQuery>{children}</JourneyWorkspaceQuery>

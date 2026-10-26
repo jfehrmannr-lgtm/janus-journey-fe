@@ -59,7 +59,7 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
     .slice(0, 3)
 
   const handleJourneyCreation = () => {
-    router.push('/dashboard/create/journey')
+    router.push('/dashboard/home/create-journey')
   }
 
   const handleResourceSelect = (resource: Resource) => {

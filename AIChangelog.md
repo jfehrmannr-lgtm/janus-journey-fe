@@ -1,3 +1,33 @@
+## 2026-10-26
+
+### #JANUS-FE-0117: Consolidate Journey Workspace Form State
+
+**Work**: Refactor / Rename / Validate; Moved Create Journey draft state into the shared workspace form store and renamed its state and actions to match the existing Folder and Task store conventions.
+
+- Added `useCreateJourneyForm` and `createJourneyForm` to `workspaceFromStore.ts`.
+- Renamed Journey field actions to `setJourneyName`, `setJourneyDescription`, `setJourneyFolders`, and `setJourneyTasks`.
+- Renamed reset behavior to `setResetJourney` and updated form, header, and lifecycle consumers.
+- Removed the standalone `createJourneyDraftStore.ts` file.
+
+## 2026-10-24
+
+### #JANUS-FE-0115: Route Dashboard Journey Creation Button
+
+**Work**: Fix / Validate / Dashboard Navigation; Updated the Dashboard `+ Journey` action to open the new Create Journey workspace route.
+
+- Changed the navigation target from the legacy creation route to `/dashboard/home/create-journey`.
+- Preserved all other Dashboard actions and Journey functionality.
+
+## 2026-10-24
+
+### #JANUS-FE-0114: Add UI-Only Create Journey Workspace
+
+**Work**: Plan / Build / Validate; Added the `/dashboard/home/create-journey` parallel route, creation-mode `DetailedWorkspace` support, and a non-submitting Journey creation form without state or backend integration.
+
+- Added a discriminated `view`/`create` workspace contract while preserving existing resource views.
+- Added a create-aware header and content/actions composition without fabricating a resource.
+- Added contract-aligned name, description, Folder, and Task UI with disabled creation controls.
+
 ## 2026-10-24
 
 ### #JANUS-FE-0113: Implement Journey Bulk Delete
@@ -1136,3 +1166,14 @@
 
 - Absolutely positioned and relatively positioned triggers now anchor menus from their actual viewport bounds.
 - Preserved wrapper-based outside-click handling, Portal rendering, placement fallback, and viewport clamping.
+
+## 2026-10-26
+
+### #JANUS-FE-0116: Add Create Journey Draft State
+
+**Work**: Plan / Build / Validate; Added Zustand-backed Create Journey draft fields, synchronized the form and creation header, and reset the draft on workspace unmount without adding submission behavior.
+
+- Added contract-aligned `name`, `description`, `folders`, and `tasks` draft state with field actions and reset behavior.
+- Connected the existing form inputs to the draft store while preserving the current UI and disabled controls.
+- Added create-workspace lifecycle cleanup so drafts do not persist after leaving the route.
+- Updated the create-mode header to display the draft name with a `Create Journey` fallback.
