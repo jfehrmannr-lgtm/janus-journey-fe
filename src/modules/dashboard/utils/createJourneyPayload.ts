@@ -6,6 +6,8 @@ import type {
   CreateJourneyTaskDraft
 } from '@/types/createJourney'
 
+const defaultJourneyImageUrl = '/assets/janus-journey-background.png'
+
 const createClientId = (prefix: string): string => {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return `${prefix}-${crypto.randomUUID()}`
@@ -73,6 +75,7 @@ const buildTaskPayload = (task: CreateJourneyTaskDraft, orderIndex: number): Cre
  * @returns A parentless hierarchical Journey draft payload.
  */
 const buildCreateJourneyPayload = (formState: CreateJourneyFormState): CreateJourneyComposePayload => ({
+  imgUrl: defaultJourneyImageUrl,
   name: formState.name.trim(),
   description: formState.description.trim() || null,
   folders: formState.folders.map((folder, folderIndex) => ({

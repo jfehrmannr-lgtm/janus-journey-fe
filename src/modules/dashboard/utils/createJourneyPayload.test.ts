@@ -38,6 +38,7 @@ describe('buildCreateJourneyPayload', () => {
     expect(buildCreateJourneyPayload(createFormState())).toEqual({
       name: 'Learn web development',
       description: 'A structured learning path.',
+      imgUrl: '/assets/janus-journey-background.png',
       folders: [
         {
           name: 'HTML and CSS',

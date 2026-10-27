@@ -1,4 +1,4 @@
-import ComponentPlayground from '@/components/ComponentPlayground/ComponentPlayground'
+import ComponentPlayground from '@/modules/playground/layout/ComponentPlayground/ComponentPlayground'
 
 /**
  * Composes the local-only component playground route.

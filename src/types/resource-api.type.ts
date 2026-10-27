@@ -28,6 +28,7 @@ export interface ApiResourceBase<TType extends ResourceType> {
 }
 
 export interface ApiJourney extends ApiResourceBase<'journey'> {
+  imgUrl: string
   progress?: ApiProgress
 }
 

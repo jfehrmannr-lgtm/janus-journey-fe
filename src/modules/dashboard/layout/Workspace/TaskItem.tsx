@@ -31,11 +31,11 @@ interface PendingTaskItemProps extends TaskItemBaseProps {
 type TaskItemProps = PersistedTaskItemProps | PendingTaskItemProps
 
 const taskStateStyles: Record<ApiTaskState, { icon: IconName; className: string }> = {
-  completed: { icon: 'CheckCircleOutlined', className: 'text-task-completed-foreground' },
-  discarded: { icon: 'CloseCircleOutlined', className: 'text-task-discarded-foreground' },
-  pending: { icon: 'ClockCircleOutlined', className: 'text-task-pending-foreground' },
-  'in-progress': { icon: 'SyncOutlined', className: 'text-task-in-progress-foreground' },
-  'in-pause': { icon: 'PauseCircleOutlined', className: 'text-task-in-pause-foreground' }
+  completed: { icon: 'CheckCircleOutlined', className: 'text-task-completed-foreground!' },
+  discarded: { icon: 'CloseCircleOutlined', className: 'text-task-discarded-foreground!' },
+  pending: { icon: 'ClockCircleOutlined', className: 'text-task-pending-foreground!' },
+  'in-progress': { icon: 'SyncOutlined', className: 'text-task-in-progress-foreground!' },
+  'in-pause': { icon: 'PauseCircleOutlined', className: 'text-task-in-pause-foreground!' }
 }
 
 /**

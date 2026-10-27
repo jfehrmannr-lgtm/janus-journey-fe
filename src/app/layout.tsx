@@ -18,8 +18,14 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Janus Journey',
-  description: 'Organize your tasks and make progress at your own pace.'
+  title: {
+    default: 'Janus Journey',
+    template: '%s | Janus Journey'
+  },
+  icons: {
+    icon: '/janus-journey-logo.svg'
+  },
+  description: 'Organize your journeys, folders, and tasks in one place.'
 }
 
 /**

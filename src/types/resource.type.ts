@@ -21,6 +21,7 @@ export interface ResourceProgress {
 }
 
 export interface Journey extends BaseResource<'journey'> {
+  imgUrl: string
   progress?: ResourceProgress
 }
 

@@ -18,6 +18,8 @@ interface JourneyFormValues {
   description: string
 }
 
+const defaultJourneyImageUrl = '/assets/janus-journey-background.png'
+
 interface UseJourneyWorkspaceProps {
   createJourneyAction: (payload: CreateJourneyPayload) => Promise<ApiResponse<ApiJourney>>
 }
@@ -62,6 +64,7 @@ const useJourneyWorkspace = ({ createJourneyAction }: UseJourneyWorkspaceProps) 
         parentUid: apiJourney.parent.uid,
         name: apiJourney.name,
         description: apiJourney.description ?? '',
+        imgUrl: apiJourney.imgUrl,
         updatedAt: apiJourney.updatedAt
       }
       const journeyWithResources: ApiJourneyWithResources = {
@@ -118,6 +121,7 @@ const useJourneyWorkspace = ({ createJourneyAction }: UseJourneyWorkspaceProps) 
 
     const payload: CreateJourneyPayload = {
       description: currentStore.createJourneyForm.description.trim() || null,
+      imgUrl: defaultJourneyImageUrl,
       name: currentStore.createJourneyForm.name.trim()
     }
 

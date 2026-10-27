@@ -17,11 +17,31 @@ interface TaskFormProps {
 }
 
 const taskStates: Array<{ label: string; value: CreateJourneyTaskState; icon: ReactNode }> = [
-  { icon: <Icon icon="ClockCircleOutlined" />, label: 'Pending', value: 'pending' },
-  { icon: <Icon icon="SyncOutlined" />, label: 'In progress', value: 'in-progress' },
-  { icon: <Icon icon="PauseCircleOutlined" />, label: 'In pause', value: 'in-pause' },
-  { icon: <Icon icon="CheckCircleOutlined" />, label: 'Completed', value: 'completed' },
-  { icon: <Icon icon="CloseCircleOutlined" />, label: 'Discarded', value: 'discarded' }
+  {
+    icon: <Icon className="text-task-pending-foreground" icon="ClockCircleOutlined" />,
+    label: 'Pending',
+    value: 'pending'
+  },
+  {
+    icon: <Icon className="text-task-in-progress-foreground" icon="SyncOutlined" />,
+    label: 'In progress',
+    value: 'in-progress'
+  },
+  {
+    icon: <Icon className="text-task-in-pause-foreground" icon="PauseCircleOutlined" />,
+    label: 'In pause',
+    value: 'in-pause'
+  },
+  {
+    icon: <Icon className="text-task-completed-foreground" icon="CheckCircleOutlined" />,
+    label: 'Completed',
+    value: 'completed'
+  },
+  {
+    icon: <Icon className="text-task-discarded-foreground" icon="CloseCircleOutlined" />,
+    label: 'Discarded',
+    value: 'discarded'
+  }
 ]
 
 /**

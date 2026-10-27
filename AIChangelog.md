@@ -1,3 +1,17 @@
+## 2026-10-27
+
+### #JANUS-FE-0124: Supply Required Journey Background Image Paths
+
+**Work**: Correct / Validate; Made Journey creation payload image paths required and supplied the existing local Journey background asset without adding selector UI.
+
+## 2026-10-27
+
+### #JANUS-FE-0123: Add Journey Background Image Contract
+
+**Work**: Plan / Build / Validate; Added the optional `imgUrl` property to normalized Journey, API Journey, and Journey creation payload types without adding selector UI or changing the existing creation behavior.
+
+- Navigation and creation-cache mappings preserve the value when returned by the BFF.
+
 ## 2026-10-26
 
 ### #JANUS-FE-0122: Correct Create Journey Server Action Integration
@@ -914,6 +928,16 @@
 - Added JourneyCard presentation for real Journey names and descriptions with an explicit clickable affordance.
 - Omitted progress UI because the current Journey API does not provide progress data.
 - Reused `useNavigationResourcesQuery` and `selectJourney`, allowing Dashboard and SideNav to share the existing TanStack Query cache and Journey Tree flow.
+
+## 2026-10-27
+
+### #JANUS-FE-0125: Restore Task Status Icon Colors
+
+**Work**: Plan / Build; Restored the existing semantic Task status foreground tokens on status selector icons without changing form behavior or task state handling.
+
+- Applied the pending, in-progress, paused, completed, and discarded colors to the Task form selectors.
+- Applied the existing pending, in-progress, and completed colors to the corresponding Input playground selectors.
+- Reused the established `task-*` theme tokens already used by TaskItem and JourneyTree.
 
 ## 2026-10-09
 

@@ -123,9 +123,21 @@ const InputPlayground = () => {
               isSearchable={false}
               name="task-state"
               options={[
-                { icon: <Icon icon="ClockCircleOutlined" />, label: 'Pending', value: 'pending' },
-                { icon: <Icon icon="SyncOutlined" />, label: 'In progress', value: 'in-progress' },
-                { icon: <Icon icon="CheckCircleOutlined" />, label: 'Completed', value: 'completed' }
+                {
+                  icon: <Icon className="text-task-pending-foreground" icon="ClockCircleOutlined" />,
+                  label: 'Pending',
+                  value: 'pending'
+                },
+                {
+                  icon: <Icon className="text-task-in-progress-foreground" icon="SyncOutlined" />,
+                  label: 'In progress',
+                  value: 'in-progress'
+                },
+                {
+                  icon: <Icon className="text-task-completed-foreground" icon="CheckCircleOutlined" />,
+                  label: 'Completed',
+                  value: 'completed'
+                }
               ]}
               placeholder="Select task state"
             />
@@ -138,9 +150,21 @@ const InputPlayground = () => {
               isSearchable={false}
               name="error-task-state"
               options={[
-                { icon: <Icon icon="ClockCircleOutlined" />, label: 'Pending', value: 'pending' },
-                { icon: <Icon icon="SyncOutlined" />, label: 'In progress', value: 'in-progress' },
-                { icon: <Icon icon="CheckCircleOutlined" />, label: 'Completed', value: 'completed' }
+                {
+                  icon: <Icon className="text-task-pending-foreground" icon="ClockCircleOutlined" />,
+                  label: 'Pending',
+                  value: 'pending'
+                },
+                {
+                  icon: <Icon className="text-task-in-progress-foreground" icon="SyncOutlined" />,
+                  label: 'In progress',
+                  value: 'in-progress'
+                },
+                {
+                  icon: <Icon className="text-task-completed-foreground" icon="CheckCircleOutlined" />,
+                  label: 'Completed',
+                  value: 'completed'
+                }
               ]}
               placeholder="Select task state"
             />

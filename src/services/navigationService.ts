@@ -88,6 +88,7 @@ const mapJourney = (journey: ApiJourneyWithResources | ApiJourney): Journey => (
   parentUid: journey.parent.uid,
   name: journey.name,
   description: journey.description ?? '',
+  imgUrl: journey.imgUrl,
   updatedAt: journey.updatedAt,
   progress: mapProgress(journey.progress)
 })

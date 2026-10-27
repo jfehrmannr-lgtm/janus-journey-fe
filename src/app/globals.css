@@ -34,18 +34,23 @@
   --font-mono: var(--font-geist-mono);
 
   /* Task states */
+  /* Completed */
   --color-task-completed: #dcfce7;
   --color-task-completed-foreground: #166534;
 
+  /* Discarded */
   --color-task-discarded: #fee2e2;
   --color-task-discarded-foreground: #991b1b;
 
-  --color-task-pending: #f1f5f9;
-  --color-task-pending-foreground: #475569;
+  /* Pending */
+  --color-task-pending: #fef9c3;
+  --color-task-pending-foreground: #854d0e;
 
+  /* In Progress */
   --color-task-in-progress: #dbeafe;
   --color-task-in-progress-foreground: #1d4ed8;
 
+  /* In Pause */
   --color-task-in-pause: #fef3c7;
   --color-task-in-pause-foreground: #92400e;
   --animate-button-wave: button-wave 500ms ease-out forwards;
