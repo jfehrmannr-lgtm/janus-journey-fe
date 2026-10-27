@@ -13,11 +13,11 @@ import MarketingHeader from '@/components/MarketingHeader/MarketingHeader'
  */
 const MarketingPanel = () => {
   return (
-    <section className="relative isolate flex min-h-[620px] flex-col overflow-hidden bg-slate-950 px-6 py-7 text-white sm:px-10 sm:py-9 lg:min-h-screen lg:px-16 lg:py-10 xl:px-24 2xl:px-32">
+    <section className="relative isolate flex min-h-155 flex-col overflow-hidden bg-slate-950 px-6 py-7 text-white sm:px-10 sm:py-9 lg:min-h-screen lg:px-16 lg:py-10 xl:px-24 2xl:px-32">
       <Image alt="" className="object-cover object-center" fill priority sizes="100vw" src={backgroundImage} />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-br from-slate-950/85 via-slate-950/55 to-slate-950/20"
+        className="absolute inset-0 bg-linear-to-br from-slate-950/85 via-slate-950/55 to-slate-950/20"
       />
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col">
         <MarketingHeader />

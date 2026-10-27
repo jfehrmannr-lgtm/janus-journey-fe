@@ -11,7 +11,7 @@ import { invalidateBffToken } from '@/services/bffClient'
 import useAppUiStore from '@/stores/appUiStore'
 import type { NavigationRootResources } from '@/types/navigation.type'
 import JourneyAccordionItem from '@/layout/SideNav/JourneyAccordionItem'
-import { getResourcePath, getSelectedResourceFromPathname } from '@/utils/dashboardRoutes'
+import { getResourcePath, getSelectedResourceFromPathname } from '@/modules/dashboard/utils/dashboardRoutes'
 
 interface SideNavProps {
   resources: NavigationRootResources

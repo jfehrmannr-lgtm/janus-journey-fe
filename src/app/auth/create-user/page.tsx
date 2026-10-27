@@ -1,4 +1,4 @@
-import JanusAuthBoundary from '@/components/Authentication/JanusAuthBoundary'
+import JanusAuthBoundary from '@/modules/auth/layout/Authentication/JanusAuthBoundary'
 import CreateUserScreen from '@/components/Provisioning/CreateUserScreen'
 
 /**

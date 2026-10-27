@@ -1,5 +1,5 @@
-import JourneyWorkspace from '@/components/Workspace/JourneyWorkspace/JourneyWorkspace'
-import DetailedWorkspace from '@/layout/WorkSidebar/DetailedWorkspace'
+import JourneyWorkspace from '@/modules/dashboard/layout/Workspace/JourneyWorkspace/JourneyWorkspace'
+import DetailedWorkspace from '@/modules/dashboard/layout/WorkSidebar/DetailedWorkspace'
 import { createJourneyAction } from './actions'
 
 /**

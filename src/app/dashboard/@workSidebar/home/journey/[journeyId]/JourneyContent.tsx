@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import type { ReactNode } from 'react'
 
-import DetailedWorkspace from '@/layout/WorkSidebar/DetailedWorkspace'
+import DetailedWorkspace from '@/modules/dashboard/layout/WorkSidebar/DetailedWorkspace'
 import { auth } from '@/services/auth'
 import type { ApiResponse } from '@/types/api.type'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'

@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useRef, type ReactNode } from 'react'
 
 import CollapseSidenavEffect from '@/components/WorkSidebar/CollapseSidenavEffect'
-import { dashboardHomePath, isWorkSidebarOpen } from '@/utils/dashboardRoutes'
+import { dashboardHomePath, isWorkSidebarOpen } from '@/modules/dashboard/utils/dashboardRoutes'
 
 interface CollapseSidenavProps {
   children: ReactNode

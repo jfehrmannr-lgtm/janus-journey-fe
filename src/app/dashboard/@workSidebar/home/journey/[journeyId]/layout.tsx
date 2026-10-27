@@ -1,5 +1,5 @@
 import { Suspense, type ReactNode } from 'react'
-import DetailedWorkspaceSkeleton from '@/layout/WorkSidebar/DetailedWorkspaceSkeleton'
+import DetailedWorkspaceSkeleton from '@/modules/dashboard/layout/WorkSidebar/DetailedWorkspaceSkeleton'
 import JourneyContent from './JourneyContent'
 
 interface JourneyLayoutProps {

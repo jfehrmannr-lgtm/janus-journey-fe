@@ -1,4 +1,4 @@
-import JourneyPageContent from '@/layout/WorkSidebar/DetailedJourney/JourneyPageContent'
+import JourneyPageContent from '@/modules/dashboard/layout/WorkSidebar/DetailedJourney/JourneyPageContent'
 import { bulkDeleteResourcesAction } from './actions'
 
 interface JourneyPageProps {

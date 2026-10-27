@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 
 import Icon from '@/components/Icon/Icon'
 import type { Journey } from '@/types/resource.type'
-import { getResourcePath, getSelectedResourceFromPathname } from '@/utils/dashboardRoutes'
+import { getResourcePath, getSelectedResourceFromPathname } from '@/modules/dashboard/utils/dashboardRoutes'
 
 interface JourneyAccordionItemProps {
   journey: Journey

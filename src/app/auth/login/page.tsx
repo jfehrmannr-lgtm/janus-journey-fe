@@ -1,7 +1,7 @@
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import LoginPage from '@/layout/LoginPage/LoginPage'
+import LoginPage from '@/modules/auth/layout/LoginPage/LoginPage'
 import { auth } from '@/services/auth'
 
 /**

@@ -1,4 +1,4 @@
-import CreateFolderView from '@/layout/WorkSidebar/DetailedJourney/CreateFolderView'
+import CreateFolderView from '@/modules/dashboard/layout/WorkSidebar/DetailedJourney/CreateFolderView'
 import { createFolderAction } from './actions'
 
 interface JourneyPageCreateFolderProps {

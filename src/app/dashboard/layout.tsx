@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 import type { ReactNode } from 'react'
 
-import JanusAuthBoundary from '@/components/Authentication/JanusAuthBoundary'
+import JanusAuthBoundary from '@/modules/auth/layout/Authentication/JanusAuthBoundary'
 import AppLayout from '@/layout/AppLayout/AppLayout'
 import { auth } from '@/services/auth'
 

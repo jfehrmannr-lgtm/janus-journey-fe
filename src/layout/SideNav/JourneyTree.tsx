@@ -7,7 +7,7 @@ import Icon from '@/components/Icon/Icon'
 import type { IconName } from '@/components/Icon/Icon'
 import type { JourneyTreeData } from '@/types/navigation.type'
 import type { TaskState } from '@/types/resource.type'
-import { calculateProgress } from '@/utils/progress'
+import { calculateProgress } from '@/modules/dashboard/utils/progress'
 
 interface JourneyTreeProps {
   data: JourneyTreeData

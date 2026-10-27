@@ -1,4 +1,4 @@
-import CreateFolderTaskView from '@/layout/WorkSidebar/DetailedJourney/CreateFolderTaskView'
+import CreateFolderTaskView from '@/modules/dashboard/layout/WorkSidebar/DetailedJourney/CreateFolderTaskView'
 import { createFolderTaskAction } from './actions'
 
 interface JourneyFolderPageCreateTaskProps {

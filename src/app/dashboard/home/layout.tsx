@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import DashboardHomeRoute from '@/components/Dashboard/DashboardHomeRoute'
+import DashboardHomeRoute from '@/modules/dashboard/layout/Dashboard/DashboardHomeRoute'
 
 interface HomeLayoutProps {
   children: ReactNode

@@ -1,4 +1,4 @@
-import CreateTaskView from '@/layout/WorkSidebar/DetailedJourney/CreateTaskView'
+import CreateTaskView from '@/modules/dashboard/layout/WorkSidebar/DetailedJourney/CreateTaskView'
 import { createTaskAction } from './actions'
 
 interface JourneyPageCreateTaskProps {

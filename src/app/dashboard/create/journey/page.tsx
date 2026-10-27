@@ -1,4 +1,4 @@
-import JourneyForm from '@/components/Form/Journey/JourneyForm'
+import JourneyForm from '@/modules/dashboard/layout/Form/Journey/JourneyForm'
 import { createJourneyAction } from './actions'
 
 /**
