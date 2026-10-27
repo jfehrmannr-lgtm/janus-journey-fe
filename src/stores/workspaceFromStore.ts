@@ -59,6 +59,8 @@ export const initFolderState = {
 
 type JourneyFormDraft = Pick<CreateJourneyFormState, 'name' | 'description'>
 
+export type JourneyFormErrors = Partial<Record<keyof JourneyFormDraft, string>>
+
 export const initJourneyState: JourneyFormDraft = {
   name: '',
   description: ''
@@ -131,15 +133,23 @@ export const useCreateFolderForm = create<CreateFolderFormState>((set) => ({
 
 interface CreateJourneyFormStore {
   createJourneyForm: JourneyFormDraft
+  formErrors: JourneyFormErrors
+  isValid: boolean
   setCreateJourneyForm: (form: JourneyFormDraft) => void
+  setFormErrors: (errors: JourneyFormErrors) => void
+  setIsValid: (isValid: boolean) => void
   setResetJourney: () => void
 }
 
 /**
- * Stores the Journey creation form draft alongside the Folder and Task workspace forms.
+ * Stores the Journey draft and shared validation state for the Create Journey workspace.
  */
 export const useCreateJourneyForm = create<CreateJourneyFormStore>((set) => ({
   createJourneyForm: initJourneyState,
+  formErrors: {},
+  isValid: false,
   setCreateJourneyForm: (form) => set({ createJourneyForm: form }),
-  setResetJourney: () => set({ createJourneyForm: initJourneyState })
+  setFormErrors: (errors) => set({ formErrors: errors }),
+  setIsValid: (isValid) => set({ isValid }),
+  setResetJourney: () => set({ createJourneyForm: initJourneyState, formErrors: {}, isValid: false })
 }))

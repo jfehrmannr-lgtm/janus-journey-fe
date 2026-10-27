@@ -43,6 +43,12 @@ export interface CreateJourneyDraftFolderPayload {
 export interface CreateJourneyPayload {
   name: string
   description: string | null
+  metadata?: Record<string, unknown>
+}
+
+export interface CreateJourneyComposePayload {
+  name: string
+  description: string | null
   folders: CreateJourneyDraftFolderPayload[]
   tasks: CreateJourneyDraftTaskPayload[]
 }

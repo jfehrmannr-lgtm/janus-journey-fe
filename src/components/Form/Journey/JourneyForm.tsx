@@ -9,7 +9,7 @@ import FolderForm from '@/components/Form/Folder/FolderForm'
 import TaskForm from '@/components/Form/Task/TaskForm'
 import Icon from '@/components/Icon/Icon'
 import Input from '@/components/Input/Input'
-import type { CreateJourneyFormState, CreateJourneyPayload } from '@/types/createJourney'
+import type { CreateJourneyComposePayload, CreateJourneyFormState } from '@/types/createJourney'
 import {
   buildCreateJourneyPayload,
   createEmptyFolder,
@@ -18,13 +18,14 @@ import {
   getCreateJourneyValidationErrors
 } from '@/utils/createJourneyPayload'
 import { ApiResponse } from '@/types/api.type'
-import { Journey } from '@/types/resource.type'
+import type { ApiJourney } from '@/types/resource-api.type'
+import type { Journey } from '@/types/resource.type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 interface JourneyFormProps {
   cancelHref?: string
-  onSubmit: (payload: CreateJourneyPayload) => Promise<ApiResponse<Journey>>
+  onSubmit: (payload: CreateJourneyComposePayload) => Promise<ApiResponse<ApiJourney | Journey>>
 }
 
 /**
@@ -39,7 +40,7 @@ const JourneyForm = ({ cancelHref = '/dashboard/home', onSubmit }: JourneyFormPr
   const [validationErrors, setValidationErrors] = useState<string[]>([])
   const queryClient = useQueryClient()
   const createJourneyMutation = useMutation({
-    mutationFn: async (payload: CreateJourneyPayload) => {
+    mutationFn: async (payload: CreateJourneyComposePayload) => {
       const toastId = toast.loading('Creating Journey...')
 
       try {

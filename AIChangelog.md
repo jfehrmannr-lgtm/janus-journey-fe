@@ -1,5 +1,47 @@
 ## 2026-10-26
 
+### #JANUS-FE-0122: Correct Create Journey Server Action Integration
+
+**Work**: Fix / Integrate / Validate; Moved the active Create Journey action into the parallel-route workspace, aligned its action-object wiring with Folder and Task workspaces, and switched it to the single-Journey BFF contract.
+
+- Added the active `create-journey/actions.ts` Server Action using authenticated `POST /journeys/journeys` requests.
+- Kept the legacy compose action isolated for the deprecated full-page workflow while separating single-resource and compose payload types.
+- Passed `actions={{ createJourneyAction }}` from the active route into `JourneyWorkspace`.
+
+## 2026-10-26
+
+### #JANUS-FE-0121: Implement Create Journey Submission Workflow
+
+**Work**: Plan / Build / Validate; Connected the Create Journey workspace to its Server Action, debounced validation, submission state, cache updates, and navigation to the created Journey.
+
+- Passed the Server Action from the Dashboard route into `JourneyWorkspace` and coordinated the single-resource mutation through `useJourneyWorkspace`.
+- Adapted the backend `ApiJourney` into the navigation cache shape and initialized empty Folder and Task collections for the new Journey resource tree.
+- Preserved the existing Zustand draft and `isValid` state while adding duplicate-submit protection and success/error feedback.
+
+## 2026-10-26
+
+### #JANUS-FE-0120: Align Create Journey Validation Responsibilities
+
+**Work**: Refactor / Validate; Moved Journey validation orchestration out of Zustand and the form component into the existing workspace coordination pattern while retaining shared draft, error, and validity state.
+
+- Kept `workspaceFromStore.ts` focused on Journey draft and plain shared-state setters.
+- Added `useJourneyWorkspace` for validation and submission-readiness coordination.
+- Updated `CreateJourneyForm` to receive values, errors, and callbacks instead of directly orchestrating Zustand.
+- Preserved the non-submitting workflow and existing Header synchronization.
+
+## 2026-10-26
+
+### #JANUS-FE-0119: Add Create Journey Form Validation
+
+**Work**: Plan / Build / Validate; Added Journey name validation, store-backed validation errors, and submission-readiness state without connecting creation requests or mutation behavior.
+
+- Added `formErrors` and `isValid` to the existing Create Journey form store.
+- Validated the required Journey name on changes and blur, with inline Input feedback.
+- Disabled the Create button until the draft is valid while preserving the current non-submitting workflow.
+- Kept pending and submission error handling for the future mutation layer rather than duplicating it in Zustand.
+
+## 2026-10-26
+
 ### #JANUS-FE-0118: Simplify Create Journey Draft Workflow
 
 **Work**: Plan / Build / Validate; Reduced the Create Journey form and Zustand draft to Journey name and description, leaving Folder and Task creation for post-creation workflows.

@@ -2,21 +2,50 @@
 
 import Button from '@/components/Button/Button'
 import Input from '@/components/Input/Input'
-import { useCreateJourneyForm } from '@/stores/workspaceFromStore'
+import type { JourneyFormErrors } from '@/stores/workspaceFromStore'
+
+interface CreateJourneyFormProps {
+  canSubmit: boolean
+  createJourneyForm: {
+    name: string
+    description: string
+  }
+  formErrors: JourneyFormErrors
+  onFormChange: (form: { name: string; description: string }) => void
+  onSubmit: () => void
+  onValidate: () => void
+  isSubmitting: boolean
+}
 
 /**
  * Renders the UI-only Journey creation form for the Create Journey workspace.
  *
- * @returns A non-submitting Journey creation form surface.
+ * @param canSubmit - Whether the current draft passes validation.
+ * @param createJourneyForm - Current Journey draft values.
+ * @param formErrors - Validation errors keyed by Journey field.
+ * @param onFormChange - Callback invoked when a draft field changes.
+ * @param onSubmit - Callback invoked when the form is submitted.
+ * @param onValidate - Callback invoked when the form should be validated.
+ * @param isSubmitting - Whether Journey creation is in progress.
+ * @returns A Journey creation form surface.
  */
-const CreateJourneyForm = () => {
-  const name = useCreateJourneyForm((state) => state.createJourneyForm.name)
-  const description = useCreateJourneyForm((state) => state.createJourneyForm.description)
-  const createJourneyForm = useCreateJourneyForm((state) => state.createJourneyForm)
-  const setCreateJourneyForm = useCreateJourneyForm((state) => state.setCreateJourneyForm)
-
+const CreateJourneyForm = ({
+  canSubmit,
+  createJourneyForm,
+  formErrors,
+  isSubmitting,
+  onFormChange,
+  onSubmit,
+  onValidate
+}: CreateJourneyFormProps) => {
   return (
-    <form className="space-y-6 px-5 py-5" onSubmit={(event) => event.preventDefault()}>
+    <form
+      className="space-y-6 px-5 py-5"
+      onSubmit={(event) => {
+        event.preventDefault()
+        onSubmit()
+      }}
+    >
       <div className="space-y-1">
         <p className="text-xs font-semibold uppercase tracking-wider text-primary">New Journey</p>
         <h2 className="text-xl font-semibold tracking-tight text-text-primary">Shape a path worth following</h2>
@@ -37,38 +66,33 @@ const CreateJourneyForm = () => {
         </div>
         <Input
           id="create-journey-name"
+          error={formErrors.name}
           label="Journey name"
           name="name"
-          onChange={(event) =>
-            setCreateJourneyForm({
-              ...createJourneyForm,
-              name: event.target.value
-            })
-          }
+          onBlur={onValidate}
+          onChange={(event) => onFormChange({ ...createJourneyForm, name: event.target.value })}
           placeholder="e.g. Learn web development"
           required
-          value={name}
+          value={createJourneyForm.name}
         />
         <Input
           id="create-journey-description"
           helperText="Optional. Describe the outcome or purpose of this Journey."
           label="Description"
           name="description"
-          onChange={(event) =>
-            setCreateJourneyForm({
-              ...createJourneyForm,
-              description: event.target.value
-            })
-          }
+          onBlur={onValidate}
+          onChange={(event) => onFormChange({ ...createJourneyForm, description: event.target.value })}
           placeholder="What do you want to accomplish?"
           type="text-area"
-          value={description}
+          value={createJourneyForm.description}
         />
       </section>
 
       <footer className="border-t border-border pt-5">
-        <Button disabled label="Create Journey" size="full" type="submit" />
-        <p className="mt-2 text-center text-xs text-text-muted">Creation will be enabled in a future iteration.</p>
+        <Button disabled={!canSubmit || isSubmitting} label="Create Journey" size="full" type="submit" />
+        <p className="mt-2 text-center text-xs text-text-muted">
+          {isSubmitting ? 'Creating your Journey...' : 'You can add Folders and Tasks after creation.'}
+        </p>
       </footer>
     </form>
   )

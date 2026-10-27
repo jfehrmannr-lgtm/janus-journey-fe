@@ -25,12 +25,14 @@ type DetailedHeaderWorkspaceProps = DetailedHeaderWorkspaceViewProps | DetailedH
  * @returns The detailed workspace header.
  */
 const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
-  const draftName = useCreateJourneyForm((state) => state.createJourneyForm.name)
+  const { name, description } = useCreateJourneyForm((state) => state.createJourneyForm)
   const isCreateMode = props.mode === 'create'
   const resource = isCreateMode ? undefined : props.resource
   const isJourney = isCreateMode || resource?.type === 'journey'
-  const title = isCreateMode ? draftName || 'Create Journey' : resource?.name
-  const description = isCreateMode ? 'Define the purpose and structure of a new Journey.' : resource?.description
+  const title = isCreateMode ? name || 'Create Journey' : resource?.name
+  const headerDescription = isCreateMode
+    ? description || 'Define the purpose and structure of a new Journey.'
+    : resource?.description
 
   return (
     <header
@@ -63,7 +65,7 @@ const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
         </div>
         <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
         <p className="mt-1 line-clamp-2 text-sm leading-5 text-slate-100">
-          {description || 'No description available.'}
+          {headerDescription || 'No description available.'}
         </p>
       </div>
     </header>

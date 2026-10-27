@@ -1,15 +1,16 @@
 import JourneyWorkspace from '@/components/Workspace/JourneyWorkspace/JourneyWorkspace'
 import DetailedWorkspace from '@/layout/WorkSidebar/DetailedWorkspace'
+import { createJourneyAction } from './actions'
 
 /**
  * Renders the Create Journey workspace in the Dashboard work-sidebar slot.
  *
- * @returns The creation-mode DetailedWorkspace with its UI-only form.
+ * @returns The creation-mode DetailedWorkspace with its Journey form.
  */
 const CreateJourneyWorkspacePage = () => {
   return (
     <DetailedWorkspace mode="create">
-      <JourneyWorkspace />
+      <JourneyWorkspace actions={{ createJourneyAction }} />
     </DetailedWorkspace>
   )
 }

@@ -2,7 +2,7 @@ import type {
   CreateJourneyFolderDraft,
   CreateJourneyDraftTaskPayload,
   CreateJourneyFormState,
-  CreateJourneyPayload,
+  CreateJourneyComposePayload,
   CreateJourneyTaskDraft
 } from '@/types/createJourney'
 
@@ -72,7 +72,7 @@ const buildTaskPayload = (task: CreateJourneyTaskDraft, orderIndex: number): Cre
  * @param formState - Current local Create Journey form state.
  * @returns A parentless hierarchical Journey draft payload.
  */
-const buildCreateJourneyPayload = (formState: CreateJourneyFormState): CreateJourneyPayload => ({
+const buildCreateJourneyPayload = (formState: CreateJourneyFormState): CreateJourneyComposePayload => ({
   name: formState.name.trim(),
   description: formState.description.trim() || null,
   folders: formState.folders.map((folder, folderIndex) => ({
