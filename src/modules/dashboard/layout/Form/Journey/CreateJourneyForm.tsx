@@ -1,17 +1,22 @@
 'use client'
 
 import Button from '@/components/Button/Button'
+import Dropdown from '@/components/Dropdown/Dropdown'
 import Input from '@/components/Input/Input'
 import type { JourneyFormErrors } from '@/stores/workspaceFromStore'
+import { imageOptions } from './imageOptions'
+import Icon from '@/components/Icon/Icon'
+import CreateJourneyFormSelectImage from './CreateJourneyFormSelectImage'
 
 interface CreateJourneyFormProps {
   canSubmit: boolean
   createJourneyForm: {
     name: string
     description: string
+    imgUrl: string
   }
   formErrors: JourneyFormErrors
-  onFormChange: (form: { name: string; description: string }) => void
+  onFormChange: (form: { name: string; description: string; imgUrl: string }) => void
   onSubmit: () => void
   onValidate: () => void
   isSubmitting: boolean
@@ -64,6 +69,7 @@ const CreateJourneyForm = ({
           </h3>
           <p className="mt-1 text-sm text-text-muted">Give this Journey a name and a short description.</p>
         </div>
+        <CreateJourneyFormSelectImage />
         <Input
           id="create-journey-name"
           error={formErrors.name}
@@ -72,7 +78,6 @@ const CreateJourneyForm = ({
           onBlur={onValidate}
           onChange={(event) => onFormChange({ ...createJourneyForm, name: event.target.value })}
           placeholder="e.g. Learn web development"
-          required
           value={createJourneyForm.name}
         />
         <Input

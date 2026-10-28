@@ -40,6 +40,8 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
   const cancelResourceSelection = useAppUiStore((state) => state.cancelResourceSelection)
   const toggleSelectedResource = useAppUiStore((state) => state.toggleSelectedResource)
 
+  console.debug('selectedResource', selectedResource)
+
   const { data: journey } = useQuery<ApiJourneyWithResources>({
     enabled: false,
     queryFn: () => {

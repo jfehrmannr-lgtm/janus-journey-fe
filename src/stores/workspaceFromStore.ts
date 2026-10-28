@@ -57,13 +57,14 @@ export const initFolderState = {
   isValidating: false
 }
 
-type JourneyFormDraft = Pick<CreateJourneyFormState, 'name' | 'description'>
+type JourneyFormDraft = Pick<CreateJourneyFormState, 'name' | 'description' | 'imgUrl'>
 
 export type JourneyFormErrors = Partial<Record<keyof JourneyFormDraft, string>>
 
 export const initJourneyState: JourneyFormDraft = {
   name: '',
-  description: ''
+  description: '',
+  imgUrl: '/janus_journey_backgrounds/mount-sunrise.png'
 }
 
 // Task store

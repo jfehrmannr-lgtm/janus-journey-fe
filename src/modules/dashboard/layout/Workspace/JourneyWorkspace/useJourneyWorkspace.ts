@@ -16,9 +16,8 @@ import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 interface JourneyFormValues {
   name: string
   description: string
+  imgUrl: string
 }
-
-const defaultJourneyImageUrl = '/assets/janus-journey-background.png'
 
 interface UseJourneyWorkspaceProps {
   createJourneyAction: (payload: CreateJourneyPayload) => Promise<ApiResponse<ApiJourney>>
@@ -121,7 +120,7 @@ const useJourneyWorkspace = ({ createJourneyAction }: UseJourneyWorkspaceProps) 
 
     const payload: CreateJourneyPayload = {
       description: currentStore.createJourneyForm.description.trim() || null,
-      imgUrl: defaultJourneyImageUrl,
+      imgUrl: currentStore.createJourneyForm.imgUrl,
       name: currentStore.createJourneyForm.name.trim()
     }
 

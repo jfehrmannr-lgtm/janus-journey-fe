@@ -33,7 +33,6 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
     return (
       <CreateJourneyWorkspaceLifecycle>
         <div className="min-h-full bg-white">
-          <DetailedHeaderWorkspace mode="create" />
           <DetailedWorksapceActions mode="create">{children}</DetailedWorksapceActions>
         </div>
       </CreateJourneyWorkspaceLifecycle>

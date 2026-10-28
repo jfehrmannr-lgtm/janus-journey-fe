@@ -10,10 +10,12 @@ import { useCreateJourneyForm } from '@/stores/workspaceFromStore'
 interface DetailedHeaderWorkspaceViewProps {
   mode?: 'view'
   resource: ApiJourneyWithResources | ApiFolderWithTasks | ApiTask
+  imgUrl?: string
 }
 
 interface DetailedHeaderWorkspaceCreateProps {
   mode: 'create'
+  imgUrl: string
 }
 
 type DetailedHeaderWorkspaceProps = DetailedHeaderWorkspaceViewProps | DetailedHeaderWorkspaceCreateProps
@@ -33,7 +35,7 @@ const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
   const headerDescription = isCreateMode
     ? description || 'Define the purpose and structure of a new Journey.'
     : resource?.description
-  const headerBackgroundImage = !isCreateMode && resource?.type === 'journey' ? resource.imgUrl : backgroundImage.src
+  const headerBackgroundImage = !isCreateMode && resource?.type === 'journey' ? resource.imgUrl : props.imgUrl
 
   return (
     <header

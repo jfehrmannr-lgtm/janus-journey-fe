@@ -21,6 +21,7 @@ export interface CreateJourneyFolderDraft {
 export interface CreateJourneyFormState {
   name: string
   description: string
+  imgUrl: string
   folders: CreateJourneyFolderDraft[]
   tasks: CreateJourneyTaskDraft[]
 }
