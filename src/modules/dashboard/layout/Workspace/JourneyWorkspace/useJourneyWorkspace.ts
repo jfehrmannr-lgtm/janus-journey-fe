@@ -12,12 +12,7 @@ import type { ApiJourney, ApiJourneyWithResources } from '@/types/resource-api.t
 import type { Journey } from '@/types/resource.type'
 import type { NavigationRootResources } from '@/types/navigation.type'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
-
-interface JourneyFormValues {
-  name: string
-  description: string
-  imgUrl: string
-}
+import { JourneyFormValues } from '@/stores/workspaceFromStore'
 
 interface UseJourneyWorkspaceProps {
   createJourneyAction: (payload: CreateJourneyPayload) => Promise<ApiResponse<ApiJourney>>

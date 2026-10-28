@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import type { ApiTaskState } from '@/types/resource-api.type'
-import type { CreateJourneyFormState } from '@/types/createJourney'
 
 export interface TaskFormValues {
   id: string
@@ -16,9 +15,17 @@ export interface FolderFormValues {
   description: string
 }
 
+export interface JourneyFormValues {
+  name: string
+  description: string
+  imgUrl: string
+}
+
 export type TaskFormErrors = Partial<Record<Exclude<keyof TaskFormValues, 'id'>, string>>
 
 export type FolderFormErrors = Partial<Record<Exclude<keyof FolderFormValues, 'id'>, string>>
+
+export type JourneyFormErrors = Partial<JourneyFormValues>
 
 // Initial form values
 
@@ -34,6 +41,12 @@ export const initFolderForm: FolderFormValues = {
   id: '',
   name: '',
   description: ''
+}
+
+export const initJourneyState: JourneyFormValues = {
+  name: '',
+  description: '',
+  imgUrl: '/janus_journey_backgrounds/mount-sunrise.png'
 }
 
 // Initial store states
@@ -55,16 +68,6 @@ export const initFolderState = {
   isSubmitting: false,
   activeFormId: null as string | null,
   isValidating: false
-}
-
-type JourneyFormDraft = Pick<CreateJourneyFormState, 'name' | 'description' | 'imgUrl'>
-
-export type JourneyFormErrors = Partial<Record<keyof JourneyFormDraft, string>>
-
-export const initJourneyState: JourneyFormDraft = {
-  name: '',
-  description: '',
-  imgUrl: '/janus_journey_backgrounds/mount-sunrise.png'
 }
 
 // Task store
@@ -133,10 +136,10 @@ export const useCreateFolderForm = create<CreateFolderFormState>((set) => ({
 }))
 
 interface CreateJourneyFormStore {
-  createJourneyForm: JourneyFormDraft
+  createJourneyForm: JourneyFormValues
   formErrors: JourneyFormErrors
   isValid: boolean
-  setCreateJourneyForm: (form: JourneyFormDraft) => void
+  setCreateJourneyForm: (form: JourneyFormValues) => void
   setFormErrors: (errors: JourneyFormErrors) => void
   setIsValid: (isValid: boolean) => void
   setResetJourney: () => void

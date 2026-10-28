@@ -6,7 +6,7 @@ import type {
   CreateJourneyTaskDraft
 } from '@/types/createJourney'
 
-const defaultJourneyImageUrl = '/assets/janus-journey-background.png'
+const defaultJourneyImageUrl = '/janus_journey_backgrounds/mount-sunrise.png'
 
 const createClientId = (prefix: string): string => {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -49,6 +49,7 @@ const createEmptyFolder = (): CreateJourneyFolderDraft => ({
 const createInitialCreateJourneyFormState = (): CreateJourneyFormState => ({
   name: '',
   description: '',
+  imgUrl: defaultJourneyImageUrl,
   folders: [],
   tasks: []
 })

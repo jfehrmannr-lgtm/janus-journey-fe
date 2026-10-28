@@ -1,9 +1,9 @@
-import React from 'react'
 import { imageOptions } from './imageOptions'
 import Dropdown from '@/components/Dropdown/Dropdown'
 import Input from '@/components/Input/Input'
 import Icon from '@/components/Icon/Icon'
 import { useCreateJourneyForm } from '@/stores/workspaceFromStore'
+import Image from 'next/image'
 
 const CreateJourneyFormSelectImage = () => {
   const { setCreateJourneyForm, createJourneyForm } = useCreateJourneyForm((state) => state)
@@ -33,7 +33,7 @@ const CreateJourneyFormSelectImage = () => {
                   key={imageOptionElement.path}
                   onClick={() => setCreateJourneyForm({ ...createJourneyForm, imgUrl: imageOptionElement.path })}
                 >
-                  <img src={imageOptionElement.path} />
+                  <Image src={imageOptionElement.path} alt={''} />
                   <div>{imageOptionElement.label}</div>
                 </button>
               )

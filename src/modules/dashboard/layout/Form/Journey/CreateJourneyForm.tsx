@@ -1,20 +1,13 @@
 'use client'
 
 import Button from '@/components/Button/Button'
-import Dropdown from '@/components/Dropdown/Dropdown'
 import Input from '@/components/Input/Input'
-import type { JourneyFormErrors } from '@/stores/workspaceFromStore'
-import { imageOptions } from './imageOptions'
-import Icon from '@/components/Icon/Icon'
+import type { JourneyFormErrors, JourneyFormValues } from '@/stores/workspaceFromStore'
 import CreateJourneyFormSelectImage from './CreateJourneyFormSelectImage'
 
 interface CreateJourneyFormProps {
   canSubmit: boolean
-  createJourneyForm: {
-    name: string
-    description: string
-    imgUrl: string
-  }
+  createJourneyForm: JourneyFormValues
   formErrors: JourneyFormErrors
   onFormChange: (form: { name: string; description: string; imgUrl: string }) => void
   onSubmit: () => void

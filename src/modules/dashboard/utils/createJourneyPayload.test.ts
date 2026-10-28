@@ -6,6 +6,7 @@ import type { CreateJourneyFormState } from '@/types/createJourney'
 const createFormState = (): CreateJourneyFormState => ({
   name: 'Learn web development',
   description: 'A structured learning path.',
+  imgUrl: '/janus_journey_backgrounds/mount-sunrise.png',
   folders: [
     {
       clientId: 'folder-client-1',
@@ -38,7 +39,7 @@ describe('buildCreateJourneyPayload', () => {
     expect(buildCreateJourneyPayload(createFormState())).toEqual({
       name: 'Learn web development',
       description: 'A structured learning path.',
-      imgUrl: '/assets/janus-journey-background.png',
+      imgUrl: '/janus_journey_backgrounds/mount-sunrise.png',
       folders: [
         {
           name: 'HTML and CSS',

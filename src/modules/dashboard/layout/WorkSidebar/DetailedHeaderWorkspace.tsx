@@ -1,7 +1,6 @@
 'use client'
 
 import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/types/resource-api.type'
-import backgroundImage from '@/assets/janus-journey-background.png'
 import Icon from '@/components/Icon/Icon'
 import JourneyOptions from '@/modules/dashboard/layout/Workspace/JourneyOptions/JourneyOptions'
 import Dropdown from '@/components/Dropdown/Dropdown'
