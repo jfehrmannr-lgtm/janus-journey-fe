@@ -33,12 +33,13 @@ const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
   const headerDescription = isCreateMode
     ? description || 'Define the purpose and structure of a new Journey.'
     : resource?.description
+  const headerBackgroundImage = !isCreateMode && resource?.type === 'journey' ? resource.imgUrl : backgroundImage.src
 
   return (
     <header
       className="relative flex min-h-44 flex-col justify-end overflow-hidden bg-cover bg-center px-5 py-5 text-white"
       style={{
-        backgroundImage: `linear-gradient(to top, rgb(15 23 42 / 0.88), rgb(15 23 42 / 0.15)), url(${backgroundImage.src})`
+        backgroundImage: `linear-gradient(to top, rgb(15 23 42 / 0.88), rgb(15 23 42 / 0.15)), url(${headerBackgroundImage})`
       }}
     >
       {!isCreateMode && resource && (
@@ -61,7 +62,7 @@ const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
       )}
       <div className="relative">
         <div className="mb-3 flex size-9 items-center justify-center rounded-lg bg-white/15 text-white">
-          <Icon icon={isJourney ? 'AppstoreOutlined' : 'FolderOutlined'} />
+          <Icon icon={isJourney ? 'CompassOutlined' : 'FolderOutlined'} />
         </div>
         <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
         <p className="mt-1 line-clamp-2 text-sm leading-5 text-slate-100">

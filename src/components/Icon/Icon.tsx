@@ -12,6 +12,9 @@ import {
   CloseOutlined,
   DeleteOutlined,
   DownOutlined,
+  EnvironmentOutlined,
+  GlobalOutlined,
+  CompassOutlined,
   EditOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
@@ -50,6 +53,9 @@ const iconComponents = {
   CloseOutlined,
   DeleteOutlined,
   DownOutlined,
+  EnvironmentOutlined,
+  GlobalOutlined,
+  CompassOutlined,
   EditOutlined,
   EyeInvisibleOutlined,
   EyeOutlined,
@@ -88,6 +94,9 @@ export type IconName =
   | 'CloseOutlined'
   | 'DeleteOutlined'
   | 'DownOutlined'
+  | 'EnvironmentOutlined'
+  | 'GlobalOutlined'
+  | 'CompassOutlined'
   | 'EditOutlined'
   | 'EyeInvisibleOutlined'
   | 'EyeOutlined'

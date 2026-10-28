@@ -112,7 +112,7 @@ const JourneyForm = ({ cancelHref = '/dashboard/home', onSubmit }: JourneyFormPr
       <section aria-labelledby="journey-details-title" className="rounded-xl border border-border/80 bg-surface p-5">
         <div className="flex items-start gap-4">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-soft text-lg text-primary-foreground">
-            <Icon icon="AppstoreOutlined" />
+            <Icon icon="CompassOutlined" />
           </span>
           <div>
             <h2 className="text-base font-semibold text-text-primary" id="journey-details-title">

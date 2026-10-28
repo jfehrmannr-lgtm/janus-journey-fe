@@ -94,7 +94,7 @@ const InputPlayground = () => {
               defaultValue="journey"
               name="resource-type"
               options={[
-                { icon: <Icon icon="AppstoreOutlined" />, label: 'Journey', value: 'journey' },
+                { icon: <Icon icon="CompassOutlined" />, label: 'Journey', value: 'journey' },
                 { icon: <Icon icon="FolderOutlined" />, label: 'Folder', value: 'folder' },
                 { icon: <Icon icon="CheckSquareOutlined" />, label: 'Task', value: 'task' }
               ]}
@@ -109,7 +109,7 @@ const InputPlayground = () => {
               isClereable
               name="clearable-resource"
               options={[
-                { icon: <Icon icon="AppstoreOutlined" />, label: 'Journey', value: 'journey' },
+                { icon: <Icon icon="CompassOutlined" />, label: 'Journey', value: 'journey' },
                 { icon: <Icon icon="FolderOutlined" />, label: 'Folder', value: 'folder' },
                 { icon: <Icon icon="CheckSquareOutlined" />, label: 'Task', value: 'task' }
               ]}
@@ -186,7 +186,7 @@ const InputPlayground = () => {
               disabled
               name="disabled-resource"
               options={[
-                { icon: <Icon icon="AppstoreOutlined" />, label: 'Journey', value: 'journey' },
+                { icon: <Icon icon="CompassOutlined" />, label: 'Journey', value: 'journey' },
                 { icon: <Icon icon="FolderOutlined" />, label: 'Folder', value: 'folder' }
               ]}
               placeholder="Unavailable resource selector"

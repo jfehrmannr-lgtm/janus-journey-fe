@@ -83,7 +83,7 @@ const CreateFolderForm = ({
                 className="text-blue-700"
                 icon={
                   reference.type === 'journey'
-                    ? 'AppstoreOutlined'
+                    ? 'CompassOutlined'
                     : reference.type === 'user'
                       ? 'TeamOutlined'
                       : 'FolderOutlined'

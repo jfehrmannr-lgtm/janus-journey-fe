@@ -48,7 +48,7 @@ const FolderWorkspaceActions = ({
           <Button
             buttonSize="normal"
             color="neutral"
-            icon={<Icon icon="AppstoreOutlined" />}
+            icon={<Icon icon="CompassOutlined" />}
             label="Return"
             type="button"
             variant="outlined"

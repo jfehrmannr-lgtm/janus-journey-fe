@@ -1,3 +1,30 @@
+## 2026-10-28
+
+### #JANUS-FE-0128: Use Journey Resource Header Image
+
+**Work**: Plan / Build; Updated the Journey workspace header to use the selected Journey resource `imgUrl` while preserving the existing static background fallback for creation and non-Journey resources.
+
+- Kept the header layout, overlay, styling, and behavior unchanged.
+- Did not modify `JourneyWorkspace`, forms, API contracts, or data fetching.
+
+## 2026-10-27
+
+### #JANUS-FE-0127: Use Compass Icon For Journeys
+
+**Work**: Plan / Build; Replaced Journey UI icon usage with CompassOutlined while retaining AppstoreOutlined in the shared Icon component and unrelated icon examples.
+
+- Updated Journey cards, dashboard tables, workspace headers, forms, and Journey selectors.
+- Kept AppstoreOutlined available for generic application/grid usage.
+
+## 2026-10-27
+
+### #JANUS-FE-0126: Add Navigation Icon Options
+
+**Work**: Plan / Build; Extended the shared Icon component with EnvironmentOutlined, GlobalOutlined, and CompassOutlined support.
+
+- Registered all three Ant Design icons in the shared component map.
+- Added their names to the typed `IconName` contract.
+
 ## 2026-10-27
 
 ### #JANUS-FE-0124: Supply Required Journey Background Image Paths

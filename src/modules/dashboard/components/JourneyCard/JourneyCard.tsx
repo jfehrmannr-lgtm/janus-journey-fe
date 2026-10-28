@@ -77,7 +77,7 @@ const JourneyCard = ({
   const shouldShowProgress = showProgress && progress !== undefined
   const shouldShowLastModified = showLastModified && lastModified !== undefined
   const resourceIcons: Record<ResourceType, IconName> = {
-    journey: 'AppstoreOutlined',
+    journey: 'CompassOutlined',
     folder: 'FolderOutlined',
     task: 'CheckSquareOutlined'
   }

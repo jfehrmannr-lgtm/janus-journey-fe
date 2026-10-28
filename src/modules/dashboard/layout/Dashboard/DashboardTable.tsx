@@ -30,7 +30,7 @@ const resourceLabels: Record<DashboardResourceFilter, string> = {
 }
 
 const resourceIcons: Record<ResourceType, IconName> = {
-  journey: 'AppstoreOutlined',
+  journey: 'CompassOutlined',
   folder: 'FolderOutlined',
   task: 'CheckSquareOutlined'
 }
@@ -188,7 +188,7 @@ const DashboardTable = ({
                 aria-pressed={resourceView === 'cards'}
                 buttonSize="normal"
                 color={resourceView === 'cards' ? 'primary' : 'neutral'}
-                icon={<Icon icon="AppstoreOutlined" />}
+                icon={<Icon icon="CompassOutlined" />}
                 label="Cards"
                 onClick={() => onViewChange('cards')}
                 size="nm"
