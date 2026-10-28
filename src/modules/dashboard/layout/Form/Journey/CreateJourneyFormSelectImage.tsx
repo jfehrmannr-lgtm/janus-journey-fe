@@ -14,6 +14,7 @@ const CreateJourneyFormSelectImage = () => {
       trigger={
         <Input
           size={10000}
+          className="cursor-pointer"
           onChange={() => false}
           value={imageOptions.find((imageOptionElement) => imageOptionElement.path === createJourneyForm.imgUrl)?.label}
           icon={<Icon icon="CompassOutlined" />}
@@ -29,11 +30,11 @@ const CreateJourneyFormSelectImage = () => {
             {imageOptions.map((imageOptionElement) => {
               return (
                 <button
-                  className={`cursor-pointer w-50 border hover:border-primary/60 p-2 rounded-lg transition ${createJourneyForm.imgUrl === imageOptionElement.path ? 'border-primary' : 'border-white'}`}
+                  className={`cursor-pointer border hover:border-primary/60 p-2 rounded-lg transition ${createJourneyForm.imgUrl === imageOptionElement.path ? 'border-primary' : 'border-white'}`}
                   key={imageOptionElement.path}
                   onClick={() => setCreateJourneyForm({ ...createJourneyForm, imgUrl: imageOptionElement.path })}
                 >
-                  <Image src={imageOptionElement.path} alt={''} />
+                  <Image src={imageOptionElement.path} alt={''} width={200} height={0} />
                   <div>{imageOptionElement.label}</div>
                 </button>
               )

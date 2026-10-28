@@ -174,17 +174,6 @@ const DashboardTable = ({
           <div className="flex items-center gap-2">
             <div className="flex rounded-xl border border-border p-1 space-x-1" role="group" aria-label="Resource view">
               <Button
-                aria-pressed={resourceView === 'table'}
-                buttonSize="normal"
-                color={resourceView === 'table' ? 'primary' : 'neutral'}
-                icon={<Icon icon="UnorderedListOutlined" />}
-                label="Table"
-                onClick={() => onViewChange('table')}
-                size="nm"
-                type="button"
-                variant={resourceView === 'table' ? 'filled' : 'outlined'}
-              />
-              <Button
                 aria-pressed={resourceView === 'cards'}
                 buttonSize="normal"
                 color={resourceView === 'cards' ? 'primary' : 'neutral'}
@@ -194,6 +183,17 @@ const DashboardTable = ({
                 size="nm"
                 type="button"
                 variant={resourceView === 'cards' ? 'filled' : 'outlined'}
+              />
+              <Button
+                aria-pressed={resourceView === 'table'}
+                buttonSize="normal"
+                color={resourceView === 'table' ? 'primary' : 'neutral'}
+                icon={<Icon icon="UnorderedListOutlined" />}
+                label="Table"
+                onClick={() => onViewChange('table')}
+                size="nm"
+                type="button"
+                variant={resourceView === 'table' ? 'filled' : 'outlined'}
               />
             </div>
             <Button

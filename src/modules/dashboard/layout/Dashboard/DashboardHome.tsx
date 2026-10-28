@@ -47,7 +47,7 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
   const pathname = usePathname()
   const router = useRouter()
   const [resourceFilter, setResourceFilter] = useState<DashboardResourceFilter>('journey')
-  const [resourceView, setResourceView] = useState<DashboardResourceView>('table')
+  const [resourceView, setResourceView] = useState<DashboardResourceView>('cards')
   const selectedResource = getSelectedResourceFromPathname(pathname)
   const username = session?.user.name?.split(' ')[0] ?? 'there'
   const continueJourneys = resources.journeys
