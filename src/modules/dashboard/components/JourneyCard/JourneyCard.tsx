@@ -19,34 +19,38 @@ interface JourneyCardProps {
 }
 
 /**
- * Formats an ISO date as a compact relative modification label.
+ * Formats an ISO date as a local-calendar relative activity label.
  *
  * @param value - ISO date value supplied by the parent.
  * @returns A relative modification label.
  */
 const formatRelativeModification = (value: string): string => {
-  const timestamp = Date.parse(value)
+  const activityDate = new Date(value)
 
-  if (Number.isNaN(timestamp)) {
+  if (Number.isNaN(activityDate.getTime())) {
     return 'Modified recently'
   }
 
-  const elapsedSeconds = Math.max(0, Math.floor((Date.now() - timestamp) / 1000))
-  const units = [
-    { amount: 60 * 60 * 24 * 365, label: 'year' },
-    { amount: 60 * 60 * 24 * 30, label: 'month' },
-    { amount: 60 * 60 * 24, label: 'day' },
-    { amount: 60 * 60, label: 'hour' },
-    { amount: 60, label: 'minute' }
-  ]
-  const unit = units.find(({ amount }) => elapsedSeconds >= amount)
+  const now = new Date()
+  const activityDay = Date.UTC(activityDate.getFullYear(), activityDate.getMonth(), activityDate.getDate())
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+  const calendarDaysAgo = Math.floor((today - activityDay) / (24 * 60 * 60 * 1000))
 
-  if (!unit) {
-    return 'Modified just now'
+  if (calendarDaysAgo === 0) {
+    const time = activityDate.toLocaleTimeString(undefined, {
+      hour: '2-digit',
+      hour12: false,
+      minute: '2-digit'
+    })
+
+    return `Modified today at ${time}`
   }
 
-  const valueInUnit = Math.floor(elapsedSeconds / unit.amount)
-  return `Modified ${valueInUnit} ${unit.label}${valueInUnit === 1 ? '' : 's'} ago`
+  if (calendarDaysAgo > 0) {
+    return `Modified ${calendarDaysAgo} day${calendarDaysAgo === 1 ? '' : 's'} ago`
+  }
+
+  return 'Modified recently'
 }
 
 /**

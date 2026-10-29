@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
 import { authClient } from '@/services/authClient'
@@ -19,15 +19,15 @@ interface DashboardHomeProps {
 }
 
 /**
- * Sorts resources from newest to oldest using their optional update timestamp.
+ * Sorts resources from newest to oldest using their optional activity timestamp.
  *
  * @param first - First resource being compared.
  * @param second - Second resource being compared.
  * @returns Sort order with most recently modified resources first.
  */
-const sortByModifiedDate = <T extends { updatedAt?: string }>(first: T, second: T): number => {
-  const firstTime = first.updatedAt === undefined ? 0 : Date.parse(first.updatedAt)
-  const secondTime = second.updatedAt === undefined ? 0 : Date.parse(second.updatedAt)
+const sortByLastActivityDate = <T extends { lastActivityAt: string }>(first: T, second: T): number => {
+  const firstTime = Date.parse(first.lastActivityAt)
+  const secondTime = Date.parse(second.lastActivityAt)
 
   return (Number.isNaN(secondTime) ? 0 : secondTime) - (Number.isNaN(firstTime) ? 0 : firstTime)
 }
@@ -50,13 +50,17 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
   const [resourceView, setResourceView] = useState<DashboardResourceView>('cards')
   const selectedResource = getSelectedResourceFromPathname(pathname)
   const username = session?.user.name?.split(' ')[0] ?? 'there'
-  const continueJourneys = resources.journeys
-    .filter((journey) => {
-      const progressPercentage = getJourneyProgressPercentage(journey)
-      return progressPercentage === undefined || progressPercentage < 100
-    })
-    .sort(sortByModifiedDate)
-    .slice(0, 3)
+  const continueJourneys = useMemo(
+    () =>
+      resources.journeys
+        .filter((journey) => {
+          const progressPercentage = getJourneyProgressPercentage(journey)
+          return progressPercentage === undefined || progressPercentage < 100
+        })
+        .sort((first, second) => sortByLastActivityDate(first, second))
+        .slice(0, 3),
+    [resources.journeys]
+  )
 
   const handleJourneyCreation = () => {
     router.push('/dashboard/home/create-journey')

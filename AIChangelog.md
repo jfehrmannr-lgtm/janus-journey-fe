@@ -1,5 +1,18 @@
 ## 2026-10-29
 
+### #JANUS-FE-0134: Prioritize Journeys By Last Activity
+
+**Work**: Plan / Build / Validate; Updated Dashboard Continue to order incomplete Journeys by descending `lastActivityAt` and updated JourneyCard labels to display local calendar-day activity timestamps.
+
+- Preserved the existing incomplete-Journey filter, three-card limit, layout, navigation, and loading/empty behavior.
+- Kept source collections unmutated, preserved `lastActivityAt` through the existing navigation mapper, and avoided changes to data fetching, progress calculation, or API contracts.
+
+### #JANUS-FE-0133: Add Resource Activity API Types
+
+**Work**: Plan / Build / Validate; Added the required server-controlled `lastActivityAt` timestamp to the shared BFF resource response type inherited by Journey, Folder, and Task API contracts.
+
+- Preserved the separate UI resource model and all existing mappings, behavior, and relationships.
+
 ### #JANUS-FE-0132: Improve Journey Resource Selection Controls
 
 **Work**: Plan / Build / Validate; Closed the Journey options dropdown when resource selection starts, disabled Delete All without selections, and extended existing workspace cleanup to clear selected resources.

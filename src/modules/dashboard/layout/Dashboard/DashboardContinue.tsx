@@ -11,6 +11,14 @@ interface DashboardContinueProps {
   onSelectJourney: (journeyUid: string) => void
 }
 
+const getLastActivityAt = (journey: Journey): string | undefined => {
+  if ('lastActivityAt' in journey && typeof journey.lastActivityAt === 'string') {
+    return journey.lastActivityAt
+  }
+
+  return undefined
+}
+
 /**
  * Renders the most recently modified incomplete Journeys.
  *
@@ -46,7 +54,7 @@ const DashboardContinue = ({
             <JourneyCard
               journey={journey}
               key={journey.uid}
-              lastModified={journey.updatedAt}
+              lastModified={getLastActivityAt(journey)}
               onClick={() => onSelectJourney(journey.uid)}
               progress={journey.progress}
               selected={selectedResourceType === 'journey' && selectedResourceUid === journey.uid}

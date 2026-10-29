@@ -1,3 +1,5 @@
+import { ApiParentReference } from './resource-api.type'
+
 export type ResourceType = 'journey' | 'folder' | 'task'
 
 export type TaskState = 'pending' | 'in-progress' | 'in-pause' | 'completed' | 'discarded'
@@ -5,10 +7,13 @@ export type TaskState = 'pending' | 'in-progress' | 'in-pause' | 'completed' | '
 export interface BaseResource<TType extends ResourceType> {
   uid: string
   type: TType
-  parentUid: string
+  parent: ApiParentReference
   name: string
-  description: string
-  updatedAt?: string
+  description: string | null
+  metadata: Record<string, unknown>
+  createdAt: string
+  updatedAt: string
+  lastActivityAt: string
 }
 
 export interface ResourceProgress {

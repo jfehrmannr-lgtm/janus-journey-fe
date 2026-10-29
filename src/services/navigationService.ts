@@ -82,7 +82,7 @@ const mapFolderTree = (folder: ApiFolderWithTasks): JourneyTreeData => ({
   tasks: folder.tasks.map(mapTask)
 })
 
-const mapJourney = (journey: ApiJourneyWithResources | ApiJourney): Journey => ({
+const mapJourney = (journey: ApiJourneyWithResources | ApiJourney): Journey & { lastActivityAt: string } => ({
   uid: journey.uid,
   type: 'journey',
   parentUid: journey.parent.uid,
@@ -90,6 +90,7 @@ const mapJourney = (journey: ApiJourneyWithResources | ApiJourney): Journey => (
   description: journey.description ?? '',
   imgUrl: journey.imgUrl,
   updatedAt: journey.updatedAt,
+  lastActivityAt: journey.lastActivityAt,
   progress: mapProgress(journey.progress)
 })
 
