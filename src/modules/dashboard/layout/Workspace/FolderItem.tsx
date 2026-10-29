@@ -6,6 +6,7 @@ import { useState, type KeyboardEvent, type ReactNode } from 'react'
 import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import Icon from '@/components/Icon/Icon'
 import InputCheck from '@/components/InputCheck/InputCheck'
+import ProgressBar from '@/components/ProgressBar/ProgressBar'
 import type { ApiFolderWithTasks } from '@/types/resource-api.type'
 import type { FolderFormValues } from '@/stores/workspaceFromStore'
 
@@ -102,16 +103,6 @@ const FolderItem = (props: FolderItemProps) => {
     pendingProps?.onSelect()
   }
 
-  const headerClassName = isPendingFolder
-    ? pendingProps?.isInvalid
-      ? 'bg-danger-surface'
-      : pendingProps?.isValid
-        ? 'bg-task-completed'
-        : 'bg-surface-subtle'
-    : isSelected
-      ? 'bg-primary-soft/60'
-      : 'bg-surface-subtle'
-
   const headerContent = (
     <>
       {isSelectingResources && (
@@ -128,6 +119,11 @@ const FolderItem = (props: FolderItemProps) => {
       )}
       <Icon className="text-blue-700" icon="FolderOutlined" />
       <span className="min-w-0 flex-1 truncate text-sm font-semibold text-text-strong">{folderName}</span>
+      {!isPendingFolder && folder?.progress !== undefined && (
+        <div className="w-20">
+          <ProgressBar showPercent="none" progress={folder.progress.percentage} size="sm" />
+        </div>
+      )}
       <span className="text-xs text-text-muted">
         {isPendingFolder ? '0 / 0' : showCompletionProgress ? `${completedTasks} / ${tasks.length}` : tasks.length}
       </span>
@@ -135,11 +131,11 @@ const FolderItem = (props: FolderItemProps) => {
   )
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border-subtle">
+    <div className="overflow-hidden rounded-sm border-b border-l border-border-strong/50 hover:border-primary-soft">
       {isPendingFolder ? (
         <div
           aria-expanded="false"
-          className={`flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-slate-200 ${headerClassName}`}
+          className={`flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-slate-200`}
           onClick={handleHeaderClick}
           onKeyDown={handlePendingKeyDown}
           role="button"
@@ -160,7 +156,7 @@ const FolderItem = (props: FolderItemProps) => {
       ) : (
         <button
           aria-expanded={!disableCollapse && isExpanded}
-          className={`flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-slate-200 ${headerClassName}`}
+          className={`cursor-pointer flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-primary-soft`}
           onClick={handleHeaderClick}
           type="button"
         >
@@ -172,9 +168,9 @@ const FolderItem = (props: FolderItemProps) => {
       )}
 
       {!isPendingFolder && !disableCollapse && isExpanded && (
-        <div>
+        <div className="px-8">
           {showCreateTaskAction && !isSelectingResources && (
-            <div className="border-t border-border-subtle px-3 py-2">
+            <div className="border-t border-border-subtle py-2">
               <CreateResourceButton
                 onClick={createTaskHref ? () => router.push(createTaskHref, { scroll: false }) : undefined}
                 parentResourceType="folder"

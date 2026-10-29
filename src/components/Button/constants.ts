@@ -1,6 +1,6 @@
 import type { ButtonColor, ButtonVariant, ButtonVisualSize, ButtonWidth } from './Button.types'
 
-export const BUTTON_VARIANTS: ButtonVariant[] = ['filled', 'outlined', 'dotted']
+export const BUTTON_VARIANTS: ButtonVariant[] = ['filled', 'outlined', 'dotted', 'ghost']
 export const BUTTON_COLORS: ButtonColor[] = ['primary', 'neutral', 'success', 'warning', 'danger']
 export const BUTTON_WIDTHS: ButtonWidth[] = ['sm', 'md', 'nm', 'lg', 'xl', 'full']
 export const BUTTON_VISUAL_SIZES: ButtonVisualSize[] = ['thin', 'normal', 'large', 'biggest']
@@ -42,5 +42,12 @@ export const BUTTON_VARIANT_COLOR_CLASSES: Record<ButtonVariant, Record<ButtonCo
     success: 'border-task-completed-foreground text-task-completed-foreground hover:bg-task-completed',
     warning: 'border-task-in-pause-foreground text-task-in-pause-foreground hover:bg-task-in-pause',
     danger: 'border-danger-foreground text-danger-foreground hover:bg-danger-surface'
+  },
+  ghost: {
+    primary: 'text-primary hover:bg-primary-soft',
+    neutral: 'text-text-body hover:bg-surface-subtle',
+    success: 'text-task-completed-foreground hover:bg-task-completed',
+    warning: 'text-task-in-pause-foreground hover:bg-task-in-pause',
+    danger: 'text-danger-foreground hover:bg-danger-surface'
   }
 }

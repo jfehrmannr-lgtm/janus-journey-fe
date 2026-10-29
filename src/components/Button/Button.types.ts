@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactElement } from 'react'
 
-export type ButtonVariant = 'filled' | 'outlined' | 'dotted'
+export type ButtonVariant = 'filled' | 'outlined' | 'dotted' | 'ghost'
 export type ButtonColor = 'primary' | 'neutral' | 'success' | 'warning' | 'danger'
 export type ButtonWidth = 'sm' | 'md' | 'nm' | 'lg' | 'xl' | 'full'
 export type ButtonVisualSize = 'thin' | 'normal' | 'large' | 'biggest'

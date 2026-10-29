@@ -6,6 +6,7 @@ import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import type { ApiTask } from '@/types/resource-api.type'
 
 import TaskItem from './TaskItem'
+import Icon from '@/components/Icon/Icon'
 
 interface RootTasksProps {
   createTaskHref?: string
@@ -38,31 +39,36 @@ const RootTasks = ({
   const router = useRouter()
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border-subtle">
-      <div className="bg-surface-subtle px-3 py-3 text-sm font-semibold text-text-strong">Tasks</div>
-      {!isSelectingResources && (
-        <div className="border-t border-border-subtle px-3 py-2">
-          <CreateResourceButton
-            onClick={createTaskHref ? () => router.push(createTaskHref, { scroll: false }) : undefined}
-            parentResourceType="journey"
-            parentUid={journeyUid}
-            resourceType="task"
-          />
-        </div>
-      )}
-      {tasks.length > 0 ? (
-        tasks.map((task) => (
-          <TaskItem
-            isSelectingResources={isSelectingResources}
-            isSelected={selectedResource.includes(task.uid)}
-            key={task.uid}
-            onToggleSelection={() => onToggleSelection(task.uid)}
-            task={task}
-          />
-        ))
-      ) : (
-        <p className="border-t border-border-subtle px-3 py-4 text-sm text-text-muted">No root tasks yet.</p>
-      )}
+    <div className="overflow-hidden rounded-sm border-b border-l border-border-strong/50 hover:border-primary-soft">
+      <div className="flex px-3 py-3 space-x-3">
+        <Icon className="text-blue-700" icon="CheckSquareOutlined" />
+        <div className=" text-sm font-semibold text-text-strong">Task without Folder</div>
+      </div>
+      <div className="px-9">
+        {!isSelectingResources && (
+          <div className="border-t border-border-subtle py-2">
+            <CreateResourceButton
+              onClick={createTaskHref ? () => router.push(createTaskHref, { scroll: false }) : undefined}
+              parentResourceType="journey"
+              parentUid={journeyUid}
+              resourceType="task"
+            />
+          </div>
+        )}
+        {tasks.length > 0 ? (
+          tasks.map((task) => (
+            <TaskItem
+              isSelectingResources={isSelectingResources}
+              isSelected={selectedResource.includes(task.uid)}
+              key={task.uid}
+              onToggleSelection={() => onToggleSelection(task.uid)}
+              task={task}
+            />
+          ))
+        ) : (
+          <p className="border-t border-border-subtle px-3 py-4 text-sm text-text-muted">No root tasks yet.</p>
+        )}
+      </div>
     </div>
   )
 }

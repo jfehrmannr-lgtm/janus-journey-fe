@@ -1,3 +1,30 @@
+## 2026-10-29
+
+### #JANUS-FE-0131: Reuse ProgressBar In Detailed Workspace
+
+**Work**: Plan / Build / Validate; Replaced the detailed Journey workspace’s custom progress markup with the shared ProgressBar component while preserving task counts and percentage labels.
+
+- Reused the existing progress normalization and accessibility behavior.
+- Preserved the existing Journey progress calculation and layout context.
+
+## 2026-10-29
+
+### #JANUS-FE-0130: Show Folder Progress In Workspace
+
+**Work**: Plan / Build / Validate; Added the shared ProgressBar to persisted Folder items using the Folder progress percentage returned by the API.
+
+- Kept pending Folder rendering and existing completion counts unchanged.
+- Reused the existing ProgressBar component and API progress contract.
+
+## 2026-10-29
+
+### #JANUS-FE-0129: Add Button Ghost Variant
+
+**Work**: Plan / Build / Validate; Added a shared Ghost Button variant with transparent styling and semantic hover surfaces for lightweight actions.
+
+- Exposed `ghost` through the typed Button variant contract and playground variant list.
+- Preserved existing Filled, Outlined, and Dotted Button behavior.
+
 ## 2026-10-28
 
 ### #JANUS-FE-0128: Use Journey Resource Header Image

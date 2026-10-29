@@ -40,8 +40,6 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
   const cancelResourceSelection = useAppUiStore((state) => state.cancelResourceSelection)
   const toggleSelectedResource = useAppUiStore((state) => state.toggleSelectedResource)
 
-  console.debug('selectedResource', selectedResource)
-
   const { data: journey } = useQuery<ApiJourneyWithResources>({
     enabled: false,
     queryFn: () => {
@@ -156,53 +154,53 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
             />
           </div>
         )}
+        {!isSelectingResources && (
+          <div className="flex items-center gap-2 py-2">
+            <CreateResourceButton
+              onClick={() =>
+                router.push(`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-folder`, {
+                  scroll: false
+                })
+              }
+              parentResourceType="journey"
+              parentUid={journey.uid}
+              resourceType="folder"
+            />
+          </div>
+        )}
       </nav>
 
-      <section className="space-y-3 px-5 py-4">
-        <div className="overflow-hidden rounded-xl border border-border-subtle">
-          <div className="bg-surface-subtle px-3 py-3 text-sm font-semibold text-text-strong">Folders</div>
-          {!isSelectingResources && (
-            <div className="border-t border-border-subtle px-3 pt-2">
-              <CreateResourceButton
-                onClick={() =>
-                  router.push(`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-folder`, {
-                    scroll: false
-                  })
-                }
-                parentResourceType="journey"
-                parentUid={journey.uid}
-                resourceType="folder"
-              />
-            </div>
-          )}
-          <div className="space-y-3 p-3">
-            {journey.folders.map((folder) => (
-              <FolderItem
-                createTaskHref={`/dashboard/home/journey/${journeyId}/folder/${folder.uid}/create-task`}
-                folder={folder}
-                isSelectingResources={isSelectingResources}
-                isSelected={selectedResource.includes(folder.uid)}
-                selectedResource={selectedResource}
-                key={folder.uid}
-                onToggleSelection={() =>
-                  toggleSelectedResource(
-                    folder.uid,
-                    folder.tasks.map((task) => task.uid)
-                  )
-                }
-                onToggleTaskSelection={toggleSelectedResource}
-              />
-            ))}
-          </div>
+      <section className="px-2 py-4">
+        {!isSelectingResources && <></>}
+        <div className="space-y-3 p-3">
+          {journey.folders.map((folder) => (
+            <FolderItem
+              createTaskHref={`/dashboard/home/journey/${journeyId}/folder/${folder.uid}/create-task`}
+              folder={folder}
+              isSelectingResources={isSelectingResources}
+              isSelected={selectedResource.includes(folder.uid)}
+              selectedResource={selectedResource}
+              key={folder.uid}
+              onToggleSelection={() =>
+                toggleSelectedResource(
+                  folder.uid,
+                  folder.tasks.map((task) => task.uid)
+                )
+              }
+              onToggleTaskSelection={toggleSelectedResource}
+            />
+          ))}
         </div>
-        <RootTasks
-          createTaskHref={`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-task`}
-          journeyUid={journey.uid}
-          tasks={journey.tasks}
-          isSelectingResources={isSelectingResources}
-          selectedResource={selectedResource}
-          onToggleSelection={toggleSelectedResource}
-        />
+        <div className="space-y-3 p-3">
+          <RootTasks
+            createTaskHref={`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-task`}
+            journeyUid={journey.uid}
+            tasks={journey.tasks}
+            isSelectingResources={isSelectingResources}
+            selectedResource={selectedResource}
+            onToggleSelection={toggleSelectedResource}
+          />
+        </div>
       </section>
     </div>
   )

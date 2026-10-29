@@ -46,6 +46,7 @@ export interface ApiTask extends ApiResourceBase<'task'> {
 
 export interface ApiFolderWithTasks extends ApiFolder {
   tasks: ApiTask[]
+  progress?: ApiProgress
 }
 
 export interface ApiJourneyWithResources extends ApiJourney {

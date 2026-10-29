@@ -34,11 +34,11 @@ const CreateResourceButton = ({ onClick, parentResourceType, parentUid, resource
       data-resource-type={resourceType}
       color="neutral"
       icon={<Icon icon={isFolder ? 'FolderOutlined' : 'CheckSquareOutlined'} />}
-      label={`Create ${resourceLabel}`}
+      label={`Add ${resourceLabel}`}
       onClick={onClick}
       size="full"
       type="button"
-      variant="dotted"
+      variant="outlined"
     />
   )
 }
