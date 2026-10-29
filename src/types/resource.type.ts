@@ -19,10 +19,8 @@ export interface BaseResource<TType extends ResourceType> {
 export interface ResourceProgress {
   completed: number
   discarded: number
-  pending: number
-  inProgress: number
-  inPause: number
   total: number
+  percentage: number
 }
 
 export interface Journey extends BaseResource<'journey'> {

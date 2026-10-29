@@ -2,9 +2,8 @@
 
 import Icon from '@/components/Icon/Icon'
 import type { IconName } from '@/components/Icon/Icon'
-import type { Journey, ResourceType } from '@/types/resource.type'
+import type { Journey, ResourceProgress, ResourceType } from '@/types/resource.type'
 import { calculateProgressPercentage } from '@/modules/dashboard/utils/progress'
-import type { Progress } from '@/modules/dashboard/utils/progress'
 
 interface JourneyCardProps {
   journey: Journey
@@ -14,7 +13,7 @@ interface JourneyCardProps {
   selected?: boolean
   showProgress?: boolean
   showLastModified?: boolean
-  progress?: Progress
+  progress?: ResourceProgress
   lastModified?: string
 }
 

@@ -1,5 +1,17 @@
 ## 2026-10-29
 
+### #JANUS-FE-0136: Align Progress Calculation With ResourceProgress
+
+**Work**: Plan / Build / Validate; Refactored task progress calculation and its consumers to use the shared `ResourceProgress` contract with completed, discarded, total, and percentage values.
+
+- Preserved visible-task filtering and completion percentage behavior.
+
+### #JANUS-FE-0135: Preserve Created Journey Activity Timestamp
+
+**Work**: Plan / Build / Validate; Included the backend-provided `lastActivityAt` when inserting a newly created Journey into the navigation resource cache.
+
+- Preserved the existing POST response mapping, cache update, navigation, and all other Journey properties.
+
 ### #JANUS-FE-0134: Prioritize Journeys By Last Activity
 
 **Work**: Plan / Build / Validate; Updated Dashboard Continue to order incomplete Journeys by descending `lastActivityAt` and updated JourneyCard labels to display local calendar-day activity timestamps.

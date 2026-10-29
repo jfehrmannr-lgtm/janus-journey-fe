@@ -50,6 +50,7 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
   const [resourceView, setResourceView] = useState<DashboardResourceView>('cards')
   const selectedResource = getSelectedResourceFromPathname(pathname)
   const username = session?.user.name?.split(' ')[0] ?? 'there'
+
   const continueJourneys = useMemo(
     () =>
       resources.journeys
@@ -61,6 +62,7 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
         .slice(0, 3),
     [resources.journeys]
   )
+  console.debug('resources', resources)
 
   const handleJourneyCreation = () => {
     router.push('/dashboard/home/create-journey')

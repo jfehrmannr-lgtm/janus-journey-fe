@@ -51,18 +51,18 @@ const useJourneyWorkspace = ({ createJourneyAction }: UseJourneyWorkspaceProps) 
     },
     onMutate: () => ({ toastId: toast.loading('Creating Journey...') }),
     onSuccess: (response, _payload, context) => {
-      const apiJourney = response.payload
       const journey: Journey = {
-        uid: apiJourney.uid,
-        type: 'journey',
-        parentUid: apiJourney.parent.uid,
-        name: apiJourney.name,
-        description: apiJourney.description ?? '',
-        imgUrl: apiJourney.imgUrl,
-        updatedAt: apiJourney.updatedAt
+        ...response.payload,
+        progress: {
+          completed: 0,
+          discarded: 0,
+          total: 0,
+          percentage: 0
+        }
       }
+
       const journeyWithResources: ApiJourneyWithResources = {
-        ...apiJourney,
+        ...journey,
         folders: [],
         tasks: []
       }
@@ -70,10 +70,10 @@ const useJourneyWorkspace = ({ createJourneyAction }: UseJourneyWorkspaceProps) 
       queryClient.setQueryData<NavigationRootResources>(navigationQueryKeys.rootResources(), (resources) =>
         resources ? { ...resources, journeys: resources.journeys.concat(journey) } : resources
       )
-      queryClient.setQueryData(navigationQueryKeys.resourceTree('journey', apiJourney.uid), journeyWithResources)
+      queryClient.setQueryData(navigationQueryKeys.resourceTree('journey', journey.uid), journeyWithResources)
 
       toast.success('Journey created successfully.', { id: context?.toastId })
-      router.push(`/dashboard/home/journey/${encodeURIComponent(apiJourney.uid)}`)
+      router.push(`/dashboard/home/journey/${encodeURIComponent(journey.uid)}`)
     }
   })
 

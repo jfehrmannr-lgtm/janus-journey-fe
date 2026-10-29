@@ -1,5 +1,5 @@
 import type { ApiResponse } from '@/types/api.type'
-import type { BaseResource, ResourceType } from '@/types/resource.type'
+import type { BaseResource, ResourceProgress, ResourceType } from '@/types/resource.type'
 
 export type ApiParentType = 'user' | 'journey' | 'folder'
 export type ApiTaskState = 'pending' | 'in-progress' | 'completed' | 'in-pause' | 'discarded'
@@ -9,23 +9,16 @@ export interface ApiParentReference {
   type: ApiParentType
 }
 
-export interface ApiProgress {
-  completed: number
-  discarded: number
-  total: number
-  percentage: number
-}
-
 export type ApiResourceBase<TType extends ResourceType> = BaseResource<TType>
 
 export interface ApiJourney extends ApiResourceBase<'journey'> {
   imgUrl: string
-  progress?: ApiProgress
+  progress?: ResourceProgress
 }
 
 export interface ApiFolder extends ApiResourceBase<'folder'> {
   orderIndex?: unknown
-  progress?: ApiProgress
+  progress?: ResourceProgress
 }
 
 export interface ApiTask extends ApiResourceBase<'task'> {
@@ -37,7 +30,7 @@ export interface ApiTask extends ApiResourceBase<'task'> {
 
 export interface ApiFolderWithTasks extends ApiFolder {
   tasks: ApiTask[]
-  progress?: ApiProgress
+  progress?: ResourceProgress
 }
 
 export interface ApiJourneyWithResources extends ApiJourney {

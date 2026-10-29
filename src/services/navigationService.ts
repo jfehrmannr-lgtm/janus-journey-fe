@@ -131,10 +131,8 @@ const mapProgress = (progress: ApiJourney['progress']): ResourceProgress | undef
   return {
     completed: progress.completed,
     discarded: progress.discarded,
-    pending: Math.max(0, progress.total - progress.completed - progress.discarded),
-    inProgress: 0,
-    inPause: 0,
-    total: progress.total
+    total: progress.total,
+    percentage: progress.percentage
   }
 }
 

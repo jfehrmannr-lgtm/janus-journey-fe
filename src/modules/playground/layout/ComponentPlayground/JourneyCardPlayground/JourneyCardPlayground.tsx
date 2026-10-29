@@ -3,12 +3,11 @@
 import { useState } from 'react'
 
 import JourneyCard from '@/modules/dashboard/components/JourneyCard/JourneyCard'
-import type { Journey } from '@/types/resource.type'
-import type { Progress } from '@/modules/dashboard/utils/progress'
+import type { Journey, ResourceProgress } from '@/types/resource.type'
 
 interface JourneyCardExample {
   journey: Journey
-  progress?: Progress
+  progress?: ResourceProgress
   lastModified?: string
 }
 
@@ -29,7 +28,7 @@ const noProgressJourney = createJourney(
 const journeyExamples: JourneyCardExample[] = [
   {
     journey: createJourney('journey-zero', 'Start a new Journey', 'A Journey with no completed tasks yet.'),
-    progress: { completed: 0, discarded: 0, pending: 8, inProgress: 0, inPause: 0, total: 8 },
+    progress: { completed: 0, discarded: 0, total: 8, percentage: 0 },
     lastModified: '2026-10-15T08:00:00.000Z'
   },
   {
@@ -38,7 +37,7 @@ const journeyExamples: JourneyCardExample[] = [
       'Learn web development',
       'Build practical skills through a structured path.'
     ),
-    progress: { completed: 4, discarded: 0, pending: 4, inProgress: 0, inPause: 0, total: 8 },
+    progress: { completed: 4, discarded: 0, total: 8, percentage: 50 },
     lastModified: '2026-10-13T08:00:00.000Z'
   },
   {
@@ -47,7 +46,7 @@ const journeyExamples: JourneyCardExample[] = [
       'Ship the finished project',
       'Everything needed for the project is complete.'
     ),
-    progress: { completed: 8, discarded: 0, pending: 0, inProgress: 0, inPause: 0, total: 8 },
+    progress: { completed: 8, discarded: 0, total: 8, percentage: 100 },
     lastModified: '2026-10-08T08:00:00.000Z'
   }
 ]
