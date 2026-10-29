@@ -47,25 +47,27 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
   const resolvedTasks = progress ? progress.completed + progress.discarded : 0
 
   return (
-    <div className="min-h-full bg-white">
-      <DetailedHeaderWorkspace mode="view" resource={resource} />
+    <CreateJourneyWorkspaceLifecycle>
+      <div className="min-h-full bg-white">
+        <DetailedHeaderWorkspace mode="view" resource={resource} />
 
-      {isJourney && progress && (
-        <section aria-label="Journey progress" className="border-b border-border-subtle px-5 py-5">
-          <div className="flex items-center gap-3 text-xs text-text-muted">
-            <ProgressBar className="flex-1" progress={progress.percentage} showPercent="none" size="md" />
-            <span className="whitespace-nowrap">
-              {resolvedTasks} / {progress.total} tasks
-            </span>
-            <span className="font-semibold text-text-body">{progress.percentage}%</span>
-          </div>
-        </section>
-      )}
+        {isJourney && progress && (
+          <section aria-label="Journey progress" className="border-b border-border-subtle px-5 py-5">
+            <div className="flex items-center gap-3 text-xs text-text-muted">
+              <ProgressBar className="flex-1" progress={progress.percentage} showPercent="none" size="md" />
+              <span className="whitespace-nowrap">
+                {resolvedTasks} / {progress.total} tasks
+              </span>
+              <span className="font-semibold text-text-body">{progress.percentage}%</span>
+            </div>
+          </section>
+        )}
 
-      <DetailedWorksapceActions mode="view" resource={resource}>
-        {children}
-      </DetailedWorksapceActions>
-    </div>
+        <DetailedWorksapceActions mode="view" resource={resource}>
+          {children}
+        </DetailedWorksapceActions>
+      </div>
+    </CreateJourneyWorkspaceLifecycle>
   )
 }
 

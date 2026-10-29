@@ -1,5 +1,14 @@
 ## 2026-10-29
 
+### #JANUS-FE-0132: Improve Journey Resource Selection Controls
+
+**Work**: Plan / Build / Validate; Closed the Journey options dropdown when resource selection starts, disabled Delete All without selections, and extended existing workspace cleanup to clear selected resources.
+
+- Preserved existing selection and bulk deletion behavior.
+- Reused the existing Zustand cleanup action and lifecycle effect without adding another effect.
+
+## 2026-10-29
+
 ### #JANUS-FE-0131: Reuse ProgressBar In Detailed Workspace
 
 **Work**: Plan / Build / Validate; Replaced the detailed Journey workspace’s custom progress markup with the shared ProgressBar component while preserving task counts and percentage labels.

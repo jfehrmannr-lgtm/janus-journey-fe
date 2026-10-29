@@ -38,7 +38,7 @@ const CreateResourceButton = ({ onClick, parentResourceType, parentUid, resource
       onClick={onClick}
       size="full"
       type="button"
-      variant="outlined"
+      variant="ghost"
     />
   )
 }

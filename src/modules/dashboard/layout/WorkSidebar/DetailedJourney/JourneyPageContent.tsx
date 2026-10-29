@@ -135,7 +135,7 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
               buttonSize="normal"
               className="border-transparent text-danger-foreground hover:bg-danger-surface"
               color="danger"
-              disabled={deleteResourcesMutation.isPending}
+              disabled={deleteResourcesMutation.isPending || selectedResource.length === 0}
               label="Delete All"
               onClick={handleBulkDelete}
               size="nm"
@@ -172,7 +172,7 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
 
       <section className="px-2 py-4">
         {!isSelectingResources && <></>}
-        <div className="space-y-3 p-3">
+        <div className={journey.folders.length !== 0 ? 'space-y-3 p-3' : ''}>
           {journey.folders.map((folder) => (
             <FolderItem
               createTaskHref={`/dashboard/home/journey/${journeyId}/folder/${folder.uid}/create-task`}

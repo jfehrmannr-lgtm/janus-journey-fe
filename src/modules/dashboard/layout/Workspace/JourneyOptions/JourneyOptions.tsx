@@ -17,10 +17,12 @@ interface JourneyOptionsProps {
  * @returns The Journey options interface.
  */
 const JourneyOptions = ({ journeyName, onClose }: JourneyOptionsProps) => {
+  const closeDropdown = useAppUiStore((state) => state.closeDropdown)
   const startResourceSelection = useAppUiStore((state) => state.startResourceSelection)
 
   const handleSelectResources = () => {
-    if (onClose) onClose()
+    onClose?.()
+    closeDropdown()
     startResourceSelection()
   }
 

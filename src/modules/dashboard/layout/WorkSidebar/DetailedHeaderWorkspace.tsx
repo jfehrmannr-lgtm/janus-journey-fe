@@ -51,7 +51,7 @@ const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
           trigger={
             <button
               aria-label="More workspace actions"
-              className="absolute right-4 top-4 flex size-8 cursor-pointer items-center justify-center rounded-lg bg-surface-inverse/40 text-lg text-white transition-colors hover:bg-surface-inverse/60"
+              className="z-1 absolute right-4 top-4 flex size-8 cursor-pointer items-center justify-center rounded-lg bg-surface-inverse/40 text-lg text-white transition-colors hover:bg-surface-inverse/60"
               type="button"
             >
               <Icon icon="EllipsisOutlined" />
