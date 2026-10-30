@@ -62,7 +62,6 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
         .slice(0, 3),
     [resources.journeys]
   )
-  console.debug('resources', resources)
 
   const handleJourneyCreation = () => {
     router.push('/dashboard/home/create-journey')
