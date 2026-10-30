@@ -1341,3 +1341,13 @@
 - Connected the existing form inputs to the draft store while preserving the current UI and disabled controls.
 - Added create-workspace lifecycle cleanup so drafts do not persist after leaving the route.
 - Updated the create-mode header to display the draft name with a `Create Journey` fallback.
+
+## 2026-10-30
+
+### #JANUS-FE-0137: Improve Authentication and Initial Workspace Loading
+
+**Work**: Plan / Build / Validate; Refined the authentication loading screen and existing root-resource loading boundaries without changing authentication or React Query behavior.
+
+- Added branded Janus Journey presentation, accessible status semantics, and reduced-motion-safe animation to `AuthLoadingState`.
+- Reworked `DashboardHomeSkeleton` to mirror the dashboard header, Continue section, and root-resource table responsively.
+- Added a Suspense fallback around the existing server-prefetched dashboard route so the root-resource skeleton is visible while the initial request resolves, while cached content remains unchanged during refetches.
