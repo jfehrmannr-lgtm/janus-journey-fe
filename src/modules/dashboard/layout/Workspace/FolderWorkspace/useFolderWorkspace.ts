@@ -8,7 +8,14 @@ import toast from 'react-hot-toast'
 import { initFolderForm, useCreateFolderForm, type FolderFormValues } from '@/stores/workspaceFromStore'
 import type { CreateFolderBulkPayload, CreateFolderBulkResponse } from '@/types/folder-api.type'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import {
+  getDashboardHomeData,
+  getLatestActivityAt,
+  synchronizeJourneyInRootResources,
+  synchronizeJourneyProgress
+} from '@/services/dashboardService'
 import { ApiFolderWithTasks, ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { NavigationRootResources } from '@/types/navigation.type'
 
 interface UseFolderWorkspaceProps {
   createFolderAction: (payload: CreateFolderBulkPayload) => Promise<CreateFolderBulkResponse>
@@ -47,17 +54,29 @@ const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspac
         tasks: []
       }))
 
-      queryClient.setQueryData<ApiJourneyWithResources>(
+      const updatedJourney = queryClient.setQueryData<ApiJourneyWithResources>(
         navigationQueryKeys.resourceTree('journey', journeyId),
         (journey) => {
           if (!journey) return journey
 
-          return {
+          return synchronizeJourneyProgress({
             ...journey,
+            lastActivityAt: getLatestActivityAt(journey.lastActivityAt, response.payload),
             folders: journey.folders.concat(createdFolders)
-          }
+          })
         }
       )
+
+      if (updatedJourney) {
+        const updatedRootResources = queryClient.setQueryData<NavigationRootResources>(
+          navigationQueryKeys.rootResources(),
+          (resources) => (resources ? synchronizeJourneyInRootResources(resources, updatedJourney) : resources)
+        )
+
+        if (updatedRootResources) {
+          queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(updatedRootResources))
+        }
+      }
 
       toast.success('Folders created successfully.', { id: context?.toastId })
 

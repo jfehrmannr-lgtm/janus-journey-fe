@@ -30,4 +30,12 @@ const calculateProgress = (tasks: ProgressTask[]): ResourceProgress => {
  */
 const calculateProgressPercentage = ({ percentage }: ResourceProgress) => percentage
 
-export { calculateProgress, calculateProgressPercentage }
+/**
+ * Formats a progress percentage with the single decimal place used by workspace labels.
+ *
+ * @param percentage - Progress percentage to format.
+ * @returns The formatted percentage without its percent sign.
+ */
+const formatProgressPercentage = (percentage: number): string => percentage.toFixed(1)
+
+export { calculateProgress, calculateProgressPercentage, formatProgressPercentage }

@@ -1,5 +1,17 @@
 ## 2026-11-02
 
+### #JANUS-FE-0144: Align Journey Progress Formatting
+
+**Work**: Plan / Build / Validate; Standardized JourneyCard and DetailedWorkspace progress labels to one decimal place through the shared progress utility.
+
+### #JANUS-FE-0143: Synchronize Journey Dashboard Activity
+
+**Work**: Plan / Build / Validate; Synchronized Journey progress and server-provided `lastActivityAt` across selected resource, root navigation, and Dashboard Home caches after Task and Folder mutations.
+
+- Recalculated Folder and Journey progress through the existing `calculateProgress` utility after Task creation, Folder creation, Task status updates, and resource deletion.
+- Propagated authoritative activity timestamps from successful Task/Folder responses without generating client timestamps.
+- Refetched root resources only after deletion, whose `204` response does not include the propagated Journey activity timestamp, then reconciled the selected Journey and Dashboard caches.
+
 ### #JANUS-FE-0142: Use Journey Icon In Sidebar
 
 **Work**: Plan / Build / Validate; Replaced the Journey row caret indicator in the Sidebar with the existing Compass Journey icon without changing navigation or selection behavior.

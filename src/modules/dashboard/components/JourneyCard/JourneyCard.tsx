@@ -3,7 +3,7 @@
 import Icon from '@/components/Icon/Icon'
 import type { IconName } from '@/components/Icon/Icon'
 import type { Journey, ResourceProgress, ResourceType } from '@/types/resource.type'
-import { calculateProgressPercentage } from '@/modules/dashboard/utils/progress'
+import { calculateProgressPercentage, formatProgressPercentage } from '@/modules/dashboard/utils/progress'
 
 interface JourneyCardProps {
   journey: Journey
@@ -116,7 +116,7 @@ const JourneyCard = ({
         <span className="block">
           <span className="flex items-center justify-between gap-3 text-xs font-semibold text-text-muted">
             <span>Progress</span>
-            <span>{Math.round(progressPercentage)}%</span>
+            <span>{formatProgressPercentage(progressPercentage)}%</span>
           </span>
           <span className="mt-2 block h-2 overflow-hidden rounded-full bg-surface-subtle">
             <span

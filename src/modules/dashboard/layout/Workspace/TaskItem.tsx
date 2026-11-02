@@ -15,7 +15,11 @@ import useAppUiStore from '@/stores/appUiStore'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import type { JourneyTreeData, NavigationRootResources } from '@/types/navigation.type'
 import { calculateProgress } from '@/modules/dashboard/utils/progress'
-import { getDashboardHomeData } from '@/services/dashboardService'
+import {
+  getDashboardHomeData,
+  synchronizeJourneyInRootResources,
+  synchronizeJourneyProgress
+} from '@/services/dashboardService'
 
 interface TaskItemBaseProps {
   children?: ReactNode
@@ -61,32 +65,51 @@ const replaceApiTask = (items: ApiTask[], updatedTask: ApiTask): ApiTask[] =>
 
 const synchronizeResourceTree = (cachedResource: ResourceTreeCache, updatedTask: ApiTask): ResourceTreeCache => {
   if ('rootResourceUid' in cachedResource) {
+    if (!cachedResource.tasks.some((task) => task.uid === updatedTask.uid)) {
+      return cachedResource
+    }
+
     return { ...cachedResource, tasks: replaceTask(cachedResource.tasks, updatedTask) }
   }
 
   if (cachedResource.type === 'journey') {
+    const containsTask =
+      cachedResource.tasks.some((task) => task.uid === updatedTask.uid) ||
+      cachedResource.folders.some((folder) => folder.tasks.some((task) => task.uid === updatedTask.uid))
+
+    if (!containsTask) {
+      return cachedResource
+    }
+
     const folders = cachedResource.folders.map((folder): ApiFolderWithTasks => {
       const tasks = replaceApiTask(folder.tasks, updatedTask)
 
       return {
         ...folder,
+        lastActivityAt: tasks.some((task) => task.uid === updatedTask.uid)
+          ? updatedTask.lastActivityAt
+          : folder.lastActivityAt,
         progress: calculateProgress(tasks),
         tasks
       }
     })
     const tasks = replaceApiTask(cachedResource.tasks, updatedTask)
 
-    return {
+    return synchronizeJourneyProgress({
       ...cachedResource,
       folders,
-      progress: calculateProgress([...folders.flatMap((folder) => folder.tasks), ...tasks]),
+      lastActivityAt: updatedTask.lastActivityAt,
       tasks
-    }
+    })
+  }
+
+  if (!cachedResource.tasks.some((task) => task.uid === updatedTask.uid)) {
+    return cachedResource
   }
 
   const tasks = replaceApiTask(cachedResource.tasks, updatedTask)
 
-  return { ...cachedResource, progress: calculateProgress(tasks), tasks }
+  return { ...cachedResource, lastActivityAt: updatedTask.lastActivityAt, progress: calculateProgress(tasks), tasks }
 }
 
 /**
@@ -121,24 +144,37 @@ const TaskItem = (props: TaskItemProps) => {
       console.error(error)
     },
     onSuccess: (updatedTask) => {
+      queryClient.setQueriesData<ResourceTreeCache>({ queryKey: ['navigation', 'resource-tree'] }, (resource) =>
+        resource ? synchronizeResourceTree(resource, updatedTask) : resource
+      )
+
+      const updatedJourney = queryClient
+        .getQueriesData<ApiJourneyWithResources>({ queryKey: ['navigation', 'resource-tree', 'journey'] })
+        .map(([, resource]) => resource)
+        .find(
+          (resource) =>
+            resource?.type === 'journey' &&
+            (resource.tasks.some((task) => task.uid === updatedTask.uid) ||
+              resource.folders.some((folder) => folder.tasks.some((task) => task.uid === updatedTask.uid)))
+        )
+
       const updatedRootResources = queryClient.setQueryData<NavigationRootResources>(
         navigationQueryKeys.rootResources(),
         (resources) => {
           if (!resources) return resources
 
-          return {
+          const updatedResources = {
             ...resources,
             rootTasks: replaceTask(resources.rootTasks, updatedTask)
           }
+
+          return updatedJourney ? synchronizeJourneyInRootResources(updatedResources, updatedJourney) : updatedResources
         }
       )
 
       if (updatedRootResources) {
         queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(updatedRootResources))
       }
-      queryClient.setQueriesData<ResourceTreeCache>({ queryKey: ['navigation', 'resource-tree'] }, (resource) =>
-        resource ? synchronizeResourceTree(resource, updatedTask) : resource
-      )
       toast.success('Task state updated.')
     }
   })

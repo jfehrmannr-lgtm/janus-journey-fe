@@ -9,6 +9,7 @@ import CreateJourneyWorkspaceLifecycle from '@/modules/dashboard/layout/Workspac
 import DetailedHeaderWorkspace from './DetailedHeaderWorkspace'
 import DetailedWorksapceActions from './DetailedWorksapceActions'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import { formatProgressPercentage } from '@/modules/dashboard/utils/progress'
 
 type WorkspaceResource = ApiJourneyWithResources | ApiFolderWithTasks | ApiTask
 
@@ -83,7 +84,7 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
               <span className="whitespace-nowrap">
                 {resolvedTasks} / {progress.total} tasks
               </span>
-              <span className="font-semibold text-text-body">{progress.percentage}%</span>
+              <span className="font-semibold text-text-body">{formatProgressPercentage(progress.percentage)}%</span>
             </div>
           </section>
         )}

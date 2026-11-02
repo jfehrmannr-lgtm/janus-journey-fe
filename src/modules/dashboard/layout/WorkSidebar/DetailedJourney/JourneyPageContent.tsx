@@ -10,6 +10,12 @@ import FolderItem from '@/modules/dashboard/layout/Workspace/FolderItem'
 import RootTasks from '@/modules/dashboard/layout/Workspace/RootTasks'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import {
+  getDashboardHomeData,
+  synchronizeJourneyInRootResources,
+  synchronizeJourneyProgress
+} from '@/services/dashboardService'
+import type { NavigationRootResources } from '@/types/navigation.type'
 import useAppUiStore from '@/stores/appUiStore'
 
 interface JourneyPageContentProps {
@@ -62,16 +68,14 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
       console.error(error)
     },
     onMutate: () => ({ toastId: toast.loading('Deleting resources...') }),
-    onSuccess: (_response, selection, context) => {
+    onSuccess: async (_response, selection, context) => {
       const folderIds = new Set(selection.folderIds)
       const taskIds = new Set(selection.taskIds)
 
-      queryClient.setQueryData<ApiJourneyWithResources>(journeyQueryKey, (cachedJourney) => {
-        if (!cachedJourney) {
-          return cachedJourney
-        }
+      const updatedJourney = queryClient.setQueryData<ApiJourneyWithResources>(journeyQueryKey, (cachedJourney) => {
+        if (!cachedJourney) return cachedJourney
 
-        return {
+        return synchronizeJourneyProgress({
           ...cachedJourney,
           folders: cachedJourney.folders
             .filter((folder) => !folderIds.has(folder.uid))
@@ -80,8 +84,47 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
               tasks: folder.tasks.filter((task) => !taskIds.has(task.uid))
             })),
           tasks: cachedJourney.tasks.filter((task) => !taskIds.has(task.uid))
-        }
+        })
       })
+
+      if (updatedJourney) {
+        const updatedRootResources = queryClient.setQueryData<NavigationRootResources>(
+          navigationQueryKeys.rootResources(),
+          (resources) => (resources ? synchronizeJourneyInRootResources(resources, updatedJourney) : resources)
+        )
+
+        if (updatedRootResources) {
+          queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(updatedRootResources))
+        }
+      }
+
+      // Delete responses do not expose the propagated activity timestamp. Refetch the existing root query to
+      // reconcile the authoritative Journey timestamp, then mirror it back into the selected resource cache.
+      try {
+        await queryClient.refetchQueries({ queryKey: navigationQueryKeys.rootResources(), type: 'all' })
+        const authoritativeRootResources = queryClient.getQueryData<NavigationRootResources>(
+          navigationQueryKeys.rootResources()
+        )
+        const authoritativeJourney = authoritativeRootResources?.journeys.find((item) => item.uid === journeyId)
+
+        if (authoritativeRootResources) {
+          queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(authoritativeRootResources))
+        }
+
+        if (authoritativeJourney) {
+          queryClient.setQueryData<ApiJourneyWithResources>(journeyQueryKey, (cachedJourney) =>
+            cachedJourney
+              ? {
+                  ...cachedJourney,
+                  lastActivityAt: authoritativeJourney.lastActivityAt,
+                  progress: authoritativeJourney.progress ?? cachedJourney.progress
+                }
+              : cachedJourney
+          )
+        }
+      } catch (error: unknown) {
+        console.error(error)
+      }
 
       toast.success('Resources deleted successfully.', { id: context?.toastId })
       cancelResourceSelection()

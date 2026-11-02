@@ -7,8 +7,15 @@ import toast from 'react-hot-toast'
 
 import { initTaskForm, useCreateTaskForm, type TaskFormValues } from '@/stores/workspaceFromStore'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import {
+  getDashboardHomeData,
+  getLatestActivityAt,
+  synchronizeJourneyInRootResources,
+  synchronizeJourneyProgress
+} from '@/services/dashboardService'
 import type { CreateTaskBulkPayload, CreateTaskBulkResponse } from '@/types/task-api.type'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { NavigationRootResources } from '@/types/navigation.type'
 
 interface UseTaskWorkspaceProps {
   createTaskAction: (payload: CreateTaskBulkPayload) => Promise<CreateTaskBulkResponse>
@@ -39,10 +46,30 @@ const useTaskWorkspace = ({ createTaskAction, journeyId }: UseTaskWorkspaceProps
     },
     onMutate: () => ({ toastId: toast.loading('Creating Tasks...') }),
     onSuccess: (response, _payload, context) => {
-      queryClient.setQueryData<ApiJourneyWithResources>(
+      const updatedJourney = queryClient.setQueryData<ApiJourneyWithResources>(
         navigationQueryKeys.resourceTree('journey', journeyId),
-        (journey) => (journey ? { ...journey, tasks: journey.tasks.concat(response.payload) } : journey)
+        (journey) => {
+          if (!journey) return journey
+
+          return synchronizeJourneyProgress({
+            ...journey,
+            lastActivityAt: getLatestActivityAt(journey.lastActivityAt, response.payload),
+            tasks: journey.tasks.concat(response.payload)
+          })
+        }
       )
+
+      if (updatedJourney) {
+        const updatedRootResources = queryClient.setQueryData<NavigationRootResources>(
+          navigationQueryKeys.rootResources(),
+          (resources) => (resources ? synchronizeJourneyInRootResources(resources, updatedJourney) : resources)
+        )
+
+        if (updatedRootResources) {
+          queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(updatedRootResources))
+        }
+      }
+
       toast.success('Tasks created successfully.', { id: context?.toastId })
       router.push(`/dashboard/home/journey/${encodeURIComponent(journeyId)}`)
     }
