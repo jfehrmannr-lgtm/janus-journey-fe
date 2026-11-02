@@ -1,5 +1,12 @@
 ## 2026-11-02
 
+### #JANUS-FE-0140: Distinguish Invisible Tasks
+
+**Work**: Plan / Build / Validate; Added a subtle visibility indicator to TaskItem without changing Task state controls, visibility behavior, or existing interactions.
+
+- Reused the existing `EyeInvisibleOutlined` icon for Tasks with `isVisible: false`.
+- Muted only the invisible Task name while preserving the existing state icon and visible Task appearance.
+
 ### #JANUS-FE-0139: Complete Task Quick State Selector
 
 **Work**: Plan / Build / Validate; Completed the existing TaskItem state dropdown using the established Task state definitions, quick Task patch action, React Query mutation handling, and cache invalidation conventions.

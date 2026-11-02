@@ -68,6 +68,7 @@ const TaskItem = (props: TaskItemProps) => {
   const isImplicitlySelected = persistedProps?.isImplicitlySelected ?? false
   const pendingTask = pendingProps?.pendingTask
   const taskName = pendingTask?.name || task?.name || 'New Task'
+  const isVisible = task?.isVisible ?? pendingTask?.isVisible ?? true
   const queryClient = useQueryClient()
   const closeDropdown = useAppUiStore((state) => state.closeDropdown)
 
@@ -127,44 +128,56 @@ const TaskItem = (props: TaskItemProps) => {
         </span>
       )}
       <span onClick={(event) => event.stopPropagation()}>
-        <Dropdown
-          disabled={updateTaskMutation.isPending}
-          id={`task-state-selector-${props.task?.uid ?? pendingProps?.pendingTask.id}`}
-          trigger={
-            <Button
-              className="px-2!"
-              buttonSize="normal"
-              disabled={updateTaskMutation.isPending}
-              variant="outlined"
-              color="neutral"
-              icon={<Icon className={`shrink-0 ${stateStyle.className}`} icon={stateStyle.icon} />}
-            />
-          }
-        >
-          <div className="flex flex-col gap-0.5">
-            {taskStates.map((nextState) => {
-              const nextStateStyle = taskStateStyles[nextState]
+        {!isPendingTask ? (
+          <Dropdown
+            disabled={updateTaskMutation.isPending}
+            id={`task-state-selector-${task?.uid}`}
+            trigger={
+              <Button
+                className="px-2!"
+                buttonSize="normal"
+                disabled={updateTaskMutation.isPending}
+                variant="outlined"
+                color="neutral"
+                icon={<Icon className={`shrink-0 ${stateStyle.className}`} icon={stateStyle.icon} />}
+              />
+            }
+          >
+            <div className="flex flex-col gap-0.5">
+              {taskStates.map((nextState) => {
+                const nextStateStyle = taskStateStyles[nextState]
 
-              return (
-                <Button
-                  aria-label={`Set Task state to ${nextStateStyle.label}`}
-                  className="justify-start! border-transparent! px-3! text-left! text-sm! text-text-body hover:bg-surface-subtle"
-                  disabled={updateTaskMutation.isPending}
-                  icon={<Icon className={nextStateStyle.className} icon={nextStateStyle.icon} />}
-                  key={nextState}
-                  label={nextStateStyle.label}
-                  onClick={() => handleStateSelect(nextState)}
-                  size="full"
-                  type="button"
-                  variant="outlined"
-                />
-              )
-            })}
+                return (
+                  <Button
+                    aria-label={`Set Task state to ${nextStateStyle.label}`}
+                    className="justify-start! border-transparent! px-3! text-left! text-sm! text-text-body hover:bg-surface-subtle"
+                    disabled={updateTaskMutation.isPending}
+                    icon={<Icon className={nextStateStyle.className} icon={nextStateStyle.icon} />}
+                    key={nextState}
+                    label={nextStateStyle.label}
+                    onClick={() => handleStateSelect(nextState)}
+                    size="full"
+                    type="button"
+                    variant="outlined"
+                  />
+                )
+              })}
+            </div>
+          </Dropdown>
+        ) : (
+          <div className="px-2 flex items-center justify-center relative top-px">
+            <Icon className={`shrink-0 ${stateStyle.className}`} icon={stateStyle.icon} />
           </div>
-        </Dropdown>
+        )}
       </span>
 
-      <span className="min-w-0 flex-1 text-text-body">{taskName}</span>
+      {!isVisible && (
+        <span aria-label="Task is invisible" className="shrink-0 text-text-muted" role="img" title="Task is invisible">
+          <Icon icon="EyeInvisibleOutlined" />
+        </span>
+      )}
+
+      <span className={`min-w-0 flex-1 ${isVisible ? 'text-text-body' : 'text-text-muted'}`}>{taskName}</span>
     </>
   )
 
