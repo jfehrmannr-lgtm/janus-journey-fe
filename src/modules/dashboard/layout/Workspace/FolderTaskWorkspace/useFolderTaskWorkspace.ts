@@ -11,17 +11,20 @@ import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/d
 import {
   getDashboardHomeData,
   getLatestActivityAt,
+  synchronizeFolderProgress,
   synchronizeJourneyInRootResources,
   synchronizeJourneyProgress
 } from '@/services/dashboardService'
 import type { CreateTaskBulkPayload, CreateTaskBulkResponse } from '@/types/task-api.type'
-import type { ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { ApiFolderWithTasks, ApiJourneyWithResources } from '@/types/resource-api.type'
 import type { NavigationRootResources } from '@/types/navigation.type'
 
 interface UseFolderTaskWorkspaceProps {
   createFolderTaskAction: (payload: CreateTaskBulkPayload) => Promise<CreateTaskBulkResponse>
   folderId: string
-  journeyId: string
+  journeyId?: string
+  resourceType?: 'journey' | 'folder'
+  returnHref: string
 }
 
 /**
@@ -32,7 +35,13 @@ interface UseFolderTaskWorkspaceProps {
  * @param journeyId - Journey UID whose resource tree is updated after creation.
  * @returns Folder Task workspace state, callbacks, and lifecycle cleanup.
  */
-const useFolderTaskWorkspace = ({ createFolderTaskAction, folderId, journeyId }: UseFolderTaskWorkspaceProps) => {
+const useFolderTaskWorkspace = ({
+  createFolderTaskAction,
+  folderId,
+  journeyId,
+  resourceType = 'journey',
+  returnHref
+}: UseFolderTaskWorkspaceProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [isTaskFormOpen, setIsTaskFormOpen] = useState(false)
@@ -49,34 +58,46 @@ const useFolderTaskWorkspace = ({ createFolderTaskAction, folderId, journeyId }:
     },
     onMutate: () => ({ toastId: toast.loading('Creating Tasks...') }),
     onSuccess: (response, _payload, context) => {
-      const updatedJourney = queryClient.setQueryData<ApiJourneyWithResources>(
-        navigationQueryKeys.resourceTree('journey', journeyId),
-        (journey) => {
-          if (!journey) return journey
+      if (resourceType === 'folder') {
+        queryClient.setQueryData<ApiFolderWithTasks>(navigationQueryKeys.resourceTree('folder', folderId), (folder) =>
+          folder
+            ? synchronizeFolderProgress({
+                ...folder,
+                lastActivityAt: getLatestActivityAt(folder.lastActivityAt, response.payload),
+                tasks: folder.tasks.concat(response.payload)
+              })
+            : folder
+        )
+      } else if (journeyId) {
+        const updatedJourney = queryClient.setQueryData<ApiJourneyWithResources>(
+          navigationQueryKeys.resourceTree('journey', journeyId),
+          (journey) => {
+            if (!journey) return journey
 
-          return synchronizeJourneyProgress({
-            ...journey,
-            lastActivityAt: getLatestActivityAt(journey.lastActivityAt, response.payload),
-            folders: journey.folders.map((folder) =>
-              folder.uid === folderId ? { ...folder, tasks: folder.tasks.concat(response.payload) } : folder
-            )
-          })
-        }
-      )
-
-      if (updatedJourney) {
-        const updatedRootResources = queryClient.setQueryData<NavigationRootResources>(
-          navigationQueryKeys.rootResources(),
-          (resources) => (resources ? synchronizeJourneyInRootResources(resources, updatedJourney) : resources)
+            return synchronizeJourneyProgress({
+              ...journey,
+              lastActivityAt: getLatestActivityAt(journey.lastActivityAt, response.payload),
+              folders: journey.folders.map((folder) =>
+                folder.uid === folderId ? { ...folder, tasks: folder.tasks.concat(response.payload) } : folder
+              )
+            })
+          }
         )
 
-        if (updatedRootResources) {
-          queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(updatedRootResources))
+        if (updatedJourney) {
+          const updatedRootResources = queryClient.setQueryData<NavigationRootResources>(
+            navigationQueryKeys.rootResources(),
+            (resources) => (resources ? synchronizeJourneyInRootResources(resources, updatedJourney) : resources)
+          )
+
+          if (updatedRootResources) {
+            queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(updatedRootResources))
+          }
         }
       }
 
       toast.success('Tasks created successfully.', { id: context?.toastId })
-      router.push(`/dashboard/home/journey/${encodeURIComponent(journeyId)}`)
+      router.push(returnHref)
     }
   })
 

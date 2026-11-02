@@ -37,7 +37,7 @@ const DetailedWorkspaceActions = (props: DetailedWorkspaceActionsProps) => {
       return <JourneyWorkspaceQuery>{children}</JourneyWorkspaceQuery>
 
     case 'folder':
-      return <div className="px-5 py-6 text-sm text-text-muted">Folder workspace pending</div>
+      return <JourneyWorkspaceQuery>{children}</JourneyWorkspaceQuery>
 
     case 'task':
       return <div className="px-5 py-6 text-sm text-text-muted">Task workspace pending</div>

@@ -6,6 +6,8 @@ import JourneyOptions from '@/modules/dashboard/layout/Workspace/JourneyOptions/
 import Dropdown from '@/components/Dropdown/Dropdown'
 import { useCreateJourneyForm } from '@/stores/workspaceFromStore'
 
+const defaultFolderBackgroundImage = '/janus_journey_backgrounds/mount-sunrise.png'
+
 interface DetailedHeaderWorkspaceViewProps {
   mode?: 'view'
   resource: ApiJourneyWithResources | ApiFolderWithTasks | ApiTask
@@ -34,14 +36,21 @@ const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
   const headerDescription = isCreateMode
     ? description || 'Define the purpose and structure of a new Journey.'
     : resource?.description
-  const headerBackgroundImage = !isCreateMode && resource?.type === 'journey' ? resource.imgUrl : props.imgUrl
+  const headerBackgroundImage = isCreateMode
+    ? props.imgUrl
+    : resource?.type === 'journey'
+      ? resource.imgUrl
+      : defaultFolderBackgroundImage
+  const headerStyle = headerBackgroundImage
+    ? {
+        backgroundImage: `linear-gradient(to top, rgb(15 23 42 / 0.88), rgb(15 23 42 / 0.15)), url(${headerBackgroundImage})`
+      }
+    : { backgroundImage: 'linear-gradient(to top, rgb(30 41 59), rgb(71 85 105))' }
 
   return (
     <header
       className="relative flex min-h-44 flex-col justify-end overflow-hidden bg-cover bg-center px-5 py-5 text-white"
-      style={{
-        backgroundImage: `linear-gradient(to top, rgb(15 23 42 / 0.88), rgb(15 23 42 / 0.15)), url(${headerBackgroundImage})`
-      }}
+      style={headerStyle}
     >
       {!isCreateMode && resource && (
         <Dropdown

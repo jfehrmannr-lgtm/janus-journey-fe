@@ -1,5 +1,37 @@
 ## 2026-11-02
 
+### #JANUS-FE-0151: Align Folder Detail Resource Styling
+
+**Work**: Plan / Build / Validate; Matched FolderDetail resource spacing, borders, typography, and Task section presentation to the existing JourneyDetail design while preserving Task creation and interactions.
+
+### #JANUS-FE-0150: Enable Folder Detail Task Creation
+
+**Work**: Plan / Build / Validate; Reused the existing Folder Task workspace, Server Action, and mutation logic for Task creation from FolderDetail.
+
+- Added the FolderDetail Create Task entry point and route.
+- Synchronized the selected Folder cache and recalculated progress after successful creation, including nested Folder Tasks.
+- Preserved the existing Journey Folder Task creation behavior.
+
+### #JANUS-FE-0149: Set Folder Header Background
+
+**Work**: Plan / Build / Validate; Configured Folder detail headers to use the existing `mount-sunrise` background asset by default while preserving Journey and create-mode image behavior.
+
+### #JANUS-FE-0148: Align Folder Parallel Route Structure
+
+**Work**: Plan / Build / Validate; Refactored the Folder parallel route to match the existing Journey organization with dedicated content, layout, page, and not-found files without changing its behavior.
+
+### #JANUS-FE-0147: Add Folder Detail View
+
+**Work**: Plan / Build / Validate; Added normal and parallel Folder routes that load Folder resources into the shared DetailedWorkspace shell with Folder progress, direct Tasks, and nested Folder rendering.
+
+- Reused the existing authenticated resource-tree query contract and not-found handling.
+- Enabled the shared progress section for Folder resources and preserved Journey behavior.
+- Replaced the Folder workspace placeholder with the existing resource content architecture.
+
+### #JANUS-FE-0146: Reuse Journey Cards In My Journeys
+
+**Work**: Plan / Build / Validate; Reused JourneyCard for Journey resources in the My Journeys cards view with a two-column layout while preserving Continue with’s existing three-card behavior.
+
 ### #JANUS-FE-0145: Add Resource Input Character Limits
 
 **Work**: Plan / Build / Validate; Applied API-aligned Journey, Folder, and Task name and description limits across standalone and composed forms with shared live character counters.

@@ -103,9 +103,6 @@ const JourneyCard = ({
         </span>
         <span className="min-w-0 flex-1">
           <span className="block truncate text-lg font-semibold text-text-primary">{journey.name}</span>
-          <span className="mt-1 block line-clamp-2 text-sm leading-6 text-text-muted">
-            {journey.description || 'No description available.'}
-          </span>
         </span>
         <Icon
           className="mt-1 shrink-0 text-lg text-text-subtle transition-colors group-hover:text-primary"

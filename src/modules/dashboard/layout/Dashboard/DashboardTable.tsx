@@ -6,6 +6,7 @@ import Button from '@/components/Button/Button'
 import Icon from '@/components/Icon/Icon'
 import type { IconName } from '@/components/Icon/Icon'
 import ProgressBar from '@/components/ProgressBar/ProgressBar'
+import JourneyCard from '@/modules/dashboard/components/JourneyCard/JourneyCard'
 import type { NavigationRootResources } from '@/types/navigation.type'
 import type { Resource, ResourceType } from '@/types/resource.type'
 import { calculateProgressPercentage } from '@/modules/dashboard/utils/progress'
@@ -290,6 +291,19 @@ const DashboardTable = ({
         ) : (
           <div className="grid gap-3 p-3 md:grid-cols-2">
             {filteredResources.map((resource) => {
+              if (resource.type === 'journey') {
+                return (
+                  <JourneyCard
+                    journey={resource}
+                    key={resource.uid}
+                    onClick={() => onSelectResource(resource)}
+                    progress={resource.progress}
+                    selected={isResourceSelected(resource)}
+                    showLastModified={false}
+                  />
+                )
+              }
+
               const progress = getResourceProgress(resource)
               const progressPercentage = getResourceProgressPercentage(resource) ?? 0
               const selectable = resource.type !== 'task'

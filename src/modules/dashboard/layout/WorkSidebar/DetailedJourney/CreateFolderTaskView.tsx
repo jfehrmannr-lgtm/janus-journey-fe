@@ -4,12 +4,14 @@ import FolderTaskWorkspace from '@/modules/dashboard/layout/Workspace/FolderTask
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import { useQueryClient } from '@tanstack/react-query'
-import type { ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { ApiFolderWithTasks, ApiJourneyWithResources } from '@/types/resource-api.type'
 import type { CreateTaskBulkPayload, CreateTaskBulkResponse } from '@/types/task-api.type'
 
 interface CreateFolderTaskViewProps {
   folderId: string
-  journeyId: string
+  journeyId?: string
+  resourceType?: 'journey' | 'folder'
+  returnHref?: string
   actions: {
     createFolderTaskAction: (payload: CreateTaskBulkPayload) => Promise<CreateTaskBulkResponse>
   }
@@ -23,12 +25,21 @@ interface CreateFolderTaskViewProps {
  * @param actions - Actions to be passed to the FolderTaskWorkspace for task creation.
  * @returns The action bar, Folder card, local form, and existing tasks.
  */
-const CreateFolderTaskView = ({ folderId, journeyId, actions }: CreateFolderTaskViewProps) => {
+const CreateFolderTaskView = ({
+  folderId,
+  journeyId,
+  resourceType = 'journey',
+  returnHref,
+  actions
+}: CreateFolderTaskViewProps) => {
   const queryClient = useQueryClient()
-  const journey = queryClient.getQueryData<ApiJourneyWithResources>(
-    navigationQueryKeys.resourceTree('journey', journeyId)
-  )
-  const folder = journey?.folders.find((currentFolder) => currentFolder.uid === folderId)
+  const journey = journeyId
+    ? queryClient.getQueryData<ApiJourneyWithResources>(navigationQueryKeys.resourceTree('journey', journeyId))
+    : undefined
+  const folder =
+    resourceType === 'folder'
+      ? queryClient.getQueryData<ApiFolderWithTasks>(navigationQueryKeys.resourceTree('folder', folderId))
+      : journey?.folders.find((currentFolder) => currentFolder.uid === folderId)
   if (!folder) {
     return <ResourceNotFound resourceType="folder" />
   }
@@ -38,7 +49,8 @@ const CreateFolderTaskView = ({ folderId, journeyId, actions }: CreateFolderTask
       actions={actions}
       folder={folder}
       journeyId={journeyId}
-      returnHref={`/dashboard/home/journey/${encodeURIComponent(journeyId)}`}
+      resourceType={resourceType}
+      returnHref={returnHref ?? `/dashboard/home/journey/${encodeURIComponent(journeyId ?? '')}`}
     />
   )
 }

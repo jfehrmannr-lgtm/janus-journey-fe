@@ -14,7 +14,8 @@ interface FolderTaskWorkspaceProps {
     createFolderTaskAction: (payload: CreateTaskBulkPayload) => Promise<CreateTaskBulkResponse>
   }
   folder: ApiFolderWithTasks
-  journeyId: string
+  journeyId?: string
+  resourceType?: 'journey' | 'folder'
   returnHref: string
 }
 
@@ -27,11 +28,13 @@ interface FolderTaskWorkspaceProps {
  * @param returnHref - Destination used by the return navigation.
  * @returns The Folder Task workspace container.
  */
-const FolderTaskWorkspace = ({ actions, folder, journeyId, returnHref }: FolderTaskWorkspaceProps) => {
+const FolderTaskWorkspace = ({ actions, folder, journeyId, resourceType, returnHref }: FolderTaskWorkspaceProps) => {
   const workspace = useFolderTaskWorkspace({
     createFolderTaskAction: actions.createFolderTaskAction,
     folderId: folder.uid,
-    journeyId
+    journeyId,
+    resourceType,
+    returnHref
   })
   const { cleanup } = workspace
 

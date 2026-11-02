@@ -1,6 +1,6 @@
 import type { DashboardHomeData } from '@/types/dashboard.type'
 import type { NavigationRootResources } from '@/types/navigation.type'
-import type { ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { ApiFolderWithTasks, ApiJourneyWithResources } from '@/types/resource-api.type'
 import { calculateProgress } from '@/modules/dashboard/utils/progress'
 
 /**
@@ -53,6 +53,28 @@ const synchronizeJourneyProgress = (journey: ApiJourneyWithResources): ApiJourne
 }
 
 /**
+ * Recalculates a Folder's progress after its direct or nested Tasks change.
+ *
+ * @param folder - Folder resource whose descendant Tasks should be recalculated.
+ * @returns The Folder with synchronized nested progress.
+ */
+const synchronizeFolderProgress = (folder: ApiFolderWithTasks): ApiFolderWithTasks => {
+  const nestedFolders = (folder.folders ?? []).map(synchronizeFolderProgress)
+  const tasks = [folder.tasks, ...nestedFolders.map((nestedFolder) => getFolderTasks(nestedFolder))].flat()
+
+  return {
+    ...folder,
+    folders: nestedFolders,
+    progress: calculateProgress(tasks)
+  }
+}
+
+const getFolderTasks = (folder: ApiFolderWithTasks): ApiFolderWithTasks['tasks'] => [
+  ...folder.tasks,
+  ...(folder.folders ?? []).flatMap((nestedFolder) => getFolderTasks(nestedFolder))
+]
+
+/**
  * Resolves the latest server-provided activity timestamp without creating a client timestamp.
  *
  * @param currentActivityAt - Existing Journey activity timestamp.
@@ -93,4 +115,10 @@ const synchronizeJourneyInRootResources = (
   )
 })
 
-export { getDashboardHomeData, getLatestActivityAt, synchronizeJourneyInRootResources, synchronizeJourneyProgress }
+export {
+  getDashboardHomeData,
+  getLatestActivityAt,
+  synchronizeFolderProgress,
+  synchronizeJourneyInRootResources,
+  synchronizeJourneyProgress
+}

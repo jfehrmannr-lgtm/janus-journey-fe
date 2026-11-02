@@ -29,6 +29,7 @@ export interface ApiTask extends ApiResourceBase<'task'> {
 }
 
 export interface ApiFolderWithTasks extends ApiFolder {
+  folders?: ApiFolderWithTasks[]
   tasks: ApiTask[]
   progress?: ResourceProgress
 }
