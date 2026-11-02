@@ -129,9 +129,9 @@ const SideNav = ({ resources }: SideNavProps) => {
               <div className="mt-8">
                 <div className="flex items-center justify-between px-3 text-xs font-semibold uppercase tracking-wider text-text-subtle">
                   <span>Journeys</span>
-                  <button className="text-text-muted hover:text-text-strong" type="button">
-                    <Icon icon="DownOutlined" />
-                  </button>
+                  <div className="text-text-muted">
+                    <Icon icon="CompassOutlined" />
+                  </div>
                 </div>
                 <div className="mt-2 space-y-1">
                   {resources.journeys.map((journey) => (

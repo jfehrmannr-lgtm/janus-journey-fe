@@ -1,3 +1,6 @@
+'use client'
+
+import { useQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 
 import ProgressBar from '@/components/ProgressBar/ProgressBar'
@@ -5,6 +8,7 @@ import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/typ
 import CreateJourneyWorkspaceLifecycle from '@/modules/dashboard/layout/Workspace/CreateJourneyWorkspaceLifecycle'
 import DetailedHeaderWorkspace from './DetailedHeaderWorkspace'
 import DetailedWorksapceActions from './DetailedWorksapceActions'
+import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 
 type WorkspaceResource = ApiJourneyWithResources | ApiFolderWithTasks | ApiTask
 
@@ -29,8 +33,25 @@ type DetailedWorkspaceProps = DetailedWorkspaceViewProps | DetailedWorkspaceCrea
  */
 const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
   const { children } = props
+  const isCreateMode = props.mode === 'create'
+  const viewResource = isCreateMode ? undefined : props.resource
+  const resourceQueryKey =
+    viewResource && (viewResource.type === 'journey' || viewResource.type === 'folder')
+      ? navigationQueryKeys.resourceTree(viewResource.type, viewResource.uid)
+      : (['workspace', 'create'] as const)
+  const { data: cachedResource } = useQuery<WorkspaceResource>({
+    enabled: false,
+    queryFn: () => {
+      if (!viewResource) {
+        throw new Error('A workspace resource is required.')
+      }
 
-  if (props.mode === 'create') {
+      return viewResource
+    },
+    queryKey: resourceQueryKey
+  })
+
+  if (isCreateMode) {
     return (
       <CreateJourneyWorkspaceLifecycle>
         <div className="min-h-full bg-white">
@@ -40,7 +61,11 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
     )
   }
 
-  const { resource } = props
+  const resource = cachedResource ?? viewResource
+
+  if (!resource) {
+    return null
+  }
   const isJourney = resource.type === 'journey'
   const progress = isJourney ? resource.progress : undefined
 

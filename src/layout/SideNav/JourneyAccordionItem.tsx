@@ -32,7 +32,7 @@ const JourneyAccordionItem = ({ journey }: JourneyAccordionItemProps) => {
         scroll={false}
       >
         <span className="flex size-4 items-center justify-center text-xs text-text-subtle">
-          {isExpanded ? <Icon icon="DownOutlined" /> : <Icon icon="RightOutlined" />}
+          <Icon icon="CompassOutlined" />
         </span>
         <span className="truncate">{journey.name}</span>
       </Link>

@@ -1,5 +1,17 @@
 ## 2026-11-02
 
+### #JANUS-FE-0142: Use Journey Icon In Sidebar
+
+**Work**: Plan / Build / Validate; Replaced the Journey row caret indicator in the Sidebar with the existing Compass Journey icon without changing navigation or selection behavior.
+
+### #JANUS-FE-0141: Synchronize Task State Caches
+
+**Work**: Plan / Build / Validate; Replaced successful quick Task state invalidation with direct React Query cache synchronization using the PATCH response and existing progress calculation utility.
+
+- Updated root Task resources, selected resource-tree caches, nested Folder Tasks, and derived Dashboard Home data without additional GET requests.
+- Recalculated Folder and Journey progress from synchronized visible Tasks.
+- Made DetailedWorkspace subscribe to the selected resource cache so Journey progress updates reactively.
+
 ### #JANUS-FE-0140: Distinguish Invisible Tasks
 
 **Work**: Plan / Build / Validate; Added a subtle visibility indicator to TaskItem without changing Task state controls, visibility behavior, or existing interactions.

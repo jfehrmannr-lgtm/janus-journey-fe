@@ -1,12 +1,14 @@
 import type { ResourceProgress, Task } from '@/types/resource.type'
 
+type ProgressTask = Pick<Task, 'isVisible' | 'state'>
+
 /**
  * Calculates visible-task progress without counting folders or hidden tasks.
  *
  * @param tasks - Tasks to include in the progress calculation.
  * @returns Completed, discarded, total, and percentage values for visible tasks.
  */
-const calculateProgress = (tasks: Task[]): ResourceProgress => {
+const calculateProgress = (tasks: ProgressTask[]): ResourceProgress => {
   const visibleTasks = tasks.filter((task) => task.isVisible)
   const completed = visibleTasks.filter((task) => task.state === 'completed').length
   const discarded = visibleTasks.filter((task) => task.state === 'discarded').length

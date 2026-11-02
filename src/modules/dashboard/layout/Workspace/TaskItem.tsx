@@ -6,12 +6,16 @@ import toast from 'react-hot-toast'
 
 import Icon, { type IconName } from '@/components/Icon/Icon'
 import InputCheck from '@/components/InputCheck/InputCheck'
-import type { ApiTask, ApiTaskState } from '@/types/resource-api.type'
+import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask, ApiTaskState } from '@/types/resource-api.type'
 import type { TaskFormValues } from '@/stores/workspaceFromStore'
 import { patchTaskAction } from '@/app/dashboard/@workSidebar/home/journey/[journeyId]/actions'
 import Button from '../../../../components/Button/Button'
 import Dropdown from '@/components/Dropdown/Dropdown'
 import useAppUiStore from '@/stores/appUiStore'
+import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import type { JourneyTreeData, NavigationRootResources } from '@/types/navigation.type'
+import { calculateProgress } from '@/modules/dashboard/utils/progress'
+import { getDashboardHomeData } from '@/services/dashboardService'
 
 interface TaskItemBaseProps {
   children?: ReactNode
@@ -47,6 +51,44 @@ const taskStateStyles: Record<ApiTaskState, { className: string; icon: IconName;
 
 const taskStates: ApiTaskState[] = ['pending', 'in-progress', 'in-pause', 'completed', 'discarded']
 
+type ResourceTreeCache = ApiJourneyWithResources | ApiFolderWithTasks | JourneyTreeData
+
+const replaceTask = <T extends { uid: string; state: ApiTaskState }>(items: T[], updatedTask: ApiTask): T[] =>
+  items.map((item) => (item.uid === updatedTask.uid ? { ...item, state: updatedTask.state } : item))
+
+const replaceApiTask = (items: ApiTask[], updatedTask: ApiTask): ApiTask[] =>
+  items.map((item) => (item.uid === updatedTask.uid ? updatedTask : item))
+
+const synchronizeResourceTree = (cachedResource: ResourceTreeCache, updatedTask: ApiTask): ResourceTreeCache => {
+  if ('rootResourceUid' in cachedResource) {
+    return { ...cachedResource, tasks: replaceTask(cachedResource.tasks, updatedTask) }
+  }
+
+  if (cachedResource.type === 'journey') {
+    const folders = cachedResource.folders.map((folder): ApiFolderWithTasks => {
+      const tasks = replaceApiTask(folder.tasks, updatedTask)
+
+      return {
+        ...folder,
+        progress: calculateProgress(tasks),
+        tasks
+      }
+    })
+    const tasks = replaceApiTask(cachedResource.tasks, updatedTask)
+
+    return {
+      ...cachedResource,
+      folders,
+      progress: calculateProgress([...folders.flatMap((folder) => folder.tasks), ...tasks]),
+      tasks
+    }
+  }
+
+  const tasks = replaceApiTask(cachedResource.tasks, updatedTask)
+
+  return { ...cachedResource, progress: calculateProgress(tasks), tasks }
+}
+
 /**
  * Renders one persisted Task row or one pending Task form item.
  *
@@ -78,9 +120,25 @@ const TaskItem = (props: TaskItemProps) => {
       toast.error(error instanceof Error ? error.message : 'Failed to update Task state.')
       console.error(error)
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['navigation'] })
-      void queryClient.invalidateQueries({ queryKey: ['dashboard', 'home'] })
+    onSuccess: (updatedTask) => {
+      const updatedRootResources = queryClient.setQueryData<NavigationRootResources>(
+        navigationQueryKeys.rootResources(),
+        (resources) => {
+          if (!resources) return resources
+
+          return {
+            ...resources,
+            rootTasks: replaceTask(resources.rootTasks, updatedTask)
+          }
+        }
+      )
+
+      if (updatedRootResources) {
+        queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(updatedRootResources))
+      }
+      queryClient.setQueriesData<ResourceTreeCache>({ queryKey: ['navigation', 'resource-tree'] }, (resource) =>
+        resource ? synchronizeResourceTree(resource, updatedTask) : resource
+      )
       toast.success('Task state updated.')
     }
   })
