@@ -4,6 +4,9 @@ import { headers } from 'next/headers'
 
 import { auth } from '@/services/auth'
 import { requestServerBffWithToken } from '@/services/serverBffClient'
+import type { TaskFormValues } from '@/stores/workspaceFromStore'
+import type { TaskState } from '@/types/resource.type'
+import type { ApiTask } from '@/types/resource-api.type'
 
 /**
  * Deletes selected Folder and Task resources through the existing BFF bulk endpoints.
@@ -45,4 +48,50 @@ export const bulkDeleteResourcesAction = async (
         })
       : Promise.resolve()
   ])
+}
+
+export type PatchTaskActionInput =
+  | {
+      quick?: false
+      values: TaskFormValues
+    }
+  | {
+      quick: true
+      state: TaskState
+    }
+
+/**
+ * Partially updates a Task through the authenticated BFF endpoint.
+ *
+ * @param taskId - Stable identifier of the Task to update.
+ * @param input - Complete form values or a quick status update.
+ * @returns The updated Task resource.
+ * @throws Error when the Task identifier is empty or no authenticated token exists.
+ */
+export const patchTaskAction = async (taskId: string, input: PatchTaskActionInput): Promise<ApiTask> => {
+  if (!taskId.trim()) {
+    throw new Error('A Task identifier is required.')
+  }
+
+  const payload = input.quick
+    ? { state: input.state }
+    : {
+        description: input.values.description,
+        isVisible: input.values.isVisible,
+        name: input.values.name,
+        state: input.values.state
+      }
+
+  const { token } = await auth.api.getToken({
+    headers: await headers()
+  })
+
+  if (!token) {
+    throw new Error('Unauthorized')
+  }
+
+  return requestServerBffWithToken<ApiTask>(`/journeys/tasks/${encodeURIComponent(taskId)}`, token, {
+    body: JSON.stringify(payload),
+    method: 'PATCH'
+  })
 }

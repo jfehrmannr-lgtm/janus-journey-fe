@@ -150,7 +150,11 @@ const Icon = ({ className, color, icon, size, type }: IconProps) => {
     ...(size === undefined ? {} : { fontSize: `${size}px` })
   }
 
-  return <IconComponent aria-hidden="true" className={classes} data-icon-type={type} style={style} />
+  return (
+    <div className="">
+      <IconComponent aria-hidden="true" className={classes} data-icon-type={type} style={style} />
+    </div>
+  )
 }
 
 export default Icon

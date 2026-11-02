@@ -1,10 +1,17 @@
+'use client'
+
 import type { KeyboardEvent, ReactNode } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 import Icon, { type IconName } from '@/components/Icon/Icon'
 import InputCheck from '@/components/InputCheck/InputCheck'
 import type { ApiTask, ApiTaskState } from '@/types/resource-api.type'
 import type { TaskFormValues } from '@/stores/workspaceFromStore'
+import { patchTaskAction } from '@/app/dashboard/@workSidebar/home/journey/[journeyId]/actions'
 import Button from '../../../../components/Button/Button'
+import Dropdown from '@/components/Dropdown/Dropdown'
+import useAppUiStore from '@/stores/appUiStore'
 
 interface TaskItemBaseProps {
   children?: ReactNode
@@ -30,13 +37,15 @@ interface PendingTaskItemProps extends TaskItemBaseProps {
 
 type TaskItemProps = PersistedTaskItemProps | PendingTaskItemProps
 
-const taskStateStyles: Record<ApiTaskState, { icon: IconName; className: string }> = {
-  completed: { icon: 'CheckCircleOutlined', className: 'text-task-completed-foreground!' },
-  discarded: { icon: 'CloseCircleOutlined', className: 'text-task-discarded-foreground!' },
-  pending: { icon: 'ClockCircleOutlined', className: 'text-task-pending-foreground!' },
-  'in-progress': { icon: 'SyncOutlined', className: 'text-task-in-progress-foreground!' },
-  'in-pause': { icon: 'PauseCircleOutlined', className: 'text-task-in-pause-foreground!' }
+const taskStateStyles: Record<ApiTaskState, { className: string; icon: IconName; label: string }> = {
+  completed: { className: 'text-task-completed-foreground!', icon: 'CheckCircleOutlined', label: 'Completed' },
+  discarded: { className: 'text-task-discarded-foreground!', icon: 'CloseCircleOutlined', label: 'Discarded' },
+  pending: { className: 'text-task-pending-foreground!', icon: 'ClockCircleOutlined', label: 'Pending' },
+  'in-progress': { className: 'text-task-in-progress-foreground!', icon: 'SyncOutlined', label: 'In progress' },
+  'in-pause': { className: 'text-task-in-pause-foreground!', icon: 'PauseCircleOutlined', label: 'In pause' }
 }
+
+const taskStates: ApiTaskState[] = ['pending', 'in-progress', 'in-pause', 'completed', 'discarded']
 
 /**
  * Renders one persisted Task row or one pending Task form item.
@@ -59,7 +68,34 @@ const TaskItem = (props: TaskItemProps) => {
   const isImplicitlySelected = persistedProps?.isImplicitlySelected ?? false
   const pendingTask = pendingProps?.pendingTask
   const taskName = pendingTask?.name || task?.name || 'New Task'
-  const stateStyle = taskStateStyles[task?.state ?? pendingTask?.state ?? 'pending']
+  const queryClient = useQueryClient()
+  const closeDropdown = useAppUiStore((state) => state.closeDropdown)
+
+  const updateTaskMutation = useMutation({
+    mutationFn: (state: ApiTaskState) => patchTaskAction(task?.uid ?? '', { quick: true, state }),
+    onError: (error: unknown) => {
+      toast.error(error instanceof Error ? error.message : 'Failed to update Task state.')
+      console.error(error)
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['navigation'] })
+      void queryClient.invalidateQueries({ queryKey: ['dashboard', 'home'] })
+      toast.success('Task state updated.')
+    }
+  })
+
+  const currentState = updateTaskMutation.data?.state ?? task?.state ?? pendingTask?.state ?? 'pending'
+  const stateStyle = taskStateStyles[currentState]
+
+  const handleStateSelect = (nextState: ApiTaskState) => {
+    if (!task || updateTaskMutation.isPending || nextState === currentState) {
+      closeDropdown()
+      return
+    }
+
+    closeDropdown()
+    updateTaskMutation.mutate(nextState)
+  }
   const rowClassName = isPendingTask
     ? pendingProps?.isInvalid
       ? 'bg-danger-surface'
@@ -90,7 +126,44 @@ const TaskItem = (props: TaskItemProps) => {
           />
         </span>
       )}
-      <Icon className={`shrink-0 ${stateStyle.className}`} icon={stateStyle.icon} />
+      <span onClick={(event) => event.stopPropagation()}>
+        <Dropdown
+          disabled={updateTaskMutation.isPending}
+          id={`task-state-selector-${props.task?.uid ?? pendingProps?.pendingTask.id}`}
+          trigger={
+            <Button
+              className="px-2!"
+              buttonSize="normal"
+              disabled={updateTaskMutation.isPending}
+              variant="outlined"
+              color="neutral"
+              icon={<Icon className={`shrink-0 ${stateStyle.className}`} icon={stateStyle.icon} />}
+            />
+          }
+        >
+          <div className="flex flex-col gap-0.5">
+            {taskStates.map((nextState) => {
+              const nextStateStyle = taskStateStyles[nextState]
+
+              return (
+                <Button
+                  aria-label={`Set Task state to ${nextStateStyle.label}`}
+                  className="justify-start! border-transparent! px-3! text-left! text-sm! text-text-body hover:bg-surface-subtle"
+                  disabled={updateTaskMutation.isPending}
+                  icon={<Icon className={nextStateStyle.className} icon={nextStateStyle.icon} />}
+                  key={nextState}
+                  label={nextStateStyle.label}
+                  onClick={() => handleStateSelect(nextState)}
+                  size="full"
+                  type="button"
+                  variant="outlined"
+                />
+              )
+            })}
+          </div>
+        </Dropdown>
+      </span>
+
       <span className="min-w-0 flex-1 text-text-body">{taskName}</span>
     </>
   )

@@ -77,6 +77,7 @@ const getDropdownPosition = ({
 /**
  * Renders reusable, portal-based floating content controlled by shared UI state.
  *
+ * @param disabled - Whether the trigger and floating content are disabled.
  * @param id - Stable identifier used to coordinate this dropdown through Zustand.
  * @param trigger - Content that toggles the dropdown when activated.
  * @param children - Floating content rendered through the shared Portal component.
@@ -87,6 +88,7 @@ const getDropdownPosition = ({
  * @returns The dropdown trigger and its portal content.
  */
 const Dropdown = ({
+  disabled = false,
   id,
   trigger,
   children,
@@ -207,6 +209,10 @@ const Dropdown = ({
   }, [isOpen, maxHeight, placement, width])
 
   const handleToggle = () => {
+    if (disabled) {
+      return
+    }
+
     if (isOpen) {
       closeDropdown()
       return
@@ -268,7 +274,7 @@ const Dropdown = ({
         {renderedTrigger}
       </span>
       <Portal>
-        <DropdownEffect containerRef={menuRef} isOpen={isOpen} style={menuStyle}>
+        <DropdownEffect containerRef={menuRef} isOpen={isOpen && !disabled} style={menuStyle}>
           <div
             aria-label="Dropdown menu"
             className="rounded-xl border border-border bg-surface p-1.5 text-text-body shadow-xl z-60"

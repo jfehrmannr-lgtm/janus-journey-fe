@@ -1,3 +1,13 @@
+## 2026-11-02
+
+### #JANUS-FE-0139: Complete Task Quick State Selector
+
+**Work**: Plan / Build / Validate; Completed the existing TaskItem state dropdown using the established Task state definitions, quick Task patch action, React Query mutation handling, and cache invalidation conventions.
+
+- Added all supported Task states with their existing icons, colors, and readable labels.
+- Prevented unchanged or duplicate updates, reflected the server response in the trigger, and invalidated navigation and dashboard data after success.
+- Preserved pending Task row interactions and disabled the selector while its update is pending.
+
 ## 2026-10-29
 
 ### #JANUS-FE-0136: Align Progress Calculation With ResourceProgress
@@ -1351,3 +1361,12 @@
 - Added branded Janus Journey presentation, accessible status semantics, and reduced-motion-safe animation to `AuthLoadingState`.
 - Reworked `DashboardHomeSkeleton` to mirror the dashboard header, Continue section, and root-resource table responsively.
 - Added a Suspense fallback around the existing server-prefetched dashboard route so the root-resource skeleton is visible while the initial request resolves, while cached content remains unchanged during refetches.
+
+## 2026-10-30
+
+### #JANUS-FE-0138: Support Quick Task Status Updates
+
+**Work**: Plan / Build / Validate; Completed the existing `patchTaskAction` with a discriminated normal/quick update input while sharing authentication, PATCH transport, response handling, and error behavior.
+
+- Normal updates send the editable Task form fields without the client-only form identifier.
+- Quick updates send only the validated `state` field, leaving unrelated Task properties untouched.
