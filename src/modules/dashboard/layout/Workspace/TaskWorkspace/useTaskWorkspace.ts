@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 
 import { initTaskForm, useCreateTaskForm, type TaskFormValues } from '@/stores/workspaceFromStore'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/dashboard/utils/createJourneyPayload'
 import {
   getDashboardHomeData,
   getLatestActivityAt,
@@ -81,7 +82,17 @@ const useTaskWorkspace = ({ createTaskAction, journeyId }: UseTaskWorkspaceProps
 
     if (!form) return
 
-    const errors = form.name.trim() ? {} : { name: 'Task name is required.' }
+    const errors: Partial<Record<'name' | 'description', string>> = {}
+
+    if (!form.name.trim()) {
+      errors.name = 'Task name is required.'
+    } else if (form.name.length > resourceNameMaxLength) {
+      errors.name = `Task name must be ${resourceNameMaxLength} characters or fewer.`
+    }
+
+    if (form.description.length > resourceDescriptionMaxLength) {
+      errors.description = `Task description must be ${resourceDescriptionMaxLength} characters or fewer.`
+    }
     validationTimers.current.delete(formId)
     currentStore.setFormValidity({ ...currentStore.formValidity, [formId]: Object.keys(errors).length === 0 })
     currentStore.setFormErrors({ ...currentStore.formErrors, [formId]: errors })

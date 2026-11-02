@@ -13,6 +13,7 @@ import type { Journey } from '@/types/resource.type'
 import type { NavigationRootResources } from '@/types/navigation.type'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import { JourneyFormValues } from '@/stores/workspaceFromStore'
+import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/dashboard/utils/createJourneyPayload'
 
 interface UseJourneyWorkspaceProps {
   createJourneyAction: (payload: CreateJourneyPayload) => Promise<ApiResponse<ApiJourney>>
@@ -24,8 +25,20 @@ interface UseJourneyWorkspaceProps {
  * @param name - Journey name being validated.
  * @returns Validation errors keyed by Journey field.
  */
-const getJourneyFormErrors = ({ name }: JourneyFormValues): JourneyFormErrors => {
-  return name.trim() ? {} : { name: 'Journey name is required.' }
+const getJourneyFormErrors = ({ name, description }: JourneyFormValues): JourneyFormErrors => {
+  const errors: JourneyFormErrors = {}
+
+  if (!name.trim()) {
+    errors.name = 'Journey name is required.'
+  } else if (name.length > resourceNameMaxLength) {
+    errors.name = `Journey name must be ${resourceNameMaxLength} characters or fewer.`
+  }
+
+  if (description.length > resourceDescriptionMaxLength) {
+    errors.description = `Journey description must be ${resourceDescriptionMaxLength} characters or fewer.`
+  }
+
+  return errors
 }
 
 /**

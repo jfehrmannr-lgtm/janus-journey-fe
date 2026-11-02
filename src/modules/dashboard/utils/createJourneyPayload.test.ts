@@ -79,10 +79,25 @@ describe('getCreateJourneyValidationErrors', () => {
     formState.tasks[0].name = ''
 
     expect(getCreateJourneyValidationErrors(formState)).toEqual([
-      'Journey name is required and must be between 1 and 255 characters.',
-      'Folder 1 needs a name between 1 and 255 characters.',
-      'Task 1 in Folder 1 needs a name between 1 and 255 characters.',
-      'Root Task 1 needs a name between 1 and 255 characters.'
+      'Journey name is required and must be between 1 and 100 characters.',
+      'Folder 1 needs a name between 1 and 100 characters.',
+      'Task 1 in Folder 1 needs a name between 1 and 100 characters.',
+      'Root Task 1 needs a name between 1 and 100 characters.'
+    ])
+  })
+
+  it('rejects oversized descriptions throughout the Journey draft', () => {
+    const formState = createFormState()
+    formState.description = 'd'.repeat(501)
+    formState.folders[0].description = 'd'.repeat(501)
+    formState.folders[0].tasks[0].description = 'd'.repeat(501)
+    formState.tasks[0].description = 'd'.repeat(501)
+
+    expect(getCreateJourneyValidationErrors(formState)).toEqual([
+      'Journey description must be 500 characters or fewer.',
+      'Folder 1 description must be 500 characters or fewer.',
+      'Task 1 in Folder 1 description must be 500 characters or fewer.',
+      'Root Task 1 description must be 500 characters or fewer.'
     ])
   })
 })

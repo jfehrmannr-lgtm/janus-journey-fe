@@ -1,5 +1,12 @@
 ## 2026-11-02
 
+### #JANUS-FE-0145: Add Resource Input Character Limits
+
+**Work**: Plan / Build / Validate; Applied API-aligned Journey, Folder, and Task name and description limits across standalone and composed forms with shared live character counters.
+
+- Enforced 100-character names and 500-character descriptions in existing frontend validation flows and native inputs.
+- Extended the shared Input component to render current/max counters without hiding validation feedback.
+
 ### #JANUS-FE-0144: Align Journey Progress Formatting
 
 **Work**: Plan / Build / Validate; Standardized JourneyCard and DetailedWorkspace progress labels to one decimal place through the shared progress utility.

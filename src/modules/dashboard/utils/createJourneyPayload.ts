@@ -7,6 +7,8 @@ import type {
 } from '@/types/createJourney'
 
 const defaultJourneyImageUrl = '/janus_journey_backgrounds/mount-sunrise.png'
+const resourceNameMaxLength = 100
+const resourceDescriptionMaxLength = 500
 
 const createClientId = (prefix: string): string => {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -98,25 +100,41 @@ const buildCreateJourneyPayload = (formState: CreateJourneyFormState): CreateJou
 const getCreateJourneyValidationErrors = (formState: CreateJourneyFormState): string[] => {
   const errors: string[] = []
 
-  if (formState.name.trim().length === 0 || formState.name.trim().length > 255) {
-    errors.push('Journey name is required and must be between 1 and 255 characters.')
+  if (formState.name.trim().length === 0 || formState.name.trim().length > resourceNameMaxLength) {
+    errors.push(`Journey name is required and must be between 1 and ${resourceNameMaxLength} characters.`)
+  }
+  if (formState.description.length > resourceDescriptionMaxLength) {
+    errors.push(`Journey description must be ${resourceDescriptionMaxLength} characters or fewer.`)
   }
 
   formState.folders.forEach((folder, folderIndex) => {
-    if (folder.name.trim().length === 0 || folder.name.trim().length > 255) {
-      errors.push(`Folder ${folderIndex + 1} needs a name between 1 and 255 characters.`)
+    if (folder.name.trim().length === 0 || folder.name.trim().length > resourceNameMaxLength) {
+      errors.push(`Folder ${folderIndex + 1} needs a name between 1 and ${resourceNameMaxLength} characters.`)
+    }
+    if (folder.description.length > resourceDescriptionMaxLength) {
+      errors.push(`Folder ${folderIndex + 1} description must be ${resourceDescriptionMaxLength} characters or fewer.`)
     }
 
     folder.tasks.forEach((task, taskIndex) => {
-      if (task.name.trim().length === 0 || task.name.trim().length > 255) {
-        errors.push(`Task ${taskIndex + 1} in Folder ${folderIndex + 1} needs a name between 1 and 255 characters.`)
+      if (task.name.trim().length === 0 || task.name.trim().length > resourceNameMaxLength) {
+        errors.push(
+          `Task ${taskIndex + 1} in Folder ${folderIndex + 1} needs a name between 1 and ${resourceNameMaxLength} characters.`
+        )
+      }
+      if (task.description.length > resourceDescriptionMaxLength) {
+        errors.push(
+          `Task ${taskIndex + 1} in Folder ${folderIndex + 1} description must be ${resourceDescriptionMaxLength} characters or fewer.`
+        )
       }
     })
   })
 
   formState.tasks.forEach((task, taskIndex) => {
-    if (task.name.trim().length === 0 || task.name.trim().length > 255) {
-      errors.push(`Root Task ${taskIndex + 1} needs a name between 1 and 255 characters.`)
+    if (task.name.trim().length === 0 || task.name.trim().length > resourceNameMaxLength) {
+      errors.push(`Root Task ${taskIndex + 1} needs a name between 1 and ${resourceNameMaxLength} characters.`)
+    }
+    if (task.description.length > resourceDescriptionMaxLength) {
+      errors.push(`Root Task ${taskIndex + 1} description must be ${resourceDescriptionMaxLength} characters or fewer.`)
     }
   })
 
@@ -128,5 +146,7 @@ export {
   createEmptyFolder,
   createEmptyTask,
   createInitialCreateJourneyFormState,
-  getCreateJourneyValidationErrors
+  getCreateJourneyValidationErrors,
+  resourceDescriptionMaxLength,
+  resourceNameMaxLength
 }

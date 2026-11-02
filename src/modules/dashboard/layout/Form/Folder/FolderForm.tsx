@@ -4,7 +4,11 @@ import Icon from '@/components/Icon/Icon'
 import TaskForm from '@/modules/dashboard/layout/Form/Task/TaskForm'
 import Input from '@/components/Input/Input'
 import type { CreateJourneyFolderDraft, CreateJourneyTaskDraft } from '@/types/createJourney'
-import { createEmptyTask } from '@/modules/dashboard/utils/createJourneyPayload'
+import {
+  createEmptyTask,
+  resourceDescriptionMaxLength,
+  resourceNameMaxLength
+} from '@/modules/dashboard/utils/createJourneyPayload'
 
 interface FolderFormProps {
   folder: CreateJourneyFolderDraft
@@ -55,19 +59,22 @@ const FolderForm = ({ folder, folderIndex, onChange, onRemove }: FolderFormProps
 
       <div className="mt-4 grid gap-4">
         <Input
+          characterCount={`${folder.name.length}/${resourceNameMaxLength}`}
           className="h-10"
           id={`folder-name-${folder.clientId}`}
           label="Folder name"
-          maxLength={255}
+          maxLength={resourceNameMaxLength}
           onChange={(event) => onChange({ ...folder, name: event.target.value })}
           placeholder="e.g. HTML and CSS"
           value={folder.name}
         />
         <Input
+          characterCount={`${folder.description.length}/${resourceDescriptionMaxLength}`}
           className="min-h-20"
           id={`folder-description-${folder.clientId}`}
           label="Folder description"
           onChange={(event) => onChange({ ...folder, description: event.target.value })}
+          maxLength={resourceDescriptionMaxLength}
           placeholder="Optional Folder description"
           type="textarea"
           value={folder.description}

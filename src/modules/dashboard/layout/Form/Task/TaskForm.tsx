@@ -7,6 +7,7 @@ import Input from '@/components/Input/Input'
 import InputCheck from '@/components/InputCheck/InputCheck'
 import SelectOption from '@/components/SelectOption/SelectOption'
 import type { CreateJourneyTaskDraft, CreateJourneyTaskState } from '@/types/createJourney'
+import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/dashboard/utils/createJourneyPayload'
 
 interface TaskFormProps {
   label?: string
@@ -82,8 +83,9 @@ const TaskForm = ({ label = 'Task', onChange, onRemove, removeLabel = 'Remove Ta
         <div className="sm:col-span-2">
           <Input
             aria-label={`${label} name`}
+            characterCount={`${task.name.length}/${resourceNameMaxLength}`}
             className="h-10"
-            maxLength={255}
+            maxLength={resourceNameMaxLength}
             onChange={handleTextChange('name')}
             placeholder="Task name"
             value={task.name}
@@ -92,7 +94,9 @@ const TaskForm = ({ label = 'Task', onChange, onRemove, removeLabel = 'Remove Ta
         <div className="sm:col-span-2">
           <Input
             aria-label={`${label} description`}
+            characterCount={`${task.description.length}/${resourceDescriptionMaxLength}`}
             className="min-h-20"
+            maxLength={resourceDescriptionMaxLength}
             onChange={handleTextChange('description')}
             placeholder="Optional Task description"
             type="textarea"

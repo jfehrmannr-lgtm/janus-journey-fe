@@ -3,6 +3,7 @@
 import Button from '@/components/Button/Button'
 import Input from '@/components/Input/Input'
 import type { JourneyFormErrors, JourneyFormValues } from '@/stores/workspaceFromStore'
+import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/dashboard/utils/createJourneyPayload'
 import CreateJourneyFormSelectImage from './CreateJourneyFormSelectImage'
 
 interface CreateJourneyFormProps {
@@ -66,8 +67,10 @@ const CreateJourneyForm = ({
         <Input
           id="create-journey-name"
           error={formErrors.name}
+          characterCount={`${createJourneyForm.name.length}/${resourceNameMaxLength}`}
           label="Journey name"
           name="name"
+          maxLength={resourceNameMaxLength}
           onBlur={onValidate}
           onChange={(event) => onFormChange({ ...createJourneyForm, name: event.target.value })}
           placeholder="e.g. Learn web development"
@@ -76,8 +79,11 @@ const CreateJourneyForm = ({
         <Input
           id="create-journey-description"
           helperText="Optional. Describe the outcome or purpose of this Journey."
+          characterCount={`${createJourneyForm.description.length}/${resourceDescriptionMaxLength}`}
+          error={formErrors.description}
           label="Description"
           name="description"
+          maxLength={resourceDescriptionMaxLength}
           onBlur={onValidate}
           onChange={(event) => onFormChange({ ...createJourneyForm, description: event.target.value })}
           placeholder="What do you want to accomplish?"

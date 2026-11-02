@@ -15,7 +15,9 @@ import {
   createEmptyFolder,
   createEmptyTask,
   createInitialCreateJourneyFormState,
-  getCreateJourneyValidationErrors
+  getCreateJourneyValidationErrors,
+  resourceDescriptionMaxLength,
+  resourceNameMaxLength
 } from '@/modules/dashboard/utils/createJourneyPayload'
 import { ApiResponse } from '@/types/api.type'
 import type { ApiJourney } from '@/types/resource-api.type'
@@ -133,14 +135,17 @@ const JourneyForm = ({ cancelHref = '/dashboard/home', onSubmit }: JourneyFormPr
                 </span>
               </>
             }
-            maxLength={255}
+            characterCount={`${formState.name.length}/${resourceNameMaxLength}`}
+            maxLength={resourceNameMaxLength}
             onChange={(event) => updateFormState((currentState) => ({ ...currentState, name: event.target.value }))}
             placeholder="e.g. Learn web development"
             required
             value={formState.name}
           />
           <Input
+            characterCount={`${formState.description.length}/${resourceDescriptionMaxLength}`}
             id="journey-description"
+            maxLength={resourceDescriptionMaxLength}
             label="Description"
             onChange={(event) =>
               updateFormState((currentState) => ({ ...currentState, description: event.target.value }))

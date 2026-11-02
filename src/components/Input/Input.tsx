@@ -5,6 +5,7 @@ import { useId, useState, type ChangeEventHandler, type ComponentProps, type Rea
 import Icon from '@/components/Icon/Icon'
 
 export interface InputProps extends Omit<ComponentProps<'input'>, 'onChange' | 'type'> {
+  characterCount?: ReactNode
   error?: ReactNode
   helperText?: ReactNode
   icon?: ReactNode
@@ -17,6 +18,7 @@ export interface InputProps extends Omit<ComponentProps<'input'>, 'onChange' | '
 /**
  * Renders a reusable semantic input or textarea with Janus Journey's standard field styling.
  *
+ * @param characterCount - Optional live character count displayed below the field.
  * @param error - Optional validation message displayed below the input.
  * @param helperText - Optional supporting text displayed below the input.
  * @param icon - Optional decorative content displayed inside the input.
@@ -28,6 +30,7 @@ const Input = ({
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
   autoComplete = 'off',
+  characterCount,
   className,
   disabled,
   error,
@@ -141,6 +144,7 @@ const Input = ({
           </p>
         )
       )}
+      {characterCount !== undefined && <p className="text-right text-xs text-text-muted">{characterCount}</p>}
     </div>
   )
 }

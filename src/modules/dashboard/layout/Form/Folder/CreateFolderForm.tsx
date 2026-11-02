@@ -3,6 +3,7 @@
 import { useState, type SubmitEvent } from 'react'
 import Icon from '@/components/Icon/Icon'
 import Input from '@/components/Input/Input'
+import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/dashboard/utils/createJourneyPayload'
 
 export interface FolderFormValues {
   name: string
@@ -46,15 +47,17 @@ const CreateFolderForm = ({
   const [description, setDescription] = useState(() => initialValues?.description ?? '')
   const [hasNameBlurred, setHasNameBlurred] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
-  const isNameValid = name.trim().length > 0
+  const isNameValid = name.trim().length > 0 && name.length <= resourceNameMaxLength
+  const isDescriptionValid = description.length <= resourceDescriptionMaxLength
   const showNameError = (hasSubmitted || hasNameBlurred) && !isNameValid
+  const showDescriptionError = hasSubmitted && !isDescriptionValid
   const nameId = `${idPrefix}-name`
   const descriptionId = `${idPrefix}-description`
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
     setHasSubmitted(true)
-    if (isNameValid) onSubmit?.()
+    if (isNameValid && isDescriptionValid) onSubmit?.()
   }
 
   return (
@@ -100,9 +103,10 @@ const CreateFolderForm = ({
             <Input
               className="mt-2"
               error={showNameError ? 'Enter a folder name to continue.' : undefined}
+              characterCount={`${name.length}/${resourceNameMaxLength}`}
               id={nameId}
               label="Folder name"
-              maxLength={255}
+              maxLength={resourceNameMaxLength}
               onBlur={() => setHasNameBlurred(true)}
               onChange={(event) => {
                 const nextName = event.target.value
@@ -118,13 +122,15 @@ const CreateFolderForm = ({
           <div>
             <Input
               className="mt-2"
+              characterCount={`${description.length}/${resourceDescriptionMaxLength}`}
+              error={showDescriptionError ? 'Folder description is too long.' : undefined}
               id={descriptionId}
               label={
                 <>
                   Description <span className="font-normal text-text-muted">(optional)</span>
                 </>
               }
-              maxLength={2000}
+              maxLength={resourceDescriptionMaxLength}
               onChange={(event) => {
                 const nextDescription = event.target.value
 

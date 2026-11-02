@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'
 import { initFolderForm, useCreateFolderForm, type FolderFormValues } from '@/stores/workspaceFromStore'
 import type { CreateFolderBulkPayload, CreateFolderBulkResponse } from '@/types/folder-api.type'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/dashboard/utils/createJourneyPayload'
 import {
   getDashboardHomeData,
   getLatestActivityAt,
@@ -90,7 +91,17 @@ const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspac
 
     if (!form) return
 
-    const errors = form.name.trim() ? {} : { name: 'Folder name is required.' }
+    const errors: Partial<Record<'name' | 'description', string>> = {}
+
+    if (!form.name.trim()) {
+      errors.name = 'Folder name is required.'
+    } else if (form.name.length > resourceNameMaxLength) {
+      errors.name = `Folder name must be ${resourceNameMaxLength} characters or fewer.`
+    }
+
+    if (form.description.length > resourceDescriptionMaxLength) {
+      errors.description = `Folder description must be ${resourceDescriptionMaxLength} characters or fewer.`
+    }
     const nextTimers = validationTimers.current
 
     nextTimers.delete(formId)
