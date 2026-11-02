@@ -15,12 +15,14 @@ import {
   synchronizeJourneyInRootResources,
   synchronizeJourneyProgress
 } from '@/services/dashboardService'
-import { ApiFolderWithTasks, ApiJourneyWithResources } from '@/types/resource-api.type'
+import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiParentReference } from '@/types/resource-api.type'
 import type { NavigationRootResources } from '@/types/navigation.type'
 
 interface UseFolderWorkspaceProps {
   createFolderAction: (payload: CreateFolderBulkPayload) => Promise<CreateFolderBulkResponse>
-  journeyId: string
+  journeyId?: string
+  parent?: ApiParentReference
+  returnHref: string
 }
 
 /**
@@ -30,7 +32,7 @@ interface UseFolderWorkspaceProps {
  * @param journeyId - Journey UID used as the parent for created Folders.
  * @returns Folder workspace state, callbacks, and lifecycle cleanup.
  */
-const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspaceProps) => {
+const useFolderWorkspace = ({ createFolderAction, journeyId, parent, returnHref }: UseFolderWorkspaceProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [isFolderFormOpen, setIsFolderFormOpen] = useState(false)
@@ -55,23 +57,42 @@ const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspac
         tasks: []
       }))
 
-      const updatedJourney = queryClient.setQueryData<ApiJourneyWithResources>(
-        navigationQueryKeys.resourceTree('journey', journeyId),
-        (journey) => {
-          if (!journey) return journey
+      if (parent?.type === 'journey' && journeyId) {
+        const updatedJourney = queryClient.setQueryData<ApiJourneyWithResources>(
+          navigationQueryKeys.resourceTree('journey', journeyId),
+          (journey) => {
+            if (!journey) return journey
 
-          return synchronizeJourneyProgress({
-            ...journey,
-            lastActivityAt: getLatestActivityAt(journey.lastActivityAt, response.payload),
-            folders: journey.folders.concat(createdFolders)
-          })
+            return synchronizeJourneyProgress({
+              ...journey,
+              lastActivityAt: getLatestActivityAt(journey.lastActivityAt, response.payload),
+              folders: journey.folders.concat(createdFolders)
+            })
+          }
+        )
+
+        if (updatedJourney) {
+          const updatedRootResources = queryClient.setQueryData<NavigationRootResources>(
+            navigationQueryKeys.rootResources(),
+            (resources) => (resources ? synchronizeJourneyInRootResources(resources, updatedJourney) : resources)
+          )
+
+          if (updatedRootResources) {
+            queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(updatedRootResources))
+          }
         }
-      )
-
-      if (updatedJourney) {
+      } else if (!parent) {
         const updatedRootResources = queryClient.setQueryData<NavigationRootResources>(
           navigationQueryKeys.rootResources(),
-          (resources) => (resources ? synchronizeJourneyInRootResources(resources, updatedJourney) : resources)
+          (resources) =>
+            resources
+              ? {
+                  ...resources,
+                  rootFolders: resources.rootFolders.concat(
+                    createdFolders as unknown as NavigationRootResources['rootFolders']
+                  )
+                }
+              : resources
         )
 
         if (updatedRootResources) {
@@ -81,7 +102,7 @@ const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspac
 
       toast.success('Folders created successfully.', { id: context?.toastId })
 
-      router.push(`/dashboard/home/journey/${encodeURIComponent(journeyId)}`)
+      router.push(returnHref)
     }
   })
 
@@ -205,7 +226,7 @@ const useFolderWorkspace = ({ createFolderAction, journeyId }: UseFolderWorkspac
     const payload: CreateFolderBulkPayload = currentStore.createFolderForm.map((form) => ({
       description: form.description.trim() || null,
       name: form.name.trim(),
-      parent: { type: 'journey', uid: journeyId }
+      ...(parent ? { parent } : {})
     }))
 
     createFolderMutation.mutate(payload)

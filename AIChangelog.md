@@ -1,5 +1,17 @@
 ## 2026-11-02
 
+### #JANUS-FE-0153: Enable Root Folder Creation
+
+**Work**: Plan / Build / Validate; Connected the Dashboard header Folder action to the existing Folder workspace and Server Action with root-folder payloads that omit `parent`.
+
+- Added root Folder creation routing and reused the existing validation, mutation, and form components.
+- Updated root navigation and Dashboard Home React Query caches immediately after successful creation.
+- Preserved parent assignment for Journey Folder creation.
+
+### #JANUS-FE-0152: Reuse Journey Cards For Folder Resources
+
+**Work**: Plan / Build / Validate; Reused JourneyCard for Folder resources in the My Journeys cards view with the existing Folder icon and progress data while preserving JourneyCard and Continue with behavior.
+
 ### #JANUS-FE-0151: Align Folder Detail Resource Styling
 
 **Work**: Plan / Build / Validate; Matched FolderDetail resource spacing, borders, typography, and Task section presentation to the existing JourneyDetail design while preserving Task creation and interactions.

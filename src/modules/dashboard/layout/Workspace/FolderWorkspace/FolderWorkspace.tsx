@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 
 import type { CreateFolderBulkPayload, CreateFolderBulkResponse } from '@/types/folder-api.type'
 import type { ApiFolder } from '@/types/resource-api.type'
+import type { ApiParentReference } from '@/types/resource-api.type'
 
 import FolderWorkspaceActions from './FolderWorkspaceActions'
 import FolderWorkspaceBody from './FolderWorkspaceBody'
@@ -11,7 +12,8 @@ import useFolderWorkspace from './useFolderWorkspace'
 
 interface FolderWorkspaceProps {
   folders: ApiFolder[]
-  journeyId: string
+  journeyId?: string
+  parent?: ApiParentReference
   reference?: {
     name: string
     type: 'journey' | 'folder' | 'user'
@@ -32,7 +34,7 @@ interface FolderWorkspaceProps {
  * @param returnHref - Destination used by the return navigation.
  * @returns The Folder workspace container.
  */
-const FolderWorkspace = ({ actions, folders, journeyId, reference, returnHref }: FolderWorkspaceProps) => {
+const FolderWorkspace = ({ actions, folders, journeyId, parent, reference, returnHref }: FolderWorkspaceProps) => {
   const {
     canSaveChanges,
     isSubmitting,
@@ -51,7 +53,9 @@ const FolderWorkspace = ({ actions, folders, journeyId, reference, returnHref }:
     handleSaveChanges
   } = useFolderWorkspace({
     createFolderAction: actions.createFolderAction,
-    journeyId
+    journeyId,
+    parent,
+    returnHref
   })
 
   useEffect(() => {

@@ -2,11 +2,11 @@
 
 import Icon from '@/components/Icon/Icon'
 import type { IconName } from '@/components/Icon/Icon'
-import type { Journey, ResourceProgress, ResourceType } from '@/types/resource.type'
+import type { Folder, Journey, ResourceProgress, ResourceType } from '@/types/resource.type'
 import { calculateProgressPercentage, formatProgressPercentage } from '@/modules/dashboard/utils/progress'
 
 interface JourneyCardProps {
-  journey: Journey
+  journey: Journey | Folder
   type?: ResourceType
   onClick?: () => void
   className?: string
@@ -53,9 +53,9 @@ const formatRelativeModification = (value: string): string => {
 }
 
 /**
- * Renders a presentational Journey summary card.
+ * Renders a presentational Journey or Folder summary card.
  *
- * @param journey - Journey resource represented by the card.
+ * @param journey - Journey or Folder resource represented by the card.
  * @param type - Resource type that determines the card icon.
  * @param onClick - Callback invoked when the card is selected.
  * @param className - Additional classes appended to the card base styles.

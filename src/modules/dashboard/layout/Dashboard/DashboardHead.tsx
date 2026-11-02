@@ -5,6 +5,7 @@ import Icon from '@/components/Icon/Icon'
 
 interface DashboardHeadProps {
   username: string
+  onCreateFolder: () => void
   onCreateJourney: () => void
 }
 
@@ -15,7 +16,7 @@ interface DashboardHeadProps {
  * @param onCreateJourney - Callback that opens the Journey creation workflow.
  * @returns The responsive Dashboard header.
  */
-const DashboardHead = ({ username, onCreateJourney }: DashboardHeadProps) => {
+const DashboardHead = ({ username, onCreateFolder, onCreateJourney }: DashboardHeadProps) => {
   return (
     <header className="rounded-2xl border border-border bg-surface p-2 sm:px-6 sm:py-4">
       <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
@@ -41,6 +42,7 @@ const DashboardHead = ({ username, onCreateJourney }: DashboardHeadProps) => {
               color="neutral"
               icon={<Icon icon="FolderOutlined" />}
               label="Folder"
+              onClick={onCreateFolder}
               size="md"
               variant="outlined"
             />

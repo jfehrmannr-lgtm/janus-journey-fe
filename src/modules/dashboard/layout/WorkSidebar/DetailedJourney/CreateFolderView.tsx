@@ -34,6 +34,7 @@ const CreateFolderView = ({ journeyId, actions }: CreateFolderViewProps) => {
     <FolderWorkspace
       folders={journey.folders}
       journeyId={journeyId}
+      parent={{ type: 'journey', uid: journeyId }}
       reference={{ name: journey.name, type: 'journey' }}
       returnHref={`/dashboard/home/journey/${encodeURIComponent(journeyId)}`}
       actions={actions}

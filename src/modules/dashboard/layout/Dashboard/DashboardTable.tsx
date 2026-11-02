@@ -291,7 +291,7 @@ const DashboardTable = ({
         ) : (
           <div className="grid gap-3 p-3 md:grid-cols-2">
             {filteredResources.map((resource) => {
-              if (resource.type === 'journey') {
+              if (resource.type === 'journey' || resource.type === 'folder') {
                 return (
                   <JourneyCard
                     journey={resource}
@@ -300,13 +300,13 @@ const DashboardTable = ({
                     progress={resource.progress}
                     selected={isResourceSelected(resource)}
                     showLastModified={false}
+                    type={resource.type}
                   />
                 )
               }
 
               const progress = getResourceProgress(resource)
               const progressPercentage = getResourceProgressPercentage(resource) ?? 0
-              const selectable = resource.type !== 'task'
               const cardClasses = `rounded-xl border p-4 text-left transition-colors cursor-pointer ${isResourceSelected(resource) ? 'border-primary bg-primary-soft/40' : 'border-border-subtle bg-surface hover:border-primary/50'}`
               const cardContent = (
                 <>
@@ -320,7 +320,6 @@ const DashboardTable = ({
                         {getResourceDescription(resource)}
                       </span>
                     </span>
-                    {selectable && <Icon className="shrink-0 text-text-subtle" icon="RightOutlined" />}
                   </div>
                   <div className="mt-4">
                     <ProgressBar progress={progressPercentage} size="sm" />
@@ -333,16 +332,7 @@ const DashboardTable = ({
                 </>
               )
 
-              return selectable ? (
-                <button
-                  className={cardClasses}
-                  key={resource.uid}
-                  onClick={() => onSelectResource(resource)}
-                  type="button"
-                >
-                  {cardContent}
-                </button>
-              ) : (
+              return (
                 <article className={cardClasses} key={resource.uid}>
                   {cardContent}
                 </article>

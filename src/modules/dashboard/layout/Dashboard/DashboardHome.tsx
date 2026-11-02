@@ -67,6 +67,10 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
     router.push('/dashboard/home/create-journey')
   }
 
+  const handleFolderCreation = () => {
+    router.push('/dashboard/home/create-folder')
+  }
+
   const handleResourceSelect = (resource: Resource) => {
     if (resource.type === 'journey' || resource.type === 'folder') {
       router.push(getResourcePath(resource.type, resource.uid))
@@ -81,7 +85,11 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
     <div className="min-h-screen  bg-surface-page px-4 py-4 sm:px-6 sm:py-6">
       <div className="mx-auto max-w-7xl space-y-1 sm:space-y-2">
         <div className="sticky top-0 z-20">
-          <DashboardHead onCreateJourney={handleJourneyCreation} username={username} />
+          <DashboardHead
+            onCreateFolder={handleFolderCreation}
+            onCreateJourney={handleJourneyCreation}
+            username={username}
+          />
         </div>
         <DashboardContinue
           journeys={continueJourneys}
