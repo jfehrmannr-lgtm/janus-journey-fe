@@ -53,9 +53,8 @@ const FolderTaskWorkspaceBody = ({
   onSelectTask
 }: FolderTaskWorkspaceBodyProps) => (
   <section className="px-5 py-5">
-    <div className="overflow-hidden rounded-xl border border-border-subtle">
-      <div className="bg-surface-subtle px-3 py-3 text-sm font-semibold text-text-strong">Tasks</div>
-      <div className="border-t border-border-subtle px-3 py-2">
+    <div className="overflow-hidden rounded-xl">
+      <div className="px-3 py-2">
         <Button
           buttonSize="normal"
           className="text-text-muted hover:border-primary/50 hover:text-primary"

@@ -1,5 +1,9 @@
 ## 2026-11-02
 
+### #JANUS-FE-0155: Revert Create Form Surface Adjustment
+
+**Work**: Plan / Build / Validate; Restored the previous CreateFolderForm and CreateTaskForm reference-container backgrounds at the user’s request.
+
 ### #JANUS-FE-0153: Enable Root Folder Creation
 
 **Work**: Plan / Build / Validate; Connected the Dashboard header Folder action to the existing Folder workspace and Server Action with root-folder payloads that omit `parent`.
