@@ -1,7 +1,7 @@
 import Button from '@/components/Button/Button'
 import CreateFolderForm from '@/modules/dashboard/layout/Form/Folder/CreateFolderForm'
 import Icon from '@/components/Icon/Icon'
-import FolderItem from '@/modules/dashboard/layout/Workspace/FolderItem'
+import FolderItem from '@/modules/dashboard/layout/ResourceDetail/Items/FolderItem'
 import type { FolderFormErrors, FolderFormValues } from '@/stores/workspaceFromStore'
 import type { ApiFolder, ApiFolderWithTasks } from '@/types/resource-api.type'
 

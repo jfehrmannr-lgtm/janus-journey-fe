@@ -1,4 +1,4 @@
-import CreateFolderTaskView from '@/modules/dashboard/layout/WorkSidebar/DetailedResource/CreateFolderTaskView'
+import CreateFolderTaskView from '@/modules/dashboard/layout/ResourceDetail/Views/CreateFolderTaskView'
 import { createFolderTaskAction } from './actions'
 
 interface ResourceFolderCreateTaskPageProps {

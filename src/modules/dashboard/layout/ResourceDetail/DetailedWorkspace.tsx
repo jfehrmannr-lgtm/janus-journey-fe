@@ -5,7 +5,7 @@ import type { ReactNode } from 'react'
 
 import ProgressBar from '@/components/ProgressBar/ProgressBar'
 import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/types/resource-api.type'
-import CreateJourneyWorkspaceLifecycle from '@/modules/dashboard/layout/Workspace/CreateJourneyWorkspaceLifecycle'
+import CreateJourneyWorkspaceLifecycle from '@/modules/dashboard/layout/ResourceDetail/Workspace/CreateJourneyWorkspaceLifecycle'
 import DetailedHeaderWorkspace from './DetailedHeaderWorkspace'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import { formatProgressPercentage } from '@/modules/dashboard/utils/progress'

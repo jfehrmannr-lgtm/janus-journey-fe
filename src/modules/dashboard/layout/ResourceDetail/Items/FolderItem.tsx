@@ -11,7 +11,7 @@ import type { ApiFolderWithTasks } from '@/types/resource-api.type'
 import type { FolderFormValues } from '@/stores/workspaceFromStore'
 
 import TaskItem from './TaskItem'
-import Button from '../../../../components/Button/Button'
+import Button from '../../../../../components/Button/Button'
 
 interface FolderItemBaseProps {
   children?: ReactNode

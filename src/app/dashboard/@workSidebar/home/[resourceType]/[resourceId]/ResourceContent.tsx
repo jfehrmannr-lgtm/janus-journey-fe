@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import type { ReactNode } from 'react'
 
-import DetailedWorkspace from '@/modules/dashboard/layout/WorkSidebar/DetailedWorkspace'
+import DetailedWorkspace from '@/modules/dashboard/layout/ResourceDetail/DetailedWorkspace'
 import { auth } from '@/services/auth'
 import type { ApiResponse } from '@/types/api.type'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
@@ -34,7 +34,7 @@ const ResourceContent = async ({ children, resourceId, resourceType }: ResourceC
       queryKey: navigationQueryKeys.resourceTree(resourceType, resourceId),
       queryFn: async (): Promise<ApiJourneyWithResources> => {
         const result = await requestServerBffWithToken<ApiResponse<ApiJourneyWithResources>>(
-          `/journeys/resources/journey/${encodeURIComponent(resourceId)}`,
+          `/journeys/resources/${resourceType}/${encodeURIComponent(resourceId)}`,
           token
         )
 
@@ -45,7 +45,7 @@ const ResourceContent = async ({ children, resourceId, resourceType }: ResourceC
     })
   } catch (error) {
     if (error instanceof ServerBffRequestError && (error.status === 404 || error.status === 400)) {
-      return <ResourceNotFound resourceType="journey" />
+      return <ResourceNotFound resourceType={resourceType} />
     }
 
     throw error

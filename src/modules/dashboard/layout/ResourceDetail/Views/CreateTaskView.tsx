@@ -1,7 +1,7 @@
 'use client'
 
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
-import TaskWorkspace from '@/modules/dashboard/layout/Workspace/TaskWorkspace/TaskWorkspace'
+import TaskWorkspace from '@/modules/dashboard/layout/ResourceDetail/Workspace/TaskWorkspace/TaskWorkspace'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
 import type { CreateTaskBulkPayload, CreateTaskBulkResponse } from '@/types/task-api.type'

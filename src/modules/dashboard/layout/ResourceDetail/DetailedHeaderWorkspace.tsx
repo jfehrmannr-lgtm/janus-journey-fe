@@ -2,7 +2,7 @@
 
 import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/types/resource-api.type'
 import Icon from '@/components/Icon/Icon'
-import JourneyOptions from '@/modules/dashboard/layout/Workspace/JourneyOptions/JourneyOptions'
+import JourneyOptions from '@/modules/dashboard/layout/ResourceDetail/Workspace/JourneyOptions/JourneyOptions'
 import Dropdown from '@/components/Dropdown/Dropdown'
 import { useCreateJourneyForm } from '@/stores/workspaceFromStore'
 

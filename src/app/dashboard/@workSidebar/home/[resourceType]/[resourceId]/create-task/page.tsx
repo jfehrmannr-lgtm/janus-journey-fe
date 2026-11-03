@@ -1,4 +1,4 @@
-import CreateTaskView from '@/modules/dashboard/layout/WorkSidebar/DetailedResource/CreateTaskView'
+import CreateTaskView from '@/modules/dashboard/layout/ResourceDetail/Views/CreateTaskView'
 import { createTaskAction } from './actions'
 
 interface ResourceCreateTaskPageProps {

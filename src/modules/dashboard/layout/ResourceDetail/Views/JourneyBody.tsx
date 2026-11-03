@@ -6,8 +6,8 @@ import toast from 'react-hot-toast'
 
 import Button from '@/components/Button/Button'
 import CreateResourceButton from '@/components/Button/CreateResourceButton'
-import FolderItem from '@/modules/dashboard/layout/Workspace/FolderItem'
-import RootTasks from '@/modules/dashboard/layout/Workspace/RootTasks'
+import FolderItem from '@/modules/dashboard/layout/ResourceDetail/Items/FolderItem'
+import RootTasks from '@/modules/dashboard/layout/ResourceDetail/Items/RootTasks'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import {
@@ -19,7 +19,7 @@ import type { NavigationRootResources } from '@/types/navigation.type'
 import useAppUiStore from '@/stores/appUiStore'
 
 interface ResourcePageContentProps {
-  resourceId: string
+  journeyId: string
   actions: {
     bulkDeleteResourcesAction: (journeyId: string, folderIds: string[], taskIds: string[]) => Promise<void>
   }
@@ -33,14 +33,14 @@ interface BulkDeleteSelection {
 /**
  * Renders the selected resource's contents and coordinates bulk resource deletion.
  *
- * @param resourceId - Resource identifier whose cached tree is displayed.
+ * @param journeyId - Journey identifier whose cached tree is displayed.
  * @param actions - Server Actions used by resource operations.
  * @returns The resource content and selection controls.
  */
-const ResourcePageContent = ({ resourceId, actions }: ResourcePageContentProps) => {
+const JourneyBody = ({ journeyId, actions }: ResourcePageContentProps) => {
   const queryClient = useQueryClient()
   const router = useRouter()
-  const journeyQueryKey = navigationQueryKeys.resourceTree('journey', resourceId)
+  const journeyQueryKey = navigationQueryKeys.resourceTree('journey', journeyId)
   const isSelectingResources = useAppUiStore((state) => state.isSelectingResources)
   const selectedResource = useAppUiStore((state) => state.selectedResource)
   const cancelResourceSelection = useAppUiStore((state) => state.cancelResourceSelection)
@@ -62,7 +62,7 @@ const ResourcePageContent = ({ resourceId, actions }: ResourcePageContentProps) 
 
   const deleteResourcesMutation = useMutation({
     mutationFn: ({ folderIds, taskIds }: BulkDeleteSelection) =>
-      actions.bulkDeleteResourcesAction(resourceId, folderIds, taskIds),
+      actions.bulkDeleteResourcesAction(journeyId, folderIds, taskIds),
     onError: (error: unknown, _selection, context) => {
       toast.error(error instanceof Error ? error.message : 'Failed to delete resources.', { id: context?.toastId })
       console.error(error)
@@ -105,7 +105,7 @@ const ResourcePageContent = ({ resourceId, actions }: ResourcePageContentProps) 
         const authoritativeRootResources = queryClient.getQueryData<NavigationRootResources>(
           navigationQueryKeys.rootResources()
         )
-        const authoritativeJourney = authoritativeRootResources?.journeys.find((item) => item.uid === resourceId)
+        const authoritativeJourney = authoritativeRootResources?.journeys.find((item) => item.uid === journeyId)
 
         if (authoritativeRootResources) {
           queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(authoritativeRootResources))
@@ -217,7 +217,7 @@ const ResourcePageContent = ({ resourceId, actions }: ResourcePageContentProps) 
         <div className={journey.folders.length !== 0 ? 'space-y-3 p-3' : ''}>
           {journey.folders.map((folder) => (
             <FolderItem
-              createTaskHref={`/dashboard/home/journey/${resourceId}/folder/${folder.uid}/create-task`}
+              createTaskHref={`/dashboard/home/journey/${journeyId}/folder/${folder.uid}/create-task`}
               folder={folder}
               isSelectingResources={isSelectingResources}
               isSelected={selectedResource.includes(folder.uid)}
@@ -248,4 +248,4 @@ const ResourcePageContent = ({ resourceId, actions }: ResourcePageContentProps) 
   )
 }
 
-export default ResourcePageContent
+export default JourneyBody

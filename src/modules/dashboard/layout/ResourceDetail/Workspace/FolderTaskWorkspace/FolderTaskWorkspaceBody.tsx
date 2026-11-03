@@ -4,7 +4,7 @@ import Icon from '@/components/Icon/Icon'
 import { type TaskFormErrors, type TaskFormValues } from '@/stores/workspaceFromStore'
 import type { ApiFolderWithTasks } from '@/types/resource-api.type'
 
-import TaskItem from '../TaskItem'
+import TaskItem from '../../Items/TaskItem'
 
 interface FolderTaskWorkspaceBodyProps {
   activeFormId: string | null

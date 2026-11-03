@@ -1,7 +1,7 @@
 'use client'
 
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
-import FolderWorkspace from '@/modules/dashboard/layout/Workspace/FolderWorkspace/FolderWorkspace'
+import FolderWorkspace from '@/modules/dashboard/layout/ResourceDetail/Workspace/FolderWorkspace/FolderWorkspace'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
 import type { CreateFolderBulkPayload, CreateFolderBulkResponse } from '@/types/folder-api.type'

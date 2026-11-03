@@ -1,6 +1,6 @@
 'use client'
 
-import FolderTaskWorkspace from '@/modules/dashboard/layout/Workspace/FolderTaskWorkspace/FolderTaskWorkspace'
+import FolderTaskWorkspace from '@/modules/dashboard/layout/ResourceDetail/Workspace/FolderTaskWorkspace/FolderTaskWorkspace'
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import { useQueryClient } from '@tanstack/react-query'

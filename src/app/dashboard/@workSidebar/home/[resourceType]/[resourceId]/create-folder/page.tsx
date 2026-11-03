@@ -1,4 +1,4 @@
-import CreateFolderView from '@/modules/dashboard/layout/WorkSidebar/DetailedResource/CreateFolderView'
+import CreateFolderView from '@/modules/dashboard/layout/ResourceDetail/Views/CreateFolderView'
 import { createFolderAction } from './actions'
 
 interface ResourceCreateFolderPageProps {

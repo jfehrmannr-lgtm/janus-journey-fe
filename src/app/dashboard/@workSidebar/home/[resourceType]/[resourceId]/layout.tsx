@@ -1,7 +1,7 @@
 import { Suspense, type ReactNode } from 'react'
-import DetailedWorkspaceSkeleton from '@/modules/dashboard/layout/WorkSidebar/DetailedWorkspaceSkeleton'
+import DetailedWorkspaceSkeleton from '@/modules/dashboard/layout/ResourceDetail/DetailedWorkspaceSkeleton'
 import ResourceContent from './ResourceContent'
-import { ResourceType } from '@/types/resource.type'
+import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
 
 interface ResourceLayoutProps {
   children: ReactNode
@@ -10,12 +10,14 @@ interface ResourceLayoutProps {
 
 const ResourceLayout = async ({ children, params }: ResourceLayoutProps) => {
   const { resourceId, resourceType } = await params
-  const resolvedResourceType: ResourceType = resourceType === 'folder' ? 'folder' : 'journey'
 
-  console.debug('params: ', resourceType, resourceId)
+  if (resourceType !== 'journey' && resourceType !== 'folder' && resourceType !== 'task') {
+    return <ResourceNotFound resourceType="null" />
+  }
+
   return (
     <Suspense key={resourceId} fallback={<DetailedWorkspaceSkeleton />}>
-      <ResourceContent resourceId={resourceId} resourceType={resolvedResourceType}>
+      <ResourceContent resourceId={resourceId} resourceType={resourceType}>
         {children}
       </ResourceContent>
     </Suspense>

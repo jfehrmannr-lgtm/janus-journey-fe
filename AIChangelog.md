@@ -1,5 +1,13 @@
 ## 2026-11-02
 
+### #JANUS-FE-0158: Route Resource Content By Type
+
+**Work**: Plan / Build / Validate; Completed the ResourcePageContent dispatcher so Journey resources render JourneyBody while unsupported Folder and Task bodies remain explicitly deferred.
+
+### #JANUS-FE-0157: Remove Debug Logging
+
+**Work**: Plan / Build / Validate; Removed remaining `console.debug` statements from Dashboard route handling without changing routing or resource behavior.
+
 ### #JANUS-FE-0156: Align Resource Route Naming
 
 **Work**: Plan / Build / Validate; Updated renamed Dashboard resource routes and WorkSidebar components so generic Resource identifiers, page/layout exports, and TSDoc remain consistent while preserving Journey-specific parent contracts.

@@ -25,8 +25,6 @@ const getSelectedResourceFromPathname = (pathname: string): SelectedResourceRout
   const routeResourceType: ResourceType = segments[2] as ResourceType
   const resourceId = segments[3]
 
-  console.debug('routeResourceType', routeResourceType)
-
   return {
     resourceType: routeResourceType,
     resourceId: decodeURIComponent(resourceId)
