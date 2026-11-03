@@ -1,160 +1,36 @@
 'use client'
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
 
 import Button from '@/components/Button/Button'
 import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import FolderItem from '@/modules/dashboard/layout/ResourceDetail/Items/FolderItem'
 import RootTasks from '@/modules/dashboard/layout/ResourceDetail/Items/RootTasks'
-import type { ApiJourneyWithResources } from '@/types/resource-api.type'
-import { navigationQueryKeys } from '@/services/navigationQueryKeys'
-import {
-  getDashboardHomeData,
-  synchronizeJourneyInRootResources,
-  synchronizeJourneyProgress
-} from '@/services/dashboardService'
-import type { NavigationRootResources } from '@/types/navigation.type'
-import useAppUiStore from '@/stores/appUiStore'
+import useJourneyBody, { type JourneyBodyActions } from './useJourneyBody'
 
-interface ResourcePageContentProps {
+interface JourneyBodyProps {
   journeyId: string
-  actions: {
-    bulkDeleteResourcesAction: (journeyId: string, folderIds: string[], taskIds: string[]) => Promise<void>
-  }
-}
-
-interface BulkDeleteSelection {
-  folderIds: string[]
-  taskIds: string[]
+  actions: JourneyBodyActions
 }
 
 /**
- * Renders the selected resource's contents and coordinates bulk resource deletion.
+ * Renders Journey resources and composes the Journey body behavior.
  *
  * @param journeyId - Journey identifier whose cached tree is displayed.
  * @param actions - Server Actions used by resource operations.
- * @returns The resource content and selection controls.
+ * @returns The Journey resource content and selection controls.
  */
-const JourneyBody = ({ journeyId, actions }: ResourcePageContentProps) => {
-  const queryClient = useQueryClient()
+const JourneyBody = ({ journeyId, actions }: JourneyBodyProps) => {
   const router = useRouter()
-  const journeyQueryKey = navigationQueryKeys.resourceTree('journey', journeyId)
-  const isSelectingResources = useAppUiStore((state) => state.isSelectingResources)
-  const selectedResource = useAppUiStore((state) => state.selectedResource)
-  const cancelResourceSelection = useAppUiStore((state) => state.cancelResourceSelection)
-  const toggleSelectedResource = useAppUiStore((state) => state.toggleSelectedResource)
-
-  const { data: journey } = useQuery<ApiJourneyWithResources>({
-    enabled: false,
-    queryFn: () => {
-      const cachedJourney = queryClient.getQueryData<ApiJourneyWithResources>(journeyQueryKey)
-
-      if (!cachedJourney) {
-        throw new Error('The Journey resource is not available in the query cache.')
-      }
-
-      return cachedJourney
-    },
-    queryKey: journeyQueryKey
-  })
-
-  const deleteResourcesMutation = useMutation({
-    mutationFn: ({ folderIds, taskIds }: BulkDeleteSelection) =>
-      actions.bulkDeleteResourcesAction(journeyId, folderIds, taskIds),
-    onError: (error: unknown, _selection, context) => {
-      toast.error(error instanceof Error ? error.message : 'Failed to delete resources.', { id: context?.toastId })
-      console.error(error)
-    },
-    onMutate: () => ({ toastId: toast.loading('Deleting resources...') }),
-    onSuccess: async (_response, selection, context) => {
-      const folderIds = new Set(selection.folderIds)
-      const taskIds = new Set(selection.taskIds)
-
-      const updatedJourney = queryClient.setQueryData<ApiJourneyWithResources>(journeyQueryKey, (cachedJourney) => {
-        if (!cachedJourney) return cachedJourney
-
-        return synchronizeJourneyProgress({
-          ...cachedJourney,
-          folders: cachedJourney.folders
-            .filter((folder) => !folderIds.has(folder.uid))
-            .map((folder) => ({
-              ...folder,
-              tasks: folder.tasks.filter((task) => !taskIds.has(task.uid))
-            })),
-          tasks: cachedJourney.tasks.filter((task) => !taskIds.has(task.uid))
-        })
-      })
-
-      if (updatedJourney) {
-        const updatedRootResources = queryClient.setQueryData<NavigationRootResources>(
-          navigationQueryKeys.rootResources(),
-          (resources) => (resources ? synchronizeJourneyInRootResources(resources, updatedJourney) : resources)
-        )
-
-        if (updatedRootResources) {
-          queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(updatedRootResources))
-        }
-      }
-
-      // Delete responses do not expose the propagated activity timestamp. Refetch the existing root query to
-      // reconcile the authoritative Journey timestamp, then mirror it back into the selected resource cache.
-      try {
-        await queryClient.refetchQueries({ queryKey: navigationQueryKeys.rootResources(), type: 'all' })
-        const authoritativeRootResources = queryClient.getQueryData<NavigationRootResources>(
-          navigationQueryKeys.rootResources()
-        )
-        const authoritativeJourney = authoritativeRootResources?.journeys.find((item) => item.uid === journeyId)
-
-        if (authoritativeRootResources) {
-          queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(authoritativeRootResources))
-        }
-
-        if (authoritativeJourney) {
-          queryClient.setQueryData<ApiJourneyWithResources>(journeyQueryKey, (cachedJourney) =>
-            cachedJourney
-              ? {
-                  ...cachedJourney,
-                  lastActivityAt: authoritativeJourney.lastActivityAt,
-                  progress: authoritativeJourney.progress ?? cachedJourney.progress
-                }
-              : cachedJourney
-          )
-        }
-      } catch (error: unknown) {
-        console.error(error)
-      }
-
-      toast.success('Resources deleted successfully.', { id: context?.toastId })
-      cancelResourceSelection()
-    }
-  })
-
-  const handleBulkDelete = () => {
-    if (deleteResourcesMutation.isPending || selectedResource.length === 0) {
-      return
-    }
-
-    const selectedResourceIds = new Set(selectedResource)
-    const folderIds =
-      journey?.folders.filter((folder) => selectedResourceIds.has(folder.uid)).map((folder) => folder.uid) ?? []
-    const selectedFolderIds = new Set(folderIds)
-    const taskIds = journey
-      ? [
-          ...journey.tasks,
-          ...journey.folders.flatMap((folder) => (selectedFolderIds.has(folder.uid) ? [] : folder.tasks))
-        ]
-          .filter((task) => selectedResourceIds.has(task.uid))
-          .map((task) => task.uid)
-      : []
-
-    if (folderIds.length === 0 && taskIds.length === 0) {
-      return
-    }
-
-    deleteResourcesMutation.mutate({ folderIds, taskIds })
-  }
+  const {
+    cancelResourceSelection,
+    handleBulkDelete,
+    isDeletingResources,
+    isSelectingResources,
+    journey,
+    selectedResource,
+    toggleSelectedResource
+  } = useJourneyBody({ actions, journeyId })
 
   if (!journey || !('folders' in journey)) {
     return <div className="px-5 py-6 text-sm text-text-muted">Invalid Journey resource</div>
@@ -177,7 +53,7 @@ const JourneyBody = ({ journeyId, actions }: ResourcePageContentProps) => {
               buttonSize="normal"
               className="border-transparent text-danger-foreground hover:bg-danger-surface"
               color="danger"
-              disabled={deleteResourcesMutation.isPending || selectedResource.length === 0}
+              disabled={isDeletingResources || selectedResource.length === 0}
               label="Delete All"
               onClick={handleBulkDelete}
               size="nm"

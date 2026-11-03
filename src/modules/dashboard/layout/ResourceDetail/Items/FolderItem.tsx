@@ -17,6 +17,7 @@ interface FolderItemBaseProps {
   children?: ReactNode
   createTaskHref?: string
   disableCollapse?: boolean
+  isUnique?: boolean
   isSelectingResources?: boolean
   initiallyExpanded?: boolean
   isSelected?: boolean
@@ -72,6 +73,7 @@ const FolderItem = (props: FolderItemProps) => {
     isSelected = false,
     onToggleSelection,
     onToggleTaskSelection,
+    isUnique = false,
     selectedResource = []
   } = props
   const pendingProps = 'pendingFolder' in props ? (props as PendingFolderItemProps) : undefined
@@ -154,21 +156,23 @@ const FolderItem = (props: FolderItemProps) => {
           />
         </div>
       ) : (
-        <button
-          aria-expanded={!disableCollapse && isExpanded}
-          className={`cursor-pointer flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-primary-soft`}
-          onClick={handleHeaderClick}
-          type="button"
-        >
-          {headerContent}
-          {!disableCollapse && (
-            <Icon className="text-xs text-text-muted" icon={isExpanded ? 'DownOutlined' : 'RightOutlined'} />
-          )}
-        </button>
+        !isUnique && (
+          <button
+            aria-expanded={!disableCollapse && isExpanded}
+            className={`cursor-pointer flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-primary-soft`}
+            onClick={handleHeaderClick}
+            type="button"
+          >
+            {headerContent}
+            {!disableCollapse && (
+              <Icon className="text-xs text-text-muted" icon={isExpanded ? 'DownOutlined' : 'RightOutlined'} />
+            )}
+          </button>
+        )
       )}
 
       {!isPendingFolder && !disableCollapse && isExpanded && (
-        <div className="px-8">
+        <div className={`${isUnique ? 'px-4' : ' px-8'}`}>
           {showCreateTaskAction && !isSelectingResources && (
             <div className="border-t border-border-subtle py-2">
               <CreateResourceButton

@@ -34,7 +34,7 @@ const FolderBody = ({ folderId }: FolderBodyProps) => {
 
   return (
     <div>
-      <FolderItem folder={folder} />
+      <FolderItem folder={folder} isUnique />
     </div>
   )
 }

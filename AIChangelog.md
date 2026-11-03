@@ -1,5 +1,13 @@
 ## 2026-11-02
 
+### #JANUS-FE-0160: Clarify Journey Bulk Deletion Selection
+
+**Work**: Plan / Build / Validate; Simplified useJourneyBody bulk-deletion selection into explicit Journey Folder and Task steps while preserving the existing deletion payload and behavior.
+
+### #JANUS-FE-0159: Extract Journey Body Hook
+
+**Work**: Plan / Build / Validate; Extracted JourneyBody query, deletion mutation, cache synchronization, and resource-selection behavior into useJourneyBody while preserving the existing Journey rendering and interactions.
+
 ### #JANUS-FE-0158: Route Resource Content By Type
 
 **Work**: Plan / Build / Validate; Completed the ResourcePageContent dispatcher so Journey resources render JourneyBody while unsupported Folder and Task bodies remain explicitly deferred.
