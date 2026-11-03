@@ -3,6 +3,7 @@
 import FolderTaskWorkspace from '@/modules/dashboard/layout/ResourceDetail/Workspace/FolderTaskWorkspace/FolderTaskWorkspace'
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import { getResourcePath } from '@/modules/dashboard/utils/dashboardRoutes'
 import { useQueryClient } from '@tanstack/react-query'
 import type { ApiFolderWithTasks, ApiJourneyWithResources } from '@/types/resource-api.type'
 import type { CreateTaskBulkPayload, CreateTaskBulkResponse } from '@/types/task-api.type'
@@ -50,7 +51,7 @@ const CreateFolderTaskView = ({
       folder={folder}
       journeyId={journeyId}
       resourceType={resourceType}
-      returnHref={returnHref ?? `/dashboard/home/${resourceType}/${encodeURIComponent(journeyId ?? '')}`}
+      returnHref={returnHref ?? getResourcePath(resourceType, journeyId ?? '')}
     />
   )
 }

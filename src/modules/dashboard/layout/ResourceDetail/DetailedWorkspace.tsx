@@ -6,6 +6,7 @@ import type { ReactNode } from 'react'
 import ProgressBar from '@/components/ProgressBar/ProgressBar'
 import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/types/resource-api.type'
 import CreateJourneyWorkspaceLifecycle from '@/modules/dashboard/layout/ResourceDetail/Workspace/CreateJourneyWorkspaceLifecycle'
+import WorkspaceLifecycle from '@/modules/dashboard/layout/ResourceDetail/Workspace/WorkspaceLifecycle'
 import DetailedHeaderWorkspace from './DetailedHeaderWorkspace'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import { formatProgressPercentage } from '@/modules/dashboard/utils/progress'
@@ -57,12 +58,14 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
 
   if (isCreateMode) {
     return (
-      <CreateJourneyWorkspaceLifecycle>
-        <div className="min-h-full bg-white">
-          <DetailedHeaderWorkspace mode="create" imgUrl={createJourneyForm.imgUrl} />
-          {children}
-        </div>
-      </CreateJourneyWorkspaceLifecycle>
+      <WorkspaceLifecycle>
+        <CreateJourneyWorkspaceLifecycle>
+          <div className="min-h-full bg-white">
+            <DetailedHeaderWorkspace mode="create" imgUrl={createJourneyForm.imgUrl} />
+            {children}
+          </div>
+        </CreateJourneyWorkspaceLifecycle>
+      </WorkspaceLifecycle>
     )
   }
 
@@ -72,7 +75,7 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
   const resolvedTasks = progress ? progress.completed + progress.discarded : 0
 
   return (
-    <CreateJourneyWorkspaceLifecycle>
+    <WorkspaceLifecycle>
       <div className="min-h-full bg-white">
         <DetailedHeaderWorkspace mode="view" resource={resource} />
         {progress && (
@@ -91,7 +94,7 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
         )}
         {children}
       </div>
-    </CreateJourneyWorkspaceLifecycle>
+    </WorkspaceLifecycle>
   )
 }
 

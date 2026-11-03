@@ -11,7 +11,11 @@ const ResourcePage = async ({ params }: ResourcePageProps) => {
   const resourceType = rawResourceType as ResourceType
 
   return (
-    <ResourcePageContent actions={{ bulkDeleteResourcesAction }} resourceId={resourceId} resourceType={resourceType} />
+    <ResourcePageContent
+      journeyActions={{ bulkDeleteResourcesAction }}
+      resourceId={resourceId}
+      resourceType={resourceType}
+    />
   )
 }
 

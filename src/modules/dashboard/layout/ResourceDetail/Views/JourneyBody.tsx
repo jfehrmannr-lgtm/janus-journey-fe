@@ -6,6 +6,7 @@ import Button from '@/components/Button/Button'
 import CreateResourceButton from '@/components/Button/CreateResourceButton'
 import FolderItem from '@/modules/dashboard/layout/ResourceDetail/Items/FolderItem'
 import RootTasks from '@/modules/dashboard/layout/ResourceDetail/Items/RootTasks'
+import { getResourcePath } from '@/modules/dashboard/utils/dashboardRoutes'
 import useJourneyBody, { type JourneyBodyActions } from './useJourneyBody'
 
 interface JourneyBodyProps {
@@ -76,7 +77,7 @@ const JourneyBody = ({ journeyId, actions }: JourneyBodyProps) => {
           <div className="flex items-center gap-2 py-2">
             <CreateResourceButton
               onClick={() =>
-                router.push(`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-folder`, {
+                router.push(`${getResourcePath('journey', journey.uid)}/create-folder`, {
                   scroll: false
                 })
               }
@@ -93,7 +94,7 @@ const JourneyBody = ({ journeyId, actions }: JourneyBodyProps) => {
         <div className={journey.folders.length !== 0 ? 'space-y-3 p-3' : ''}>
           {journey.folders.map((folder) => (
             <FolderItem
-              createTaskHref={`/dashboard/home/journey/${journeyId}/folder/${folder.uid}/create-task`}
+              createTaskHref={`${getResourcePath('journey', journeyId)}/folder/${folder.uid}/create-task`}
               folder={folder}
               isSelectingResources={isSelectingResources}
               isSelected={selectedResource.includes(folder.uid)}
@@ -111,7 +112,7 @@ const JourneyBody = ({ journeyId, actions }: JourneyBodyProps) => {
         </div>
         <div className="space-y-3 p-3">
           <RootTasks
-            createTaskHref={`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-task`}
+            createTaskHref={`${getResourcePath('journey', journey.uid)}/create-task`}
             journeyUid={journey.uid}
             tasks={journey.tasks}
             isSelectingResources={isSelectingResources}

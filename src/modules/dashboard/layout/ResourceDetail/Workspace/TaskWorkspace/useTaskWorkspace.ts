@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 
 import { initTaskForm, useCreateTaskForm, type TaskFormValues } from '@/stores/workspaceFromStore'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import { getResourcePath } from '@/modules/dashboard/utils/dashboardRoutes'
 import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/dashboard/utils/createJourneyPayload'
 import {
   getDashboardHomeData,
@@ -72,7 +73,7 @@ const useTaskWorkspace = ({ createTaskAction, journeyId }: UseTaskWorkspaceProps
       }
 
       toast.success('Tasks created successfully.', { id: context?.toastId })
-      router.push(`/dashboard/home/journey/${encodeURIComponent(journeyId)}`)
+      router.push(getResourcePath('journey', journeyId))
     }
   })
 

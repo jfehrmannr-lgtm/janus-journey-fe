@@ -8,13 +8,13 @@ import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import type { ResourceType } from '@/types/resource.type'
 
 /**
- * Reads and caches one Journey tree by Journey ID.
+ * Reads and caches one resource tree by resource ID.
  *
  * @param resourceType - Type of the selected resource.
  * @param resourceId - Stable identifier of the selected resource.
  * @returns The React Query result for the selected resource tree.
  */
-const useJourneyTreeQuery = (resourceType: ResourceType | null, resourceId: string | null) => {
+const useResourceTreeQuery = (resourceType: ResourceType | null, resourceId: string | null) => {
   return useQuery({
     queryKey:
       resourceType && resourceId
@@ -31,4 +31,4 @@ const useJourneyTreeQuery = (resourceType: ResourceType | null, resourceId: stri
   })
 }
 
-export default useJourneyTreeQuery
+export default useResourceTreeQuery

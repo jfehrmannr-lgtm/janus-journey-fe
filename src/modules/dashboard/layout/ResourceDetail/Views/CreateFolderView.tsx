@@ -3,6 +3,7 @@
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
 import FolderWorkspace from '@/modules/dashboard/layout/ResourceDetail/Workspace/FolderWorkspace/FolderWorkspace'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import { getResourcePath } from '@/modules/dashboard/utils/dashboardRoutes'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
 import type { CreateFolderBulkPayload, CreateFolderBulkResponse } from '@/types/folder-api.type'
 import { useQueryClient } from '@tanstack/react-query'
@@ -36,7 +37,7 @@ const CreateFolderView = ({ journeyId, actions }: CreateFolderViewProps) => {
       journeyId={journeyId}
       parent={{ type: 'journey', uid: journeyId }}
       reference={{ name: journey.name, type: 'journey' }}
-      returnHref={`/dashboard/home/journey/${encodeURIComponent(journeyId)}`}
+      returnHref={getResourcePath('journey', journeyId)}
       actions={actions}
     />
   )

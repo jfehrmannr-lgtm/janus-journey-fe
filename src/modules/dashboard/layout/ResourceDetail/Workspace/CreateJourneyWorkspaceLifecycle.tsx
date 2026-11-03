@@ -2,7 +2,6 @@
 
 import { useEffect, type ReactNode } from 'react'
 
-import useAppUiStore from '@/stores/appUiStore'
 import { useCreateJourneyForm } from '@/stores/workspaceFromStore'
 
 interface CreateJourneyWorkspaceLifecycleProps {
@@ -17,14 +16,12 @@ interface CreateJourneyWorkspaceLifecycleProps {
  */
 const CreateJourneyWorkspaceLifecycle = ({ children }: CreateJourneyWorkspaceLifecycleProps) => {
   const reset = useCreateJourneyForm((state) => state.setResetJourney)
-  const cancelResourceSelection = useAppUiStore((state) => state.cancelResourceSelection)
 
   useEffect(() => {
     return () => {
       reset()
-      cancelResourceSelection()
     }
-  }, [cancelResourceSelection, reset])
+  }, [reset])
 
   return children
 }

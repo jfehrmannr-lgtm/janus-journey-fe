@@ -22,7 +22,7 @@ interface DetailedHeaderWorkspaceCreateProps {
 type DetailedHeaderWorkspaceProps = DetailedHeaderWorkspaceViewProps | DetailedHeaderWorkspaceCreateProps
 
 /**
- * Renders the selected resource header and its Journey options trigger.
+ * Renders the selected resource header and its resource-specific actions.
  *
  * @param props - Selected resource or creation-mode header configuration.
  * @returns The detailed workspace header.
@@ -32,6 +32,7 @@ const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
   const isCreateMode = props.mode === 'create'
   const resource = isCreateMode ? undefined : props.resource
   const isJourney = isCreateMode || resource?.type === 'journey'
+  const isTask = resource?.type === 'task'
   const title = isCreateMode ? name || 'Create Journey' : resource?.name
   const headerDescription = isCreateMode
     ? description || 'Define the purpose and structure of a new Journey.'
@@ -52,7 +53,7 @@ const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
       className="relative flex min-h-44 flex-col justify-end overflow-hidden bg-cover bg-center px-5 py-5 text-white"
       style={headerStyle}
     >
-      {!isCreateMode && resource && (
+      {!isCreateMode && resource?.type === 'journey' && (
         <Dropdown
           id="journey-options-id"
           placement="bottom-end"
@@ -72,7 +73,7 @@ const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
       )}
       <div className="relative">
         <div className="mb-3 flex size-9 items-center justify-center rounded-lg bg-white/15 text-white">
-          <Icon icon={isJourney ? 'CompassOutlined' : 'FolderOutlined'} />
+          <Icon icon={isJourney ? 'CompassOutlined' : isTask ? 'CheckSquareOutlined' : 'FolderOutlined'} />
         </div>
         <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
         <p className="mt-1 line-clamp-2 text-sm leading-5 text-slate-100">

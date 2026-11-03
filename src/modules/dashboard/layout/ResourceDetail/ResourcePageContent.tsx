@@ -1,13 +1,12 @@
 import FolderBody from './Views/FolderBody'
 import JourneyBody from './Views/JourneyBody'
+import type { JourneyBodyActions } from './Views/useJourneyBody'
 import type { ResourceType } from '@/types/resource.type'
 
 interface ResourcePageContentProps {
   resourceId: string
   resourceType: ResourceType
-  actions: {
-    bulkDeleteResourcesAction: (journeyId: string, folderIds: string[], taskIds: string[]) => Promise<void>
-  }
+  journeyActions: JourneyBodyActions
 }
 
 /**
@@ -15,13 +14,13 @@ interface ResourcePageContentProps {
  *
  * @param resourceId - Identifier of the selected resource.
  * @param resourceType - Type of the selected resource.
- * @param actions - Server Actions used by the selected resource body.
+ * @param journeyActions - Server Actions used by the Journey body.
  * @returns The resource-specific body or an unsupported-resource message.
  */
-const ResourcePageContent = ({ resourceId, resourceType, actions }: ResourcePageContentProps) => {
+const ResourcePageContent = ({ resourceId, resourceType, journeyActions }: ResourcePageContentProps) => {
   switch (resourceType) {
     case 'journey':
-      return <JourneyBody actions={actions} journeyId={resourceId} />
+      return <JourneyBody actions={journeyActions} journeyId={resourceId} />
 
     case 'folder':
       return <FolderBody folderId={resourceId} />

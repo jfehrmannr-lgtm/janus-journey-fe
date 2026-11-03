@@ -3,6 +3,7 @@
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
 import TaskWorkspace from '@/modules/dashboard/layout/ResourceDetail/Workspace/TaskWorkspace/TaskWorkspace'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import { getResourcePath } from '@/modules/dashboard/utils/dashboardRoutes'
 import type { ApiJourneyWithResources } from '@/types/resource-api.type'
 import type { CreateTaskBulkPayload, CreateTaskBulkResponse } from '@/types/task-api.type'
 import { useQueryClient } from '@tanstack/react-query'
@@ -27,7 +28,7 @@ const CreateTaskView = ({ actions, journeyId }: CreateTaskViewProps) => {
     navigationQueryKeys.resourceTree('journey', journeyId)
   )
 
-  const returnHref = `/dashboard/home/journey/${encodeURIComponent(journeyId)}`
+  const returnHref = getResourcePath('journey', journeyId)
 
   if (!journey) {
     return <ResourceNotFound resourceType="journey" />

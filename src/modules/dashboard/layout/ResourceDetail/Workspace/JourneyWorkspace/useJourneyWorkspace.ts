@@ -12,6 +12,7 @@ import type { ApiJourney, ApiJourneyWithResources } from '@/types/resource-api.t
 import type { Journey } from '@/types/resource.type'
 import type { NavigationRootResources } from '@/types/navigation.type'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
+import { getResourcePath } from '@/modules/dashboard/utils/dashboardRoutes'
 import { JourneyFormValues } from '@/stores/workspaceFromStore'
 import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/dashboard/utils/createJourneyPayload'
 
@@ -86,7 +87,7 @@ const useJourneyWorkspace = ({ createJourneyAction }: UseJourneyWorkspaceProps) 
       queryClient.setQueryData(navigationQueryKeys.resourceTree('journey', journey.uid), journeyWithResources)
 
       toast.success('Journey created successfully.', { id: context?.toastId })
-      router.push(`/dashboard/home/journey/${encodeURIComponent(journey.uid)}`)
+      router.push(getResourcePath('journey', journey.uid))
     }
   })
 

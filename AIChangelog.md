@@ -1,5 +1,9 @@
 ## 2026-11-02
 
+### #JANUS-FE-0161: Clean Up ResourceDetail Architecture
+
+**Work**: Plan / Build / Validate; Fixed ResourceDetail imports, restricted Journey header actions, clarified Journey-only body actions, centralized resource route generation, renamed generic resource-tree query components, and separated generic workspace cleanup from Create Journey cleanup.
+
 ### #JANUS-FE-0160: Clarify Journey Bulk Deletion Selection
 
 **Work**: Plan / Build / Validate; Simplified useJourneyBody bulk-deletion selection into explicit Journey Folder and Task steps while preserving the existing deletion payload and behavior.
