@@ -7,9 +7,9 @@ import ProgressBar from '@/components/ProgressBar/ProgressBar'
 import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/types/resource-api.type'
 import CreateJourneyWorkspaceLifecycle from '@/modules/dashboard/layout/Workspace/CreateJourneyWorkspaceLifecycle'
 import DetailedHeaderWorkspace from './DetailedHeaderWorkspace'
-import DetailedWorksapceActions from './DetailedWorksapceActions'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import { formatProgressPercentage } from '@/modules/dashboard/utils/progress'
+import { useCreateJourneyForm } from '@/stores/workspaceFromStore'
 
 type WorkspaceResource = ApiJourneyWithResources | ApiFolderWithTasks | ApiTask
 
@@ -33,6 +33,7 @@ type DetailedWorkspaceProps = DetailedWorkspaceViewProps | DetailedWorkspaceCrea
  * @returns The workspace shell with its header and content/actions area.
  */
 const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
+  const { createJourneyForm } = useCreateJourneyForm()
   const { children } = props
   const isCreateMode = props.mode === 'create'
   const viewResource = isCreateMode ? undefined : props.resource
@@ -52,21 +53,19 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
     queryKey: resourceQueryKey
   })
 
+  const resource = cachedResource! ?? viewResource!
+
   if (isCreateMode) {
     return (
       <CreateJourneyWorkspaceLifecycle>
         <div className="min-h-full bg-white">
-          <DetailedWorksapceActions mode="create">{children}</DetailedWorksapceActions>
+          <DetailedHeaderWorkspace mode="create" imgUrl={createJourneyForm.imgUrl} />
+          {children}
         </div>
       </CreateJourneyWorkspaceLifecycle>
     )
   }
 
-  const resource = cachedResource ?? viewResource
-
-  if (!resource) {
-    return null
-  }
   const isJourney = resource.type === 'journey'
   const progress = resource.type === 'journey' || resource.type === 'folder' ? resource.progress : undefined
 
@@ -76,7 +75,6 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
     <CreateJourneyWorkspaceLifecycle>
       <div className="min-h-full bg-white">
         <DetailedHeaderWorkspace mode="view" resource={resource} />
-
         {progress && (
           <section
             aria-label={`${isJourney ? 'Journey' : 'Folder'} progress`}
@@ -91,10 +89,7 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
             </div>
           </section>
         )}
-
-        <DetailedWorksapceActions mode="view" resource={resource}>
-          {children}
-        </DetailedWorksapceActions>
+        {children}
       </div>
     </CreateJourneyWorkspaceLifecycle>
   )

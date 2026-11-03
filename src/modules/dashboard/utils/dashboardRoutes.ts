@@ -6,7 +6,9 @@ interface SelectedResourceRoute {
 const dashboardHomePath = '/dashboard/home'
 
 const getResourcePath = (resourceType: 'journey' | 'folder', resourceId: string): string => {
-  return `${dashboardHomePath}/${resourceType}/${encodeURIComponent(resourceId)}`
+  const routeSegment = resourceType === 'journey' ? 'resource' : resourceType
+
+  return `${dashboardHomePath}/${routeSegment}/${encodeURIComponent(resourceId)}`
 }
 
 const isWorkSidebarOpen = (pathname: string): boolean => {
@@ -20,16 +22,16 @@ const getSelectedResourceFromPathname = (pathname: string): SelectedResourceRout
     return null
   }
 
-  const resourceType = segments[2]
+  const routeResourceType = segments[2]
   const resourceId = segments[3]
 
-  if ((resourceType !== 'journey' && resourceType !== 'folder') || !resourceId) {
+  if ((routeResourceType !== 'resource' && routeResourceType !== 'folder') || !resourceId) {
     return null
   }
 
   return {
     resourceId: decodeURIComponent(resourceId),
-    resourceType
+    resourceType: routeResourceType === 'resource' ? 'journey' : 'folder'
   }
 }
 

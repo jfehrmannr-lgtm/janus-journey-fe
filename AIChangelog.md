@@ -1,5 +1,13 @@
 ## 2026-11-02
 
+### #JANUS-FE-0156: Align Resource Route Naming
+
+**Work**: Plan / Build / Validate; Updated renamed Dashboard resource routes and WorkSidebar components so generic Resource identifiers, page/layout exports, and TSDoc remain consistent while preserving Journey-specific parent contracts.
+
+- Renamed stale route component and prop identifiers left behind by the Journey-to-Resource route refactor.
+- Aligned resource route parsing with the new `/resource/{id}` path and retained the existing Folder path behavior.
+- Removed an unused workspace import exposed by the naming cleanup.
+
 ### #JANUS-FE-0155: Revert Create Form Surface Adjustment
 
 **Work**: Plan / Build / Validate; Restored the previous CreateFolderForm and CreateTaskForm reference-container backgrounds at the user’s request.

@@ -4,12 +4,12 @@ import { dashboardHomePath, getResourcePath, getSelectedResourceFromPathname } f
 
 describe('dashboard routes', () => {
   it('builds encoded Journey and Folder resource paths', () => {
-    expect(getResourcePath('journey', 'journey one')).toBe('/dashboard/home/journey/journey%20one')
+    expect(getResourcePath('journey', 'journey one')).toBe('/dashboard/home/resource/journey%20one')
     expect(getResourcePath('folder', 'folder/one')).toBe('/dashboard/home/folder/folder%2Fone')
   })
 
   it('reads selected resources from contextual paths', () => {
-    expect(getSelectedResourceFromPathname('/dashboard/home/journey/journey%20one')).toEqual({
+    expect(getSelectedResourceFromPathname('/dashboard/home/resource/journey%20one')).toEqual({
       resourceId: 'journey one',
       resourceType: 'journey'
     })
@@ -22,6 +22,6 @@ describe('dashboard routes', () => {
   it('returns no selection for non-contextual paths', () => {
     expect(getSelectedResourceFromPathname(dashboardHomePath)).toBeNull()
     expect(getSelectedResourceFromPathname('/dashboard/home/create-journey')).toBeNull()
-    expect(getSelectedResourceFromPathname('/dashboard/home/journey')).toBeNull()
+    expect(getSelectedResourceFromPathname('/dashboard/home/resource')).toBeNull()
   })
 })

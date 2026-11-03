@@ -11,13 +11,15 @@ import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 
 import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
 import { requestServerBffWithToken, ServerBffRequestError } from '@/services/serverBffClient'
+import type { ResourceType } from '@/types/resource.type'
 
-interface JourneyContentProps {
+interface ResourceContentProps {
   children: ReactNode
-  journeyId: string
+  resourceId: string
+  resourceType: ResourceType
 }
 
-const JourneyContent = async ({ children, journeyId }: JourneyContentProps) => {
+const ResourceContent = async ({ children, resourceId, resourceType }: ResourceContentProps) => {
   const requestHeaders = await headers()
   const { token } = await auth.api.getToken({ headers: requestHeaders })
 
@@ -25,14 +27,14 @@ const JourneyContent = async ({ children, journeyId }: JourneyContentProps) => {
 
   const queryClient = new QueryClient()
 
-  let journey: ApiJourneyWithResources
+  let resource: ApiJourneyWithResources
 
   try {
-    journey = await queryClient.query({
-      queryKey: navigationQueryKeys.resourceTree('journey', journeyId),
+    resource = await queryClient.query({
+      queryKey: navigationQueryKeys.resourceTree(resourceType, resourceId),
       queryFn: async (): Promise<ApiJourneyWithResources> => {
         const result = await requestServerBffWithToken<ApiResponse<ApiJourneyWithResources>>(
-          `/journeys/resources/journey/${encodeURIComponent(journeyId)}`,
+          `/journeys/resources/journey/${encodeURIComponent(resourceId)}`,
           token
         )
 
@@ -51,9 +53,9 @@ const JourneyContent = async ({ children, journeyId }: JourneyContentProps) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DetailedWorkspace resource={journey}>{children}</DetailedWorkspace>
+      <DetailedWorkspace resource={resource}>{children}</DetailedWorkspace>
     </HydrationBoundary>
   )
 }
 
-export default JourneyContent
+export default ResourceContent

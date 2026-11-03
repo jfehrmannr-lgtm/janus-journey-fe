@@ -18,8 +18,8 @@ import {
 import type { NavigationRootResources } from '@/types/navigation.type'
 import useAppUiStore from '@/stores/appUiStore'
 
-interface JourneyPageContentProps {
-  journeyId: string
+interface ResourcePageContentProps {
+  resourceId: string
   actions: {
     bulkDeleteResourcesAction: (journeyId: string, folderIds: string[], taskIds: string[]) => Promise<void>
   }
@@ -31,16 +31,16 @@ interface BulkDeleteSelection {
 }
 
 /**
- * Renders Journey resources and coordinates bulk resource deletion.
+ * Renders the selected resource's contents and coordinates bulk resource deletion.
  *
- * @param journeyId - Journey identifier whose cached resource tree is displayed.
- * @param actions - Server Actions used by Journey resource operations.
- * @returns The Journey resource content and selection controls.
+ * @param resourceId - Resource identifier whose cached tree is displayed.
+ * @param actions - Server Actions used by resource operations.
+ * @returns The resource content and selection controls.
  */
-const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => {
+const ResourcePageContent = ({ resourceId, actions }: ResourcePageContentProps) => {
   const queryClient = useQueryClient()
   const router = useRouter()
-  const journeyQueryKey = navigationQueryKeys.resourceTree('journey', journeyId)
+  const journeyQueryKey = navigationQueryKeys.resourceTree('journey', resourceId)
   const isSelectingResources = useAppUiStore((state) => state.isSelectingResources)
   const selectedResource = useAppUiStore((state) => state.selectedResource)
   const cancelResourceSelection = useAppUiStore((state) => state.cancelResourceSelection)
@@ -62,7 +62,7 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
 
   const deleteResourcesMutation = useMutation({
     mutationFn: ({ folderIds, taskIds }: BulkDeleteSelection) =>
-      actions.bulkDeleteResourcesAction(journeyId, folderIds, taskIds),
+      actions.bulkDeleteResourcesAction(resourceId, folderIds, taskIds),
     onError: (error: unknown, _selection, context) => {
       toast.error(error instanceof Error ? error.message : 'Failed to delete resources.', { id: context?.toastId })
       console.error(error)
@@ -105,7 +105,7 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
         const authoritativeRootResources = queryClient.getQueryData<NavigationRootResources>(
           navigationQueryKeys.rootResources()
         )
-        const authoritativeJourney = authoritativeRootResources?.journeys.find((item) => item.uid === journeyId)
+        const authoritativeJourney = authoritativeRootResources?.journeys.find((item) => item.uid === resourceId)
 
         if (authoritativeRootResources) {
           queryClient.setQueryData(['dashboard', 'home'], getDashboardHomeData(authoritativeRootResources))
@@ -156,7 +156,6 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
     deleteResourcesMutation.mutate({ folderIds, taskIds })
   }
 
-  // El hook debe devolver ApiJourneyWithResources para acceder a folders.
   if (!journey || !('folders' in journey)) {
     return <div className="px-5 py-6 text-sm text-text-muted">Invalid Journey resource</div>
   }
@@ -201,7 +200,7 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
           <div className="flex items-center gap-2 py-2">
             <CreateResourceButton
               onClick={() =>
-                router.push(`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-folder`, {
+                router.push(`/dashboard/home/resource/${encodeURIComponent(journey.uid)}/create-folder`, {
                   scroll: false
                 })
               }
@@ -218,7 +217,7 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
         <div className={journey.folders.length !== 0 ? 'space-y-3 p-3' : ''}>
           {journey.folders.map((folder) => (
             <FolderItem
-              createTaskHref={`/dashboard/home/journey/${journeyId}/folder/${folder.uid}/create-task`}
+              createTaskHref={`/dashboard/home/resource/${resourceId}/folder/${folder.uid}/create-task`}
               folder={folder}
               isSelectingResources={isSelectingResources}
               isSelected={selectedResource.includes(folder.uid)}
@@ -236,7 +235,7 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
         </div>
         <div className="space-y-3 p-3">
           <RootTasks
-            createTaskHref={`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-task`}
+            createTaskHref={`/dashboard/home/resource/${encodeURIComponent(journey.uid)}/create-task`}
             journeyUid={journey.uid}
             tasks={journey.tasks}
             isSelectingResources={isSelectingResources}
@@ -249,4 +248,4 @@ const JourneyPageContent = ({ journeyId, actions }: JourneyPageContentProps) => 
   )
 }
 
-export default JourneyPageContent
+export default ResourcePageContent

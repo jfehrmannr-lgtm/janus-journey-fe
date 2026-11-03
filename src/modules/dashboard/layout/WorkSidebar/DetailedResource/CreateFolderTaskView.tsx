@@ -50,7 +50,7 @@ const CreateFolderTaskView = ({
       folder={folder}
       journeyId={journeyId}
       resourceType={resourceType}
-      returnHref={returnHref ?? `/dashboard/home/journey/${encodeURIComponent(journeyId ?? '')}`}
+      returnHref={returnHref ?? `/dashboard/home/resource/${encodeURIComponent(journeyId ?? '')}`}
     />
   )
 }

@@ -5,7 +5,6 @@ import type { CreateJourneyPayload } from '@/types/createJourney'
 import type { ApiResponse } from '@/types/api.type'
 import type { ApiJourney } from '@/types/resource-api.type'
 import useJourneyWorkspace from './useJourneyWorkspace'
-import DetailedHeaderWorkspace from '../../WorkSidebar/DetailedHeaderWorkspace'
 
 interface JourneyWorkspaceProps {
   actions: {
@@ -24,18 +23,15 @@ const JourneyWorkspace = ({ actions }: JourneyWorkspaceProps) => {
     useJourneyWorkspace({ createJourneyAction: actions.createJourneyAction })
 
   return (
-    <>
-      <DetailedHeaderWorkspace mode="create" imgUrl={createJourneyForm.imgUrl} />
-      <CreateJourneyForm
-        canSubmit={canSubmit}
-        createJourneyForm={createJourneyForm}
-        formErrors={formErrors}
-        isSubmitting={isSubmitting}
-        onFormChange={onFormChange}
-        onSubmit={onSubmit}
-        onValidate={onValidate}
-      />
-    </>
+    <CreateJourneyForm
+      canSubmit={canSubmit}
+      createJourneyForm={createJourneyForm}
+      formErrors={formErrors}
+      isSubmitting={isSubmitting}
+      onFormChange={onFormChange}
+      onSubmit={onSubmit}
+      onValidate={onValidate}
+    />
   )
 }
 

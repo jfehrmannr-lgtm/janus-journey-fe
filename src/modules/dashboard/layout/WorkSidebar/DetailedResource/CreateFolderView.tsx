@@ -36,7 +36,7 @@ const CreateFolderView = ({ journeyId, actions }: CreateFolderViewProps) => {
       journeyId={journeyId}
       parent={{ type: 'journey', uid: journeyId }}
       reference={{ name: journey.name, type: 'journey' }}
-      returnHref={`/dashboard/home/journey/${encodeURIComponent(journeyId)}`}
+      returnHref={`/dashboard/home/resource/${encodeURIComponent(journeyId)}`}
       actions={actions}
     />
   )
