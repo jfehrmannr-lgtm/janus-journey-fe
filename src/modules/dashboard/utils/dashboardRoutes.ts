@@ -1,14 +1,14 @@
+import { ResourceType } from '@/types/resource.type'
+
 interface SelectedResourceRoute {
   resourceId: string
-  resourceType: 'journey' | 'folder'
+  resourceType: ResourceType
 }
 
 const dashboardHomePath = '/dashboard/home'
 
-const getResourcePath = (resourceType: 'journey' | 'folder', resourceId: string): string => {
-  const routeSegment = resourceType === 'journey' ? 'resource' : resourceType
-
-  return `${dashboardHomePath}/${routeSegment}/${encodeURIComponent(resourceId)}`
+const getResourcePath = (resourceType: ResourceType, resourceId: string): string => {
+  return `${dashboardHomePath}/${resourceType}/${encodeURIComponent(resourceId)}`
 }
 
 const isWorkSidebarOpen = (pathname: string): boolean => {
@@ -22,16 +22,14 @@ const getSelectedResourceFromPathname = (pathname: string): SelectedResourceRout
     return null
   }
 
-  const routeResourceType = segments[2]
+  const routeResourceType: ResourceType = segments[2] as ResourceType
   const resourceId = segments[3]
 
-  if ((routeResourceType !== 'resource' && routeResourceType !== 'folder') || !resourceId) {
-    return null
-  }
+  console.debug('routeResourceType', routeResourceType)
 
   return {
-    resourceId: decodeURIComponent(resourceId),
-    resourceType: routeResourceType === 'resource' ? 'journey' : 'folder'
+    resourceType: routeResourceType,
+    resourceId: decodeURIComponent(resourceId)
   }
 }
 

@@ -72,7 +72,7 @@ const useTaskWorkspace = ({ createTaskAction, journeyId }: UseTaskWorkspaceProps
       }
 
       toast.success('Tasks created successfully.', { id: context?.toastId })
-      router.push(`/dashboard/home/resource/${encodeURIComponent(journeyId)}`)
+      router.push(`/dashboard/home/journey/${encodeURIComponent(journeyId)}`)
     }
   })
 

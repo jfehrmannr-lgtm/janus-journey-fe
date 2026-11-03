@@ -27,7 +27,7 @@ const CreateTaskView = ({ actions, journeyId }: CreateTaskViewProps) => {
     navigationQueryKeys.resourceTree('journey', journeyId)
   )
 
-  const returnHref = `/dashboard/home/resource/${encodeURIComponent(journeyId)}`
+  const returnHref = `/dashboard/home/journey/${encodeURIComponent(journeyId)}`
 
   if (!journey) {
     return <ResourceNotFound resourceType="journey" />

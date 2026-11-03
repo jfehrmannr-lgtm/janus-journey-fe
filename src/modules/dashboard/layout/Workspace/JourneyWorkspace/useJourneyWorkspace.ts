@@ -86,7 +86,7 @@ const useJourneyWorkspace = ({ createJourneyAction }: UseJourneyWorkspaceProps) 
       queryClient.setQueryData(navigationQueryKeys.resourceTree('journey', journey.uid), journeyWithResources)
 
       toast.success('Journey created successfully.', { id: context?.toastId })
-      router.push(`/dashboard/home/resource/${encodeURIComponent(journey.uid)}`)
+      router.push(`/dashboard/home/journey/${encodeURIComponent(journey.uid)}`)
     }
   })
 

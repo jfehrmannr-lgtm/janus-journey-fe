@@ -200,7 +200,7 @@ const ResourcePageContent = ({ resourceId, actions }: ResourcePageContentProps) 
           <div className="flex items-center gap-2 py-2">
             <CreateResourceButton
               onClick={() =>
-                router.push(`/dashboard/home/resource/${encodeURIComponent(journey.uid)}/create-folder`, {
+                router.push(`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-folder`, {
                   scroll: false
                 })
               }
@@ -217,7 +217,7 @@ const ResourcePageContent = ({ resourceId, actions }: ResourcePageContentProps) 
         <div className={journey.folders.length !== 0 ? 'space-y-3 p-3' : ''}>
           {journey.folders.map((folder) => (
             <FolderItem
-              createTaskHref={`/dashboard/home/resource/${resourceId}/folder/${folder.uid}/create-task`}
+              createTaskHref={`/dashboard/home/journey/${resourceId}/folder/${folder.uid}/create-task`}
               folder={folder}
               isSelectingResources={isSelectingResources}
               isSelected={selectedResource.includes(folder.uid)}
@@ -235,7 +235,7 @@ const ResourcePageContent = ({ resourceId, actions }: ResourcePageContentProps) 
         </div>
         <div className="space-y-3 p-3">
           <RootTasks
-            createTaskHref={`/dashboard/home/resource/${encodeURIComponent(journey.uid)}/create-task`}
+            createTaskHref={`/dashboard/home/journey/${encodeURIComponent(journey.uid)}/create-task`}
             journeyUid={journey.uid}
             tasks={journey.tasks}
             isSelectingResources={isSelectingResources}

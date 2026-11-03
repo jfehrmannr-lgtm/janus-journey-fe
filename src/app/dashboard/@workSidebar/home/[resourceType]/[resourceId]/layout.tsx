@@ -12,6 +12,7 @@ const ResourceLayout = async ({ children, params }: ResourceLayoutProps) => {
   const { resourceId, resourceType } = await params
   const resolvedResourceType: ResourceType = resourceType === 'folder' ? 'folder' : 'journey'
 
+  console.debug('params: ', resourceType, resourceId)
   return (
     <Suspense key={resourceId} fallback={<DetailedWorkspaceSkeleton />}>
       <ResourceContent resourceId={resourceId} resourceType={resolvedResourceType}>
