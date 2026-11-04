@@ -164,6 +164,9 @@ const useCreateResourcePageContent = ({ resourceType, actions }: UseCreateResour
 
       if (input.resourceType === 'journey') {
         const journey = payload as ApiJourney
+
+        console.debug('journey', journey)
+
         queryClient.setQueryData<NavigationRootResources>(navigationQueryKeys.rootResources(), (resources) =>
           resources ? { ...resources, journeys: resources.journeys.concat(journey) } : resources
         )
