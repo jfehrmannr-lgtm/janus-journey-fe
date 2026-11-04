@@ -4,7 +4,7 @@ import Button from '@/components/Button/Button'
 import Input from '@/components/Input/Input'
 import type { JourneyFormErrors, JourneyFormValues } from '@/stores/workspaceFromStore'
 import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/dashboard/utils/createJourneyPayload'
-import CreateJourneyFormSelectImage from './CreateJourneyFormSelectImage'
+import CreateJourneyFormSelectImage from './Journey/CreateJourneyFormSelectImage'
 
 interface CreateJourneyFormProps {
   canSubmit: boolean
@@ -28,7 +28,7 @@ interface CreateJourneyFormProps {
  * @param isSubmitting - Whether Journey creation is in progress.
  * @returns A Journey creation form surface.
  */
-const CreateJourneyForm = ({
+const CreateResourceForm = ({
   canSubmit,
   createJourneyForm,
   formErrors,
@@ -102,4 +102,4 @@ const CreateJourneyForm = ({
   )
 }
 
-export default CreateJourneyForm
+export default CreateResourceForm

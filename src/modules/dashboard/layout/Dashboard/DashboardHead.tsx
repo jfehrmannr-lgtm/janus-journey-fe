@@ -7,16 +7,19 @@ interface DashboardHeadProps {
   username: string
   onCreateFolder: () => void
   onCreateJourney: () => void
+  onCreateTask: () => void
 }
 
 /**
  * Renders the Dashboard greeting and root-resource creation actions.
  *
  * @param username - Personalized name displayed in the greeting.
+ * @param onCreateFolder - Callback that opens the Folder creation workflow.
  * @param onCreateJourney - Callback that opens the Journey creation workflow.
+ * @param onCreateTask - Callback that opens the Task creation workflow.
  * @returns The responsive Dashboard header.
  */
-const DashboardHead = ({ username, onCreateFolder, onCreateJourney }: DashboardHeadProps) => {
+const DashboardHead = ({ username, onCreateFolder, onCreateJourney, onCreateTask }: DashboardHeadProps) => {
   return (
     <header className="rounded-2xl border border-border bg-surface p-2 sm:px-6 sm:py-4">
       <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
@@ -53,6 +56,7 @@ const DashboardHead = ({ username, onCreateFolder, onCreateJourney }: DashboardH
               color="neutral"
               icon={<Icon icon="CheckSquareOutlined" />}
               label="Task"
+              onClick={onCreateTask}
               size="md"
               variant="outlined"
             />

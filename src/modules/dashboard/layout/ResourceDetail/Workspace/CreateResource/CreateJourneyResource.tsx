@@ -1,6 +1,6 @@
 'use client'
 
-import CreateJourneyForm from '@/modules/dashboard/layout/Form/Journey/CreateJourneyForm'
+import CreateJourneyForm from '@/modules/dashboard/layout/Form/CreateResourceForm'
 import type { CreateJourneyPayload } from '@/types/createJourney'
 import type { ApiResponse } from '@/types/api.type'
 import type { ApiJourney } from '@/types/resource-api.type'

@@ -71,6 +71,10 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
     router.push('/dashboard/home/create-folder')
   }
 
+  const handleTaskCreation = () => {
+    router.push('/dashboard/home/create-task')
+  }
+
   const handleResourceSelect = (resource: Resource) => {
     if (resource.type === 'journey' || resource.type === 'folder') {
       router.push(getResourcePath(resource.type, resource.uid))
@@ -88,6 +92,7 @@ const DashboardHome = ({ resources }: DashboardHomeProps) => {
           <DashboardHead
             onCreateFolder={handleFolderCreation}
             onCreateJourney={handleJourneyCreation}
+            onCreateTask={handleTaskCreation}
             username={username}
           />
         </div>

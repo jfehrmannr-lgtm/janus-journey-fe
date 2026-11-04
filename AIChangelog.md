@@ -1,5 +1,21 @@
 ## 2026-11-02
 
+### #JANUS-FE-0168: Wire Resource Creation Server Actions
+
+**Work**: Plan / Build / Validate; Added the authenticated Task creation Server Action and passed the existing Journey, Folder, and Task actions through CreateResourcePageContent only to their corresponding resource components without executing any action.
+
+### #JANUS-FE-0167: Add Folder Creation Server Action
+
+**Work**: Plan / Build / Validate; Added the authenticated create-folder Server Action using the BFF single-folder endpoint and existing Folder payload and API response types, without connecting it to the deferred Folder UI.
+
+### #JANUS-FE-0166: Add Task Creation Route Shell
+
+**Work**: Plan / Build / Validate; Added the Dashboard and WorkSidebar create-task route shells, connected the Task creation dispatcher case to CreateTaskResource, and wired the Dashboard Task action to the new route without changing Journey or Folder creation behavior.
+
+### #JANUS-FE-0165: Add Folder Creation Route Shell
+
+**Work**: Plan / Build / Validate; Added the Dashboard and WorkSidebar create-folder route shells, connected the folder creation dispatcher case to CreateFolderResource, and preserved the existing Add Folder navigation and Journey creation behavior.
+
 ### #JANUS-FE-0164: Complete Create Journey Resource Composition
 
 **Work**: Plan / Build / Validate; Connected the separated CreateJourneyResource component to the creation dispatcher and passed only the hook values required by CreateJourneyForm, while preserving the existing Journey creation behavior.
