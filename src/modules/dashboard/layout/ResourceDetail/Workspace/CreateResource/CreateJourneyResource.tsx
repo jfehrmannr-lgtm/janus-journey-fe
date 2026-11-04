@@ -1,6 +1,6 @@
 'use client'
 
-import CreateJourneyForm from '@/modules/dashboard/layout/Form/CreateResourceForm'
+import CreateResourceForm from '@/modules/dashboard/layout/Form/CreateResourceForm'
 import type { CreateJourneyPayload } from '@/types/createJourney'
 import type { ApiResponse } from '@/types/api.type'
 import type { ApiJourney } from '@/types/resource-api.type'
@@ -19,18 +19,22 @@ interface CreateJourneyResourceProps {
  * @returns The Journey creation form.
  */
 const CreateJourneyResource = ({ actions }: CreateJourneyResourceProps) => {
-  const { canSubmit, createJourneyForm, formErrors, isSubmitting, onFormChange, onSubmit, onValidate } =
-    useCreateResourcePageContent({ createJourneyAction: actions.createJourneyAction })
+  const { canSubmit, createResourceForm, formErrors, isSubmitting, onFormChange, onSubmit, onValidate } =
+    useCreateResourcePageContent({
+      actions: { createJourneyAction: actions.createJourneyAction },
+      resourceType: 'journey'
+    })
 
   return (
-    <CreateJourneyForm
+    <CreateResourceForm
       canSubmit={canSubmit}
-      createJourneyForm={createJourneyForm}
+      createResourceForm={createResourceForm}
       formErrors={formErrors}
       isSubmitting={isSubmitting}
       onFormChange={onFormChange}
       onSubmit={onSubmit}
       onValidate={onValidate}
+      resourceType="journey"
     />
   )
 }

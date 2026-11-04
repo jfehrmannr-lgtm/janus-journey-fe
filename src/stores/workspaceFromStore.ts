@@ -27,6 +27,10 @@ export type FolderFormErrors = Partial<Record<Exclude<keyof FolderFormValues, 'i
 
 export type JourneyFormErrors = Partial<JourneyFormValues>
 
+export type ResourceFormValues = JourneyFormValues | FolderFormValues | TaskFormValues
+
+export type ResourceFormErrors = JourneyFormErrors | FolderFormErrors | TaskFormErrors
+
 // Initial form values
 
 export const initTaskForm: TaskFormValues = {

@@ -2,26 +2,30 @@
 
 import { useEffect, type ReactNode } from 'react'
 
-import { useCreateJourneyForm } from '@/stores/workspaceFromStore'
+import { useCreateFolderForm, useCreateJourneyForm, useCreateTaskForm } from '@/stores/workspaceFromStore'
 
 interface CreateJourneyWorkspaceLifecycleProps {
   children: ReactNode
 }
 
 /**
- * Resets the Create Journey draft when the creation workspace leaves the tree.
+ * Resets all resource creation drafts when the creation workspace leaves the tree.
  *
  * @param children - Create Journey workspace content.
  * @returns The unchanged workspace content.
  */
 const CreateJourneyWorkspaceLifecycle = ({ children }: CreateJourneyWorkspaceLifecycleProps) => {
-  const reset = useCreateJourneyForm((state) => state.setResetJourney)
+  const resetJourney = useCreateJourneyForm((state) => state.setResetJourney)
+  const resetFolder = useCreateFolderForm((state) => state.setResetFolder)
+  const resetTask = useCreateTaskForm((state) => state.setResetTaskForm)
 
   useEffect(() => {
     return () => {
-      reset()
+      resetJourney()
+      resetFolder()
+      resetTask()
     }
-  }, [reset])
+  }, [resetFolder, resetJourney, resetTask])
 
   return children
 }

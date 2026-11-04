@@ -1,5 +1,17 @@
 ## 2026-11-02
 
+### #JANUS-FE-0171: Reset All Creation Drafts on Workspace Exit
+
+**Work**: Plan / Build / Validate; Extended the existing creation Workspace lifecycle cleanup to invoke the established Journey, Folder, and Task Zustand reset actions on unmount while preserving view-mode lifecycle behavior.
+
+### #JANUS-FE-0170: Fix Shared Resource Form Blur Validation
+
+**Work**: Plan / Build / Validate; Fixed shared name and description blur handlers so they invoke resource validation without forwarding the DOM blur event as a form value, preserving Journey, Folder, and Task validation behavior.
+
+### #JANUS-FE-0169: Generalize Resource Creation Form
+
+**Work**: Plan / Build / Validate; Refactored CreateResourceForm and useCreateResourcePageContent to support Journey, Folder, and Task drafts through the existing Zustand stores and Server Actions, while preserving Journey fields and keeping resource-specific entry points and dispatching intact.
+
 ### #JANUS-FE-0168: Wire Resource Creation Server Actions
 
 **Work**: Plan / Build / Validate; Added the authenticated Task creation Server Action and passed the existing Journey, Folder, and Task actions through CreateResourcePageContent only to their corresponding resource components without executing any action.
