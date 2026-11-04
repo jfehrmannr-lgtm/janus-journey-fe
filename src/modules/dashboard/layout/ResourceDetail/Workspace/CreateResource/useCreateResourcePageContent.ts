@@ -16,7 +16,7 @@ import { getResourcePath } from '@/modules/dashboard/utils/dashboardRoutes'
 import { JourneyFormValues } from '@/stores/workspaceFromStore'
 import { resourceDescriptionMaxLength, resourceNameMaxLength } from '@/modules/dashboard/utils/createJourneyPayload'
 
-interface UseJourneyWorkspaceProps {
+interface UseCreateResourcePageContentProps {
   createJourneyAction: (payload: CreateJourneyPayload) => Promise<ApiResponse<ApiJourney>>
 }
 
@@ -48,7 +48,7 @@ const getJourneyFormErrors = ({ name, description }: JourneyFormValues): Journey
  * @param createJourneyAction - Server Action used to create the Journey.
  * @returns Journey form values, validation feedback, and submission callbacks.
  */
-const useJourneyWorkspace = ({ createJourneyAction }: UseJourneyWorkspaceProps) => {
+const useCreateResourcePageContent = ({ createJourneyAction }: UseCreateResourcePageContentProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const validationTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -147,4 +147,4 @@ const useJourneyWorkspace = ({ createJourneyAction }: UseJourneyWorkspaceProps) 
   }
 }
 
-export default useJourneyWorkspace
+export default useCreateResourcePageContent

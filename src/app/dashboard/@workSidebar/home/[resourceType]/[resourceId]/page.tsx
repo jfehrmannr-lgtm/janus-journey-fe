@@ -1,6 +1,7 @@
 import ResourcePageContent from '@/modules/dashboard/layout/ResourceDetail/ResourcePageContent'
 import { bulkDeleteResourcesAction } from './actions'
-import type { ResourceType } from '@/types/resource.type'
+import ResourceNotFound from '@/components/WorkSidebar/ResourceNotFound'
+import { isResourceType } from '@/types/resource.type'
 
 interface ResourcePageProps {
   params: Promise<{ resourceId: string; resourceType: string }>
@@ -8,7 +9,12 @@ interface ResourcePageProps {
 
 const ResourcePage = async ({ params }: ResourcePageProps) => {
   const { resourceId, resourceType: rawResourceType } = await params
-  const resourceType = rawResourceType as ResourceType
+
+  if (!isResourceType(rawResourceType)) {
+    return <ResourceNotFound resourceType="null" />
+  }
+
+  const resourceType = rawResourceType
 
   return (
     <ResourcePageContent

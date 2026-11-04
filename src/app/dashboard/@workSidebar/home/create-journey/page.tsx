@@ -1,4 +1,4 @@
-import JourneyWorkspace from '@/modules/dashboard/layout/ResourceDetail/Workspace/JourneyWorkspace/JourneyWorkspace'
+import CreateResourcePageContent from '@/modules/dashboard/layout/ResourceDetail/Workspace/CreateResource/CreateResourcePageContent'
 import DetailedWorkspace from '@/modules/dashboard/layout/ResourceDetail/DetailedWorkspace'
 import { createJourneyAction } from './actions'
 
@@ -7,12 +7,12 @@ import { createJourneyAction } from './actions'
  *
  * @returns The creation-mode DetailedWorkspace with its Journey form.
  */
-const CreateJourneyWorkspacePage = () => {
+const CreateJourneyPage = () => {
   return (
     <DetailedWorkspace mode="create">
-      <JourneyWorkspace actions={{ createJourneyAction }} />
+      <CreateResourcePageContent actions={{ createJourneyAction }} resourceType="journey" />
     </DetailedWorkspace>
   )
 }
 
-export default CreateJourneyWorkspacePage
+export default CreateJourneyPage

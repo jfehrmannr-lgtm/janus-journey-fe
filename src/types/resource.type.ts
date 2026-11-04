@@ -1,6 +1,12 @@
 import { ApiParentReference } from './resource-api.type'
 
-export type ResourceType = 'journey' | 'folder' | 'task'
+const resourceTypes = ['journey', 'folder', 'task'] as const
+
+export type ResourceType = (typeof resourceTypes)[number]
+
+const isResourceType = (value: string): value is ResourceType => {
+  return resourceTypes.includes(value as ResourceType)
+}
 
 export type TaskState = 'pending' | 'in-progress' | 'in-pause' | 'completed' | 'discarded'
 
@@ -40,3 +46,5 @@ export interface Task extends BaseResource<'task'> {
 }
 
 export type Resource = Journey | Folder | Task
+
+export { isResourceType, resourceTypes }

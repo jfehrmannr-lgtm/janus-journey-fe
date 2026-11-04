@@ -4,23 +4,23 @@ import CreateJourneyForm from '@/modules/dashboard/layout/Form/Journey/CreateJou
 import type { CreateJourneyPayload } from '@/types/createJourney'
 import type { ApiResponse } from '@/types/api.type'
 import type { ApiJourney } from '@/types/resource-api.type'
-import useJourneyWorkspace from './useJourneyWorkspace'
+import useCreateResourcePageContent from './useCreateResourcePageContent'
 
-interface JourneyWorkspaceProps {
+interface CreateJourneyResourceProps {
   actions: {
     createJourneyAction: (payload: CreateJourneyPayload) => Promise<ApiResponse<ApiJourney>>
   }
 }
 
 /**
- * Composes the Create Journey form with its draft and validation coordinator.
+ * Renders the Journey creation workspace using the existing Journey form behavior.
  *
  * @param actions - Server Actions used to create the Journey.
- * @returns The coordinated Create Journey form.
+ * @returns The Journey creation form.
  */
-const JourneyWorkspace = ({ actions }: JourneyWorkspaceProps) => {
+const CreateJourneyResource = ({ actions }: CreateJourneyResourceProps) => {
   const { canSubmit, createJourneyForm, formErrors, isSubmitting, onFormChange, onSubmit, onValidate } =
-    useJourneyWorkspace({ createJourneyAction: actions.createJourneyAction })
+    useCreateResourcePageContent({ createJourneyAction: actions.createJourneyAction })
 
   return (
     <CreateJourneyForm
@@ -35,4 +35,4 @@ const JourneyWorkspace = ({ actions }: JourneyWorkspaceProps) => {
   )
 }
 
-export default JourneyWorkspace
+export default CreateJourneyResource

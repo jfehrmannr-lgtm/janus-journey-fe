@@ -126,22 +126,52 @@ const functionOrComponent = ({
 - Do not reduce substantial work to generic one-line summaries.
 - Do not document trivial implementation details or unchanged behavior.
 
-## Basic App Structure
+## ResourceDetail Architecture
 
-- Use the Next.js App Router.
-- Keep `src/app/` focused on routing, layouts, route-level loading/error states, and route composition.
-- Do not place reusable application components or business logic directly inside `src/app/`.
-- Organize application code by responsibility using the following base structure:
+Janus Journey uses `Resource` as its domain abstraction. `Journey`, `Folder`, and `Task` are resource types, not independent application architectures.
 
-```text
-src/
-├── app/
-├── components/
-├── services/
-├── stores/
-├── layout/
-├── hooks/
-├── assets/
-├── types/
-└── utils/
-```
+### Architectural Flow
+
+1. The Next.js server layer handles routing, authentication, and server-side data preparation.
+2. `ResourcePageContent` dispatches rendering based on `resourceType`.
+3. Each resource type has its own Body (`JourneyBody`, `FolderBody`, `TaskBody`) to handle resource-specific behavior and composition.
+4. Resource Bodies converge on shared components such as `FolderItem`, `TaskItem`, forms, and Workspace components.
+5. Shared functionality must remain reusable across resource types.
+
+### Development Rules
+
+- Preserve the existing branching-and-convergence architecture.
+- Do not create independent Workspace implementations for each resource type.
+- Inspect existing components, hooks, Server Actions, and React Query patterns before implementing functionality.
+- Reuse shared behavior without forcing unrelated resource-specific logic into generic components.
+- Keep resource-specific concerns inside their corresponding Bodies or hooks.
+- Preserve existing routing, cache synchronization, and data contracts unless changes are explicitly requested.
+- When architectural responsibilities are unclear, inspect the implementation and ask before introducing new abstractions.
+
+Next.js Server Layer
+│
+└── Dashboard / Resource Route
+    │
+    └── ResourceDetail
+        │
+        └── ResourcePageContent
+            │
+            ├── JourneyBody
+            │   ├── Journey-specific logic
+            │   ├── FolderItem ──────────┐
+            │   └── TaskItem ─────────┐  │
+            │                         │  │
+            ├── FolderBody            │  │
+            │   ├── Folder-specific   │  │
+            │   ├── FolderItem ───────┼──┤
+            │   └── TaskItem ─────────┤  │
+            │                         │  │
+            └── TaskBody              │  │
+                ├── Task-specific     │  │
+                └── TaskItem ─────────┤  │
+                                      │  │
+                  Shared Components ◄─┘──┘
+                  ├── FolderItem
+                  ├── TaskItem
+                  ├── Shared Forms
+                  └── Workspace UI

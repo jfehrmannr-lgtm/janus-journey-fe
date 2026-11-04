@@ -1,5 +1,17 @@
 ## 2026-11-02
 
+### #JANUS-FE-0164: Complete Create Journey Resource Composition
+
+**Work**: Plan / Build / Validate; Connected the separated CreateJourneyResource component to the creation dispatcher and passed only the hook values required by CreateJourneyForm, while preserving the existing Journey creation behavior.
+
+### #JANUS-FE-0163: Add Resource Creation Dispatcher
+
+**Work**: Plan / Build / Validate; Added a lightweight CreateResourcePageContent switch for Journey, Folder, and Task creation contexts, preserving the existing Journey creation behavior and create-journey route while leaving deferred resource creation as placeholders.
+
+### #JANUS-FE-0162: Validate Resource Route Types
+
+**Work**: Plan / Build / Validate; Centralized the supported resource-type values and validated dynamic ResourceDetail route parameters before ResourcePageContent renders, without changing Body fetching or dispatcher responsibilities.
+
 ### #JANUS-FE-0161: Clean Up ResourceDetail Architecture
 
 **Work**: Plan / Build / Validate; Fixed ResourceDetail imports, restricted Journey header actions, clarified Journey-only body actions, centralized resource route generation, renamed generic resource-tree query components, and separated generic workspace cleanup from Create Journey cleanup.
