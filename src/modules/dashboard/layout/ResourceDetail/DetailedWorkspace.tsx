@@ -5,12 +5,12 @@ import type { ReactNode } from 'react'
 
 import ProgressBar from '@/components/ProgressBar/ProgressBar'
 import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/types/resource-api.type'
+import type { ResourceType } from '@/types/resource.type'
 import CreateJourneyWorkspaceLifecycle from '@/modules/dashboard/layout/ResourceDetail/Workspace/CreateJourneyWorkspaceLifecycle'
 import WorkspaceLifecycle from '@/modules/dashboard/layout/ResourceDetail/Workspace/WorkspaceLifecycle'
 import DetailedHeaderWorkspace from './DetailedHeaderWorkspace'
 import { navigationQueryKeys } from '@/services/navigationQueryKeys'
 import { formatProgressPercentage } from '@/modules/dashboard/utils/progress'
-import { useCreateJourneyForm } from '@/stores/workspaceFromStore'
 
 type WorkspaceResource = ApiJourneyWithResources | ApiFolderWithTasks | ApiTask
 
@@ -22,6 +22,7 @@ interface DetailedWorkspaceViewProps {
 
 interface DetailedWorkspaceCreateProps {
   mode: 'create'
+  resourceType: ResourceType
   children: ReactNode
 }
 
@@ -34,7 +35,6 @@ type DetailedWorkspaceProps = DetailedWorkspaceViewProps | DetailedWorkspaceCrea
  * @returns The workspace shell with its header and content/actions area.
  */
 const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
-  const { createJourneyForm } = useCreateJourneyForm()
   const { children } = props
   const isCreateMode = props.mode === 'create'
   const viewResource = isCreateMode ? undefined : props.resource
@@ -61,7 +61,7 @@ const DetailedWorkspace = (props: DetailedWorkspaceProps) => {
       <WorkspaceLifecycle>
         <CreateJourneyWorkspaceLifecycle>
           <div className="min-h-full bg-white">
-            <DetailedHeaderWorkspace mode="create" imgUrl={createJourneyForm.imgUrl} />
+            <DetailedHeaderWorkspace mode="create" resourceType={props.resourceType} />
             {children}
           </div>
         </CreateJourneyWorkspaceLifecycle>

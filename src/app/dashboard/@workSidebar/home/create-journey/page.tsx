@@ -9,7 +9,7 @@ import { createJourneyAction } from './actions'
  */
 const CreateJourneyPage = () => {
   return (
-    <DetailedWorkspace mode="create">
+    <DetailedWorkspace mode="create" resourceType="journey">
       <CreateResourcePageContent actions={{ createJourneyAction }} resourceType="journey" />
     </DetailedWorkspace>
   )

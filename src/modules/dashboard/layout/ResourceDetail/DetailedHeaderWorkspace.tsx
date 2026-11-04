@@ -1,10 +1,17 @@
 'use client'
 
 import type { ApiFolderWithTasks, ApiJourneyWithResources, ApiTask } from '@/types/resource-api.type'
+import type { ResourceType } from '@/types/resource.type'
 import Icon from '@/components/Icon/Icon'
 import JourneyOptions from '@/modules/dashboard/layout/ResourceDetail/Workspace/JourneyOptions/JourneyOptions'
 import Dropdown from '@/components/Dropdown/Dropdown'
-import { useCreateJourneyForm } from '@/stores/workspaceFromStore'
+import {
+  initFolderForm,
+  initTaskForm,
+  useCreateFolderForm,
+  useCreateJourneyForm,
+  useCreateTaskForm
+} from '@/stores/workspaceFromStore'
 
 const defaultFolderBackgroundImage = '/janus_journey_backgrounds/mount-sunrise.png'
 
@@ -16,7 +23,7 @@ interface DetailedHeaderWorkspaceViewProps {
 
 interface DetailedHeaderWorkspaceCreateProps {
   mode: 'create'
-  imgUrl: string
+  resourceType: ResourceType
 }
 
 type DetailedHeaderWorkspaceProps = DetailedHeaderWorkspaceViewProps | DetailedHeaderWorkspaceCreateProps
@@ -28,17 +35,36 @@ type DetailedHeaderWorkspaceProps = DetailedHeaderWorkspaceViewProps | DetailedH
  * @returns The detailed workspace header.
  */
 const DetailedHeaderWorkspace = (props: DetailedHeaderWorkspaceProps) => {
-  const { name, description } = useCreateJourneyForm((state) => state.createJourneyForm)
+  const journeyForm = useCreateJourneyForm((state) => state.createJourneyForm)
+  const folderForm = useCreateFolderForm((state) => state.createFolderForm)[0] ?? initFolderForm
+  const taskForm = useCreateTaskForm((state) => state.createTaskForm)[0] ?? initTaskForm
   const isCreateMode = props.mode === 'create'
   const resource = isCreateMode ? undefined : props.resource
-  const isJourney = isCreateMode || resource?.type === 'journey'
-  const isTask = resource?.type === 'task'
-  const title = isCreateMode ? name || 'Create Journey' : resource?.name
+  const creationForm = isCreateMode
+    ? props.resourceType === 'journey'
+      ? journeyForm
+      : props.resourceType === 'folder'
+        ? folderForm
+        : taskForm
+    : undefined
+  const isJourney = isCreateMode ? props.resourceType === 'journey' : resource?.type === 'journey'
+  const isTask = isCreateMode ? props.resourceType === 'task' : resource?.type === 'task'
+  const creationLabel = isCreateMode
+    ? props.resourceType.charAt(0).toUpperCase() + props.resourceType.slice(1)
+    : undefined
+  const title = isCreateMode ? creationForm?.name || `Create ${creationLabel}` : resource?.name
   const headerDescription = isCreateMode
-    ? description || 'Define the purpose and structure of a new Journey.'
+    ? creationForm?.description ||
+      (props.resourceType === 'journey'
+        ? 'Define the purpose and structure of a new Journey.'
+        : props.resourceType === 'folder'
+          ? 'Organize related Tasks into a focused Folder.'
+          : 'Capture a Task you want to complete.')
     : resource?.description
   const headerBackgroundImage = isCreateMode
-    ? props.imgUrl
+    ? props.resourceType === 'journey'
+      ? journeyForm.imgUrl
+      : defaultFolderBackgroundImage
     : resource?.type === 'journey'
       ? resource.imgUrl
       : defaultFolderBackgroundImage

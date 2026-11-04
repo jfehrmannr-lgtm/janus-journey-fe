@@ -9,7 +9,7 @@ import { createFolderAction } from './actions'
  */
 const CreateFolderPage = () => {
   return (
-    <DetailedWorkspace mode="create">
+    <DetailedWorkspace mode="create" resourceType="folder">
       <CreateResourcePageContent actions={{ createFolderAction }} resourceType="folder" />
     </DetailedWorkspace>
   )

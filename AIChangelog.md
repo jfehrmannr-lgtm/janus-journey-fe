@@ -1,5 +1,9 @@
 ## 2026-11-02
 
+### #JANUS-FE-0172: Generalize Creation Workspace Header
+
+**Work**: Plan / Build / Validate; Propagated creation resource types through DetailedWorkspace and updated the shared header to display Journey, Folder, and Task drafts from their existing Zustand stores while preserving view-mode behavior and Journey imagery.
+
 ### #JANUS-FE-0171: Reset All Creation Drafts on Workspace Exit
 
 **Work**: Plan / Build / Validate; Extended the existing creation Workspace lifecycle cleanup to invoke the established Journey, Folder, and Task Zustand reset actions on unmount while preserving view-mode lifecycle behavior.

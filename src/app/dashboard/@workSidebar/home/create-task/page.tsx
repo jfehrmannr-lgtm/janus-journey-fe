@@ -9,7 +9,7 @@ import { createTaskAction } from './actions'
  */
 const CreateTaskPage = () => {
   return (
-    <DetailedWorkspace mode="create">
+    <DetailedWorkspace mode="create" resourceType="task">
       <CreateResourcePageContent actions={{ createTaskAction }} resourceType="task" />
     </DetailedWorkspace>
   )
